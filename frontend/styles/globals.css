@@ -1,0 +1,148 @@
+/* Nex Deep Research Engine — Design Tokens & Global Styles */
+/* Apple Safari Reading Mode aesthetic */
+
+:root {
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* Colours */
+  --bg-primary: #fafaf9;
+  --bg-secondary: #f4f4f2;
+  --bg-panel: #ffffff;
+  --bg-panel-hover: #f0f0ee;
+  --bg-panel-active: #e8f0fe;
+
+  --border-subtle: #e8e8e6;
+  --border-medium: #d4d4d0;
+
+  --text-primary: #1a1a1a;
+  --text-secondary: #5a5a58;
+  --text-tertiary: #8a8a87;
+  --text-link: #1d5fcc;
+  --text-link-hover: #1447a8;
+
+  /* Confidence colours */
+  --verified: #1a7f4b;
+  --verified-bg: #f0faf4;
+  --verified-border: #a3d9be;
+  --likely: #92600a;
+  --likely-bg: #fffbf0;
+  --likely-border: #f0d080;
+  --low-confidence: #c0392b;
+  --low-confidence-bg: #fef8f7;
+  --low-confidence-border: #f4c0bc;
+
+  /* Accent */
+  --accent: #1d5fcc;
+  --accent-hover: #1447a8;
+  --accent-light: #e8f0fe;
+
+  /* Spacing */
+  --panel-padding: 20px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Layout */
+  --left-panel-width: 300px;
+  --right-panel-width: 360px;
+  --header-height: 52px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#__next {
+  height: 100%;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--text-link-hover);
+  text-decoration: underline;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* Confidence badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+.badge-verified {
+  color: var(--verified);
+  background: var(--verified-bg);
+  border: 1px solid var(--verified-border);
+}
+.badge-likely {
+  color: var(--likely);
+  background: var(--likely-bg);
+  border: 1px solid var(--likely-border);
+}
+.badge-low {
+  color: var(--low-confidence);
+  background: var(--low-confidence-bg);
+  border: 1px solid var(--low-confidence-border);
+}
+
+/* Pipeline stage indicator */
+.stage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.stage-dot-pending  { background: var(--border-medium); }
+.stage-dot-running  { background: var(--accent); animation: pulse 1.2s infinite; }
+.stage-dot-completed { background: var(--verified); }
+.stage-dot-error    { background: var(--low-confidence); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Prose */
+.prose { line-height: 1.7; }
+.prose h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.prose h2 { font-size: 1.2rem; font-weight: 600; margin: 1.2rem 0 0.4rem; }
+.prose h3 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.3rem; }
+.prose p  { margin-bottom: 0.8rem; }
+.prose ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
+.prose li { margin-bottom: 0.2rem; }
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--bg-secondary);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
