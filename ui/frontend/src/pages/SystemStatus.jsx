@@ -71,7 +71,7 @@ export default function SystemStatus() {
 
       <div className="status-grid">
         <div className="status-card">
-          <div className="status-card-label">Engine Status</div>
+          <div className="status-card-label">Backend</div>
           <div
             className="status-card-value"
             style={{
@@ -87,8 +87,10 @@ export default function SystemStatus() {
         </div>
 
         <div className="status-card">
-          <div className="status-card-label">Books Indexed</div>
-          <div className="status-card-value">{corpus.books_indexed ?? 0}</div>
+          <div className="status-card-label">Corpus Size</div>
+          <div className="status-card-value">
+            {corpus.corpus_size ?? corpus.chunks_generated ?? 0}
+          </div>
         </div>
 
         <div className="status-card">
@@ -106,9 +108,12 @@ export default function SystemStatus() {
         </div>
 
         <div className="status-card">
-          <div className="status-card-label">Packs Processed</div>
+          <div className="status-card-label">Pack Ingestion</div>
           <div className="status-card-value">
-            {corpus.packs_processed ?? 0}
+            {corpus.pack_ingestion_status ?? "unknown"}
+          </div>
+          <div className="status-card-note">
+            processed: {corpus.packs_processed ?? 0}
           </div>
         </div>
 

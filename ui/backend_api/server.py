@@ -105,6 +105,24 @@ app.add_middleware(
 
 
 # ---------------------------------------------------------------------------
+# GET / — basic backend root endpoint
+# ---------------------------------------------------------------------------
+
+@app.get("/")
+async def root() -> dict[str, str]:
+    return {"status": "Nex backend running"}
+
+
+# ---------------------------------------------------------------------------
+# GET /health — health endpoint for service checks
+# ---------------------------------------------------------------------------
+
+@app.get("/health")
+async def health() -> dict[str, str]:
+    return {"status": "ok", "engine": "Nex Research Engine"}
+
+
+# ---------------------------------------------------------------------------
 # POST /query — synchronous research query
 # ---------------------------------------------------------------------------
 
@@ -305,6 +323,11 @@ async def get_sources(run_id: str = Query(...)) -> dict[str, Any]:
 
 @app.get("/status")
 async def get_status() -> dict[str, Any]:
+    vector_indexes_loaded = 0
+    corpus_size = 0
+    packs_processed = 0
+    pack_ingestion_status = "idle"
+
     return {
         "engine": "nex-research-engine",
         "status": "online",
@@ -319,8 +342,10 @@ async def get_status() -> dict[str, Any]:
         "corpus": {
             "books_indexed": 0,
             "chunks_generated": 0,
-            "vector_indexes_loaded": 0,
-            "packs_processed": 0,
+            "corpus_size": corpus_size,
+            "vector_indexes_loaded": vector_indexes_loaded,
+            "packs_processed": packs_processed,
+            "pack_ingestion_status": pack_ingestion_status,
             "note": "Local corpus integration pending — currently using web sources.",
         },
         "capabilities": {
