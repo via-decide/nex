@@ -64,6 +64,7 @@ export default function SystemStatus() {
 
   const corpus = status.corpus || {};
   const caps = status.capabilities || {};
+  const engineState = status.engine || "unknown";
 
   return (
     <div className="status-page">
@@ -105,6 +106,11 @@ export default function SystemStatus() {
           <div className="status-card-value">
             {corpus.vector_indexes_loaded ?? 0}
           </div>
+        </div>
+
+        <div className="status-card">
+          <div className="status-card-label">Research Engine State</div>
+          <div className="status-card-value">{engineState}</div>
         </div>
 
         <div className="status-card">
