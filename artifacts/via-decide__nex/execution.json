@@ -1,7 +1,7 @@
 {
   "repo": "via-decide/nex",
   "mode": "codex_then_antigravity",
-  "branch": "simba/create-hypothesis-testing-helper",
+  "branch": "simba/create-research-dashboard",
   "files_to_create": [
     "codex-task.md",
     "antigravity-repair-task.md",
