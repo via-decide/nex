@@ -1,9 +1,9 @@
-Branch: simba/create-research-question-extractor
-Title: Create research question extractor.
+Branch: simba/create-decision-insight-extractor
+Title: Create decision insight extractor.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research question extractor.
+- Goal: Create decision insight extractor.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
