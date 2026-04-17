@@ -1,9 +1,9 @@
-Branch: simba/create-claim-tracker
-Title: Create claim tracker.
+Branch: simba/create-hypothesis-testing-helper
+Title: Create hypothesis testing helper.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create claim tracker.
+- Goal: Create hypothesis testing helper.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
