@@ -1,9 +1,9 @@
-Branch: simba/create-research-session-recorder
-Title: Create research session recorder.
+Branch: simba/create-evidence-notes-system
+Title: Create evidence notes system.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research session recorder.
+- Goal: Create evidence notes system.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
