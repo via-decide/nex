@@ -1,9 +1,9 @@
-Branch: simba/create-idea-evolution-tracker
-Title: Create idea evolution tracker.
+Branch: simba/create-cross-source-comparator
+Title: Create cross-source comparator.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create idea evolution tracker.
+- Goal: Create cross-source comparator.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
