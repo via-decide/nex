@@ -1,9 +1,9 @@
-Branch: simba/create-cross-source-comparator
-Title: Create cross-source comparator.
+Branch: simba/create-knowledge-query-engine
+Title: Create knowledge query engine.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create cross-source comparator.
+- Goal: Create knowledge query engine.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
