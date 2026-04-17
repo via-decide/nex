@@ -1,9 +1,9 @@
-Branch: simba/create-insight-logger
-Title: Create insight logger.
+Branch: simba/create-claim-tracker
+Title: Create claim tracker.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create insight logger.
+- Goal: Create claim tracker.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
