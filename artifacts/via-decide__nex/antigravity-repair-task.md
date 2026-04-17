@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Create research timeline builder.
+Create research gap detector.
 
 RULES
 1. Audit touched files first and identify regressions.
