@@ -1,9 +1,9 @@
-Branch: simba/create-hypothesis-testing-helper
-Title: Create hypothesis testing helper.
+Branch: simba/create-research-dashboard
+Title: Create research dashboard.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create hypothesis testing helper.
+- Goal: Create research dashboard.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
