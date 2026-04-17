@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create research timeline builder.
+Create research gap detector.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

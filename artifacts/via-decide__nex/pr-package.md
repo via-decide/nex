@@ -1,9 +1,9 @@
-Branch: simba/create-research-timeline-builder
-Title: Create research timeline builder.
+Branch: simba/create-research-gap-detector
+Title: Create research gap detector.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research timeline builder.
+- Goal: Create research gap detector.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
