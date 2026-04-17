@@ -1,9 +1,9 @@
-Branch: simba/create-research-signal-detector
-Title: Create research signal detector.
+Branch: simba/create-idea-evolution-tracker
+Title: Create idea evolution tracker.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research signal detector.
+- Goal: Create idea evolution tracker.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
