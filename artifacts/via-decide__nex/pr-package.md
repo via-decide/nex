@@ -1,9 +1,9 @@
-Branch: simba/create-hypothesis-notebook
-Title: Create hypothesis notebook.
+Branch: simba/create-concept-map-builder
+Title: Create concept map builder.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create hypothesis notebook.
+- Goal: Create concept map builder.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
