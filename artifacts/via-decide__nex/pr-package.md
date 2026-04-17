@@ -1,9 +1,9 @@
-Branch: simba/create-concept-map-builder
-Title: Create concept map builder.
+Branch: simba/create-research-session-recorder
+Title: Create research session recorder.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create concept map builder.
+- Goal: Create research session recorder.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
