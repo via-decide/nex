@@ -1,9 +1,9 @@
-Branch: simba/create-knowledge-query-engine
-Title: Create knowledge query engine.
+Branch: simba/create-research-graph-exporter
+Title: Create research graph exporter.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create knowledge query engine.
+- Goal: Create research graph exporter.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
