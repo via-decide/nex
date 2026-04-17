@@ -1,9 +1,9 @@
-Branch: simba/create-research-dashboard
-Title: Create research dashboard.
+Branch: simba/create-structured-insight-exporter
+Title: Create structured insight exporter.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research dashboard.
+- Goal: Create structured insight exporter.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
