@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create topic cluster organizer.
+Create research summary generator.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
