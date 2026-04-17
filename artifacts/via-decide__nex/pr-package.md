@@ -1,9 +1,9 @@
-Branch: simba/create-decision-insight-extractor
-Title: Create decision insight extractor.
+Branch: simba/create-research-summary-generator
+Title: Create research summary generator.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create decision insight extractor.
+- Goal: Create research summary generator.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
