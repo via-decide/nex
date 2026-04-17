@@ -1,9 +1,9 @@
-Branch: simba/create-structured-insight-exporter
-Title: Create structured insight exporter.
+Branch: simba/create-research-note-linker
+Title: Create research note linker.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create structured insight exporter.
+- Goal: Create research note linker.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
