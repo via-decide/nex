@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create research note linker.
+Create research signal detector.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
