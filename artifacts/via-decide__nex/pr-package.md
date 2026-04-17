@@ -1,9 +1,9 @@
-Branch: simba/create-evidence-notes-system
-Title: Create evidence notes system.
+Branch: simba/create-insight-logger
+Title: Create insight logger.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create evidence notes system.
+- Goal: Create insight logger.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
