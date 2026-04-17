@@ -1,7 +1,7 @@
 {
   "repo": "via-decide/nex",
   "mode": "codex_then_antigravity",
-  "branch": "simba/create-knowledge-query-engine",
+  "branch": "simba/create-research-graph-exporter",
   "files_to_create": [
     "codex-task.md",
     "antigravity-repair-task.md",
