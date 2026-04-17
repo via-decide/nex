@@ -1,9 +1,9 @@
-Branch: simba/create-research-summary-generator
-Title: Create research summary generator.
+Branch: simba/create-a-sovereign-decision-intelligence-extract
+Title: Create a sovereign decision intelligence extraction engine.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research summary generator.
+- Goal: Create a sovereign decision intelligence extraction engine.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
