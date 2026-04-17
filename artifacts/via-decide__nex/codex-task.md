@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create knowledge query engine.
+Create research graph exporter.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
