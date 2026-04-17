@@ -1,9 +1,9 @@
-Branch: simba/create-claim-tracker
-Title: Create claim tracker.
+Branch: simba/build-a-zero-dependency-pure-python-neural-netwo
+Title: Build a zero-dependency Pure Python Neural Network Engine from scratch.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create claim tracker.
+- Goal: Build a zero-dependency Pure Python Neural Network Engine from scratch.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
