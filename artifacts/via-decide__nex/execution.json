@@ -1,7 +1,7 @@
 {
   "repo": "via-decide/nex",
   "mode": "codex_then_antigravity",
-  "branch": "simba/create-claim-tracker",
+  "branch": "simba/build-a-zero-dependency-pure-python-neural-netwo",
   "files_to_create": [
     "codex-task.md",
     "antigravity-repair-task.md",
