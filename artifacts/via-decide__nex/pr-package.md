@@ -1,9 +1,9 @@
-Branch: simba/create-research-gap-detector
-Title: Create research gap detector.
+Branch: simba/create-hypothesis-notebook
+Title: Create hypothesis notebook.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research gap detector.
+- Goal: Create hypothesis notebook.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
