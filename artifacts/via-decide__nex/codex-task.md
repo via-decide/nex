@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create idea evolution tracker.
+Create cross-source comparator.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
