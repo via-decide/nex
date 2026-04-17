@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create concept map builder.
+Create research session recorder.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

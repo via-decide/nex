@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Create concept map builder.
+Create research session recorder.
 
 RULES
 1. Audit touched files first and identify regressions.
