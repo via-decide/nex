@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create evidence notes system.
+Create concept map builder.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
