@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create claim tracker.
+Build a zero-dependency Pure Python Neural Network Engine from scratch.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
