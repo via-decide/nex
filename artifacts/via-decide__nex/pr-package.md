@@ -1,9 +1,9 @@
-Branch: simba/create-research-note-linker
-Title: Create research note linker.
+Branch: simba/create-research-signal-detector
+Title: Create research signal detector.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research note linker.
+- Goal: Create research signal detector.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
