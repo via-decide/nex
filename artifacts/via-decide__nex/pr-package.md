@@ -1,9 +1,9 @@
-Branch: simba/create-research-summary-generator
-Title: Create research summary generator.
+Branch: simba/build-a-solo-founder-cognitive-bias-detector-and
+Title: Build a solo founder cognitive bias detector and reasoning auditor.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research summary generator.
+- Goal: Build a solo founder cognitive bias detector and reasoning auditor.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
