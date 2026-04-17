@@ -1,9 +1,9 @@
-Branch: simba/create-research-summary-generator
-Title: Create research summary generator.
+Branch: simba/create-research-timeline-builder
+Title: Create research timeline builder.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research summary generator.
+- Goal: Create research timeline builder.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
