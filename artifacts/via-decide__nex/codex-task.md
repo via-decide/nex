@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create insight logger.
+Create claim tracker.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
