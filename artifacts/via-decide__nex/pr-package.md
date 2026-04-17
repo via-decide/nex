@@ -1,9 +1,9 @@
-Branch: simba/create-research-summary-generator
-Title: Create research summary generator.
+Branch: simba/create-topic-cluster-organizer
+Title: Create topic cluster organizer.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research summary generator.
+- Goal: Create topic cluster organizer.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
