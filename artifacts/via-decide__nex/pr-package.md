@@ -1,9 +1,9 @@
-Branch: simba/create-evidence-notes-system
-Title: Create evidence notes system.
+Branch: simba/create-concept-map-builder
+Title: Create concept map builder.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create evidence notes system.
+- Goal: Create concept map builder.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
