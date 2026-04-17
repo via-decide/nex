@@ -1,9 +1,9 @@
-Branch: simba/create-research-graph-exporter
-Title: Create research graph exporter.
+Branch: simba/create-decision-insight-extractor
+Title: Create decision insight extractor.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research graph exporter.
+- Goal: Create decision insight extractor.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
