@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create research pipeline orchestrator.
+Create EPUB pipeline adapter.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
