@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Create Zayvora corpus adapter.
+Create a reasoning trace recorder for capturing analytical reasoning steps.
 
 RULES
 1. Audit touched files first and identify regressions.
