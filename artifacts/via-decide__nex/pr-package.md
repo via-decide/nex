@@ -1,9 +1,9 @@
-Branch: simba/create-a-reasoning-trace-recorder-for-capturing-
-Title: Create a reasoning trace recorder for capturing analytical reasoning ...
+Branch: simba/build-a-research-memory-engine-that-records-reas
+Title: Build a research memory engine that records reasoning chains and insi...
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create a reasoning trace recorder for capturing analytical reasoning steps.
+- Goal: Build a research memory engine that records reasoning chains and insights generated during research.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
