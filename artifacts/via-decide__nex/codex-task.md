@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Build a knowledge distillation engine that converts raw research text into structured reasoning units.
+Build a solo founder cognitive bias detector and reasoning auditor.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

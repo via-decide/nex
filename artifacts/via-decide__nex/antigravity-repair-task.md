@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Build a knowledge distillation engine that converts raw research text into structured reasoning units.
+Build a solo founder cognitive bias detector and reasoning auditor.
 
 RULES
 1. Audit touched files first and identify regressions.
