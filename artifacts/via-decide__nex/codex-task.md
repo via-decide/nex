@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Build a research memory engine that records reasoning chains and insights generated during research.
+Build a knowledge distillation engine that converts raw research text into structured reasoning units.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
