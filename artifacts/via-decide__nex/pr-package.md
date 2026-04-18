@@ -1,9 +1,9 @@
-Branch: simba/build-a-solo-founder-cognitive-bias-detector-and
-Title: Build a solo founder cognitive bias detector and reasoning auditor.
+Branch: simba/create-insight-signal-detector
+Title: Create insight signal detector.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Build a solo founder cognitive bias detector and reasoning auditor.
+- Goal: Create insight signal detector.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
