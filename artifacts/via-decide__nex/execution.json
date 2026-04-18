@@ -13,5 +13,5 @@
   "codex_prompt_path": "codex-task.md",
   "repair_prompt_path": "antigravity-repair-task.md",
   "synthesized_file": "writing/epub_adapter.py",
-  "synthesized_size": 22480
+  "synthesized_size": 29586
 }
