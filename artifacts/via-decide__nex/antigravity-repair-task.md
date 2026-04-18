@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Create insight signal detector.
+Create research pipeline orchestrator.
 
 RULES
 1. Audit touched files first and identify regressions.

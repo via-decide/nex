@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create insight signal detector.
+Create research pipeline orchestrator.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

@@ -1,17 +1,17 @@
 {
   "repo": "via-decide/nex",
   "mode": "codex_then_antigravity",
-  "branch": "simba/create-insight-signal-detector",
+  "branch": "simba/create-research-pipeline-orchestrator",
   "files_to_create": [
     "codex-task.md",
     "antigravity-repair-task.md",
     "pr-package.md",
     "execution.json",
-    "analysis/insight_signal_detector.py"
+    "pipeline/research_orchestrator.py"
   ],
   "files_to_modify": [],
   "codex_prompt_path": "codex-task.md",
   "repair_prompt_path": "antigravity-repair-task.md",
-  "synthesized_file": "analysis/insight_signal_detector.py",
-  "synthesized_size": 23275
+  "synthesized_file": "pipeline/research_orchestrator.py",
+  "synthesized_size": 32140
 }
