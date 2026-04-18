@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Build a solo founder cognitive bias detector and reasoning auditor.
+gn8r_task_cognitive_bias_detector.md
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

@@ -1,9 +1,9 @@
-Branch: simba/build-a-solo-founder-cognitive-bias-detector-and
-Title: Build a solo founder cognitive bias detector and reasoning auditor.
+Branch: simba/gn8rtaskcognitivebiasdetectormd
+Title: gn8r_task_cognitive_bias_detector.md
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Build a solo founder cognitive bias detector and reasoning auditor.
+- Goal: gn8r_task_cognitive_bias_detector.md
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
