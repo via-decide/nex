@@ -1,9 +1,9 @@
-Branch: simba/create-research-assistant-interface
-Title: Create research assistant interface.
+Branch: simba/create-decision-engine-bridge
+Title: Create decision engine bridge.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create research assistant interface.
+- Goal: Create decision engine bridge.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
