@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Build a solo founder cognitive bias detector and reasoning auditor.
+gn8r_task_cognitive_bias_detector.md
 
 RULES
 1. Audit touched files first and identify regressions.
