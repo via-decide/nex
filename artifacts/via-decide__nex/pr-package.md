@@ -1,9 +1,9 @@
-Branch: simba/build-a-knowledge-distillation-engine-that-conve
-Title: Build a knowledge distillation engine that converts raw research text...
+Branch: simba/build-a-solo-founder-cognitive-bias-detector-and
+Title: Build a solo founder cognitive bias detector and reasoning auditor.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Build a knowledge distillation engine that converts raw research text into structured reasoning units.
+- Goal: Build a solo founder cognitive bias detector and reasoning auditor.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
