@@ -1,9 +1,9 @@
-Branch: simba/create-insight-signal-detector
-Title: Create insight signal detector.
+Branch: simba/create-research-pipeline-orchestrator
+Title: Create research pipeline orchestrator.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create insight signal detector.
+- Goal: Create research pipeline orchestrator.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
