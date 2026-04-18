@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Build a research memory engine that records reasoning chains and insights generated during research.
+Build a knowledge distillation engine that converts raw research text into structured reasoning units.
 
 RULES
 1. Audit touched files first and identify regressions.
