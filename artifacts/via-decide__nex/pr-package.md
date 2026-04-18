@@ -1,9 +1,9 @@
-Branch: simba/create-zayvora-corpus-adapter
-Title: Create Zayvora corpus adapter.
+Branch: simba/create-a-reasoning-trace-recorder-for-capturing-
+Title: Create a reasoning trace recorder for capturing analytical reasoning ...
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create Zayvora corpus adapter.
+- Goal: Create a reasoning trace recorder for capturing analytical reasoning steps.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
