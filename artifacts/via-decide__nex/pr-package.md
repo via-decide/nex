@@ -1,9 +1,9 @@
-Branch: simba/build-a-research-memory-engine-that-records-reas
-Title: Build a research memory engine that records reasoning chains and insi...
+Branch: simba/build-a-knowledge-distillation-engine-that-conve
+Title: Build a knowledge distillation engine that converts raw research text...
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Build a research memory engine that records reasoning chains and insights generated during research.
+- Goal: Build a knowledge distillation engine that converts raw research text into structured reasoning units.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
