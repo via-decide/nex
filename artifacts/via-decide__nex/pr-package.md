@@ -1,9 +1,9 @@
-Branch: simba/create-epub-pipeline-adapter
-Title: Create EPUB pipeline adapter.
+Branch: simba/create-research-assistant-interface
+Title: Create research assistant interface.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create EPUB pipeline adapter.
+- Goal: Create research assistant interface.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
