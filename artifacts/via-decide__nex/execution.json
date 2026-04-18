@@ -1,17 +1,17 @@
 {
   "repo": "via-decide/nex",
   "mode": "codex_then_antigravity",
-  "branch": "simba/build-a-research-memory-engine-that-records-reas",
+  "branch": "simba/build-a-knowledge-distillation-engine-that-conve",
   "files_to_create": [
     "codex-task.md",
     "antigravity-repair-task.md",
     "pr-package.md",
     "execution.json",
-    "memory/research_memory.py"
+    "distillation/knowledge_distiller.py"
   ],
   "files_to_modify": [],
   "codex_prompt_path": "codex-task.md",
   "repair_prompt_path": "antigravity-repair-task.md",
-  "synthesized_file": "memory/research_memory.py",
-  "synthesized_size": 18469
+  "synthesized_file": "distillation/knowledge_distiller.py",
+  "synthesized_size": 21977
 }
