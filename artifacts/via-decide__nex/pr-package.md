@@ -1,9 +1,9 @@
-Branch: simba/create-decision-engine-bridge
-Title: Create decision engine bridge.
+Branch: simba/create-zayvora-corpus-adapter
+Title: Create Zayvora corpus adapter.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Create decision engine bridge.
+- Goal: Create Zayvora corpus adapter.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests
