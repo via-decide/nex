@@ -22,6 +22,7 @@ from typing import Any
 import anthropic
 
 from .evidence_collector import EvidenceItem
+from .utils import claims_are_similar
 
 
 # ---------------------------------------------------------------------------
@@ -61,30 +62,8 @@ class VerificationReport:
 
 
 # ---------------------------------------------------------------------------
-# Semantic similarity helper (lightweight TF-IDF style)
+# Contradiction helper
 # ---------------------------------------------------------------------------
-
-def _tokenise(text: str) -> set[str]:
-    return set(re.findall(r"\b[a-z]{3,}\b", text.lower()))
-
-_STOP_WORDS = {
-    "the", "and", "for", "that", "this", "with", "are", "was",
-    "has", "have", "been", "from", "which", "they", "their",
-    "can", "may", "also", "more", "will", "its", "not",
-}
-
-
-def _jaccard(a: str, b: str) -> float:
-    ta = _tokenise(a) - _STOP_WORDS
-    tb = _tokenise(b) - _STOP_WORDS
-    if not ta or not tb:
-        return 0.0
-    return len(ta & tb) / len(ta | tb)
-
-
-def _claims_are_similar(a: str, b: str, threshold: float = 0.25) -> bool:
-    return _jaccard(a, b) >= threshold
-
 
 def _claims_contradict(a: str, b: str) -> bool:
     """Heuristic negation detection for obvious contradictions."""
@@ -173,7 +152,7 @@ class VerificationEngine:
             for j, (cj, uj, tj) in enumerate(all_claims):
                 if i == j or assigned[j]:
                     continue
-                if _claims_are_similar(ci, cj):
+                if claims_are_similar(ci, cj):
                     cluster.append((cj, uj, tj))
                     assigned[j] = True
             clusters.append(cluster)
@@ -205,11 +184,13 @@ class VerificationEngine:
                             "source_b": ub,
                         })
 
-            contradicting = [
-                c["source_b"] if c["claim_a"] == representative else c["source_a"]
-                for c in contradictions
-                if c["claim_a"] == representative or c["claim_b"] == representative
-            ]
+            # Collect sources that contradict this representative claim
+            contradicting: list[str] = []
+            for c in contradictions:
+                if c["claim_a"] == representative:
+                    contradicting.append(c["source_b"])
+                elif c["claim_b"] == representative:
+                    contradicting.append(c["source_a"])
 
             vc = VerifiedClaim(
                 claim=representative,

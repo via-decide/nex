@@ -2,6 +2,7 @@ You are working in repository via-decide/nex on branch main.
 
 MISSION
 Create a sovereign decision intelligence extraction engine.
+Build a solo founder cognitive bias detector and reasoning auditor.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.

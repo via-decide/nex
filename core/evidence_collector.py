@@ -138,17 +138,49 @@ Rules:
 
 
 def _llm_extract(client: anthropic.Anthropic, model: str, text: str, url: str) -> dict[str, Any]:
-    content = f"Source URL: {url}\n\nText:\n{_truncate(text)}"
-    message = client.messages.create(
-        model=model,
-        max_tokens=1024,
-        system=_EXTRACT_SYSTEM,
-        messages=[{"role": "user", "content": content}],
-    )
-    raw = message.content[0].text.strip()
-    raw = re.sub(r"^```(?:json)?\s*", "", raw)
-    raw = re.sub(r"\s*```$", "", raw)
-    return json.loads(raw)
+    """Extract structured evidence from raw page text.
+
+    Args:
+        client: Anthropic client instance.
+        model: Model name to use for extraction.
+        text: Raw source text to parse.
+        url: Source URL used for debugging context.
+
+    Returns:
+        Dict with keys: summary, key_claims, citations, extraction_confidence.
+        Returns default empty values on parsing or runtime failures.
+
+    Raises:
+        None.
+    """
+    try:
+        content = f"Source URL: {url}\n\nText:\n{_truncate(text)}"
+        message = client.messages.create(
+            model=model,
+            max_tokens=1024,
+            system=_EXTRACT_SYSTEM,
+            messages=[{"role": "user", "content": content}],
+        )
+        raw = message.content[0].text.strip()
+        raw = re.sub(r"^```(?:json)?\s*", "", raw)
+        raw = re.sub(r"\s*```$", "", raw)
+        return json.loads(raw)
+    except json.JSONDecodeError as exc:
+        print(f"[EvidenceCollector._llm_extract] JSON parse error from {url}: {exc}")
+        return {
+            "summary": "",
+            "key_claims": [],
+            "citations": [],
+            "extraction_confidence": 0.0,
+        }
+    except Exception as exc:
+        print(f"[EvidenceCollector._llm_extract] Unexpected error from {url}: {exc}")
+        return {
+            "summary": "",
+            "key_claims": [],
+            "citations": [],
+            "extraction_confidence": 0.0,
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -213,6 +245,15 @@ class EvidenceCollector:
                     None, _llm_extract, self._llm, self._model, text, src.url
                 )
 
+                # Safely convert extraction_confidence to float
+                try:
+                    conf = float(extracted.get("extraction_confidence", 0.5))
+                    # Clamp to valid range
+                    conf = max(0.0, min(1.0, conf))
+                except (ValueError, TypeError):
+                    print(f"[EvidenceCollector._process] Invalid confidence value from {src.url}")
+                    conf = 0.5
+
                 return EvidenceItem(
                     source_url=src.url,
                     source_title=src.title,
@@ -221,7 +262,7 @@ class EvidenceCollector:
                     key_claims=extracted.get("key_claims", []),
                     citations=extracted.get("citations", []),
                     raw_text_length=len(text),
-                    extraction_confidence=float(extracted.get("extraction_confidence", 0.5)),
+                    extraction_confidence=conf,
                     metadata={"domain": src.domain},
                 )
 
