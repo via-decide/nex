@@ -18,6 +18,7 @@ import asyncio
 import json
 import os
 import uuid
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Any, AsyncIterator
@@ -44,6 +45,13 @@ from core.zayvora_integration import ZayvoraIntegration, ZayvoraRequest, Zayvora
 _runs: dict[str, dict[str, Any]] = {}
 _reports: dict[str, ResearchReport] = {}
 _subchats: dict[str, SubchatEngine] = {}  # keyed by run_id
+_thread_to_engine: dict[str, str] = {}    # Maps thread_id -> run_id for fast lookup
+
+_CLEANUP_CONFIG = {
+    "max_age_seconds": 86400 * 7,  # 7 days
+    "check_interval_seconds": 3600,  # 1 hour
+}
+_last_cleanup: float = time.time()
 
 
 # ---------------------------------------------------------------------------
@@ -81,6 +89,53 @@ class ZayvoraRunRequest(BaseModel):
     context: str
     finding_id: str | None = None
 
+
+
+
+async def _cleanup_old_runs() -> None:
+    """Periodically clean up old completed runs.
+
+    Prevents indefinite memory growth in in-memory stores.
+
+    Returns:
+        None.
+
+    Raises:
+        None.
+    """
+    global _last_cleanup
+    now = time.time()
+
+    # Only run cleanup every check_interval_seconds
+    if now - _last_cleanup < _CLEANUP_CONFIG["check_interval_seconds"]:
+        return
+
+    _last_cleanup = now
+    max_age = _CLEANUP_CONFIG["max_age_seconds"]
+    cutoff_time = datetime.utcnow().timestamp() - max_age
+
+    # Find old runs
+    old_run_ids: list[str] = []
+    for run_id, run in _runs.items():
+        created_str = run.get("created_at", "")
+        if created_str:
+            try:
+                created_dt = datetime.fromisoformat(created_str.replace("Z", "+00:00"))
+                created_ts = created_dt.timestamp()
+                if created_ts < cutoff_time:
+                    old_run_ids.append(run_id)
+            except ValueError:
+                pass
+
+    # Clean up old runs
+    for run_id in old_run_ids:
+        _runs.pop(run_id, None)
+        _reports.pop(run_id, None)
+        _subchats.pop(run_id, None)
+        print(f"[api._cleanup_old_runs] Removed old run {run_id}")
+
+    if old_run_ids:
+        print(f"[api._cleanup_old_runs] Removed {len(old_run_ids)} old runs")
 
 # ---------------------------------------------------------------------------
 # App lifecycle
@@ -169,6 +224,9 @@ async def start_research(
     request: ResearchStartRequest,
     background_tasks: BackgroundTasks,
 ) -> ResearchStartResponse:
+    # Run cleanup if needed
+    await _cleanup_old_runs()
+
     run_id = str(uuid.uuid4())
     _runs[run_id] = {
         "run_id": run_id,
@@ -251,10 +309,26 @@ async def stream_research(run_id: str) -> StreamingResponse:
 
 @app.post("/api/subchat/create")
 async def create_subchat(request: SubchatCreateRequest) -> dict[str, Any]:
+    """Create a subchat thread for a specific finding.
+
+    Args:
+        request: Subchat creation payload.
+
+    Returns:
+        Serialized thread record.
+
+    Raises:
+        HTTPException: If run does not exist or finding_id is invalid.
+    """
     engine = _subchats.get(request.run_id)
     if not engine:
         raise HTTPException(status_code=404, detail="Research run not found or not completed.")
-    thread = engine.create_thread(request.finding_id)
+    try:
+        thread = engine.create_thread(request.finding_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    # Track thread-to-engine mapping for fast lookup
+    _thread_to_engine[thread.thread_id] = request.run_id
     return engine.export_thread(thread.thread_id)
 
 
@@ -264,12 +338,9 @@ async def subchat_message(
     request: SubchatMessageRequest,
 ) -> StreamingResponse:
     """Stream subchat response via SSE."""
-    # Find the engine that owns this thread
-    engine = None
-    for e in _subchats.values():
-        if e.get_thread(thread_id):
-            engine = e
-            break
+    # Fast O(1) lookup using thread-to-engine map
+    run_id = _thread_to_engine.get(thread_id)
+    engine = _subchats.get(run_id) if run_id else None
 
     if not engine:
         raise HTTPException(status_code=404, detail="Thread not found.")
@@ -294,11 +365,18 @@ async def subchat_message(
 
 @app.get("/api/subchat/{thread_id}/export")
 async def export_subchat(thread_id: str) -> dict[str, Any]:
-    for engine in _subchats.values():
-        thread = engine.get_thread(thread_id)
-        if thread:
-            return engine.export_thread(thread_id)
-    raise HTTPException(status_code=404, detail="Thread not found.")
+    # Fast O(1) lookup using thread-to-engine map
+    run_id = _thread_to_engine.get(thread_id)
+    engine = _subchats.get(run_id) if run_id else None
+
+    if not engine:
+        raise HTTPException(status_code=404, detail="Thread not found.")
+
+    thread = engine.get_thread(thread_id)
+    if not thread:
+        raise HTTPException(status_code=404, detail="Thread not found.")
+
+    return engine.export_thread(thread_id)
 
 
 # ---------------------------------------------------------------------------
