@@ -19,6 +19,7 @@ import anthropic
 from .verification_engine import VerificationReport, Confidence
 from .knowledge_graph import KnowledgeGraphData
 from .research_planner import ResearchPlan
+from .utils import claims_are_similar
 
 
 # ---------------------------------------------------------------------------
@@ -217,7 +218,7 @@ class ResearchSynthesizer:
             conf = Confidence.LOW_CONFIDENCE.value
             matched_sources: list[str] = []
             for vc_claim in verification_report.all_claims:
-                if _claims_are_similar(headline, vc_claim.claim):
+                if claims_are_similar(headline, vc_claim.claim):
                     conf = vc_claim.confidence.value
                     matched_sources = vc_claim.supporting_sources[:3]
                     break
@@ -269,34 +270,52 @@ class ResearchSynthesizer:
         return "\n".join(lines)
 
     def _call_llm(self, plan: ResearchPlan, claim_digest: str) -> dict[str, Any]:
-        user_msg = (
-            f"Topic: {plan.topic}\n"
-            f"Subtopics: {', '.join(plan.subtopics)}\n\n"
-            f"Evidence digest:\n{claim_digest}"
-        )
-        message = self._llm.messages.create(
-            model=self._model,
-            max_tokens=4096,
-            system=_SYNTHESIS_SYSTEM,
-            messages=[{"role": "user", "content": user_msg}],
-        )
-        text = message.content[0].text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-        return json.loads(text)
+        """Call LLM to synthesize research report from evidence digest.
 
+        Args:
+            plan: Research plan metadata including topic and subtopics.
+            claim_digest: Normalized digest of verified and contradictory claims.
 
-# ---------------------------------------------------------------------------
-# Shared utility (avoid circular import — copy from verification_engine)
-# ---------------------------------------------------------------------------
+        Returns:
+            Dict with keys: title, executive_summary, key_findings,
+            evidence_sections, limitations, future_research.
 
-def _claims_are_similar(a: str, b: str, threshold: float = 0.2) -> bool:
-    stop = {"the", "and", "for", "that", "with", "are", "was", "has"}
-
-    def tok(t: str) -> set[str]:
-        return set(re.findall(r"\b[a-z]{3,}\b", t.lower())) - stop
-
-    ta, tb = tok(a), tok(b)
-    if not ta or not tb:
-        return False
-    return len(ta & tb) / len(ta | tb) >= threshold
+        Raises:
+            None.
+        """
+        try:
+            user_msg = (
+                f"Topic: {plan.topic}\n"
+                f"Subtopics: {', '.join(plan.subtopics)}\n\n"
+                f"Evidence digest:\n{claim_digest}"
+            )
+            message = self._llm.messages.create(
+                model=self._model,
+                max_tokens=4096,
+                system=_SYNTHESIS_SYSTEM,
+                messages=[{"role": "user", "content": user_msg}],
+            )
+            text = message.content[0].text.strip()
+            text = re.sub(r"^```(?:json)?\s*", "", text)
+            text = re.sub(r"\s*```$", "", text)
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            print(f"[ResearchSynthesizer._call_llm] JSON parse error: {exc}")
+            return {
+                "title": f"Research Report: {plan.topic}",
+                "executive_summary": "Report generation failed due to LLM response parsing error.",
+                "key_findings": [],
+                "evidence_sections": [],
+                "limitations": "Pipeline encountered an error during synthesis.",
+                "future_research": [],
+            }
+        except Exception as exc:
+            print(f"[ResearchSynthesizer._call_llm] Unexpected error: {exc}")
+            return {
+                "title": f"Research Report: {plan.topic}",
+                "executive_summary": "Report generation failed.",
+                "key_findings": [],
+                "evidence_sections": [],
+                "limitations": "Pipeline encountered an unexpected error.",
+                "future_research": [],
+            }

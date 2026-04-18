@@ -231,6 +231,17 @@ class ZayvoraIntegration:
         )
 
     async def _run_remote(self, request: ZayvoraRequest) -> ZayvoraResult:
+        """Execute Zayvora tool on remote endpoint.
+
+        Args:
+            request: Structured Zayvora invocation request.
+
+        Returns:
+            A successful or error ``ZayvoraResult`` if endpoint processing fails.
+
+        Raises:
+            None.
+        """
         payload = {
             "tool": request.tool_type.value,
             "parameters": request.parameters,
@@ -240,19 +251,40 @@ class ZayvoraIntegration:
             "Authorization": f"Bearer {self._api_key}",
             "Content-Type": "application/json",
         }
-        async with httpx.AsyncClient(timeout=120) as client:
-            resp = await client.post(
-                f"{self._endpoint}/run",
-                json=payload,
-                headers=headers,
-            )
-            resp.raise_for_status()
-            data = resp.json()
+        try:
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.post(
+                    f"{self._endpoint}/run",
+                    json=payload,
+                    headers=headers,
+                )
+                resp.raise_for_status()
+                data = resp.json()
 
-        return ZayvoraResult(
-            request=request,
-            status=data.get("status", "success"),
-            output=data.get("output", {}),
-            summary=data.get("summary", ""),
-            artifacts=data.get("artifacts", []),
-        )
+            return ZayvoraResult(
+                request=request,
+                status=data.get("status", "success"),
+                output=data.get("output", {}),
+                summary=data.get("summary", ""),
+                artifacts=data.get("artifacts", []),
+            )
+        except httpx.HTTPError as exc:
+            error_msg = f"Zayvora HTTP error: {exc}"
+            print(f"[ZayvoraIntegration._run_remote] {error_msg}")
+            return ZayvoraResult(
+                request=request,
+                status="error",
+                output={},
+                summary="Zayvora tool execution failed due to network error.",
+                error=error_msg,
+            )
+        except Exception as exc:
+            error_msg = f"Zayvora execution error: {exc}"
+            print(f"[ZayvoraIntegration._run_remote] {error_msg}")
+            return ZayvoraResult(
+                request=request,
+                status="error",
+                output={},
+                summary="Zayvora tool execution failed.",
+                error=error_msg,
+            )

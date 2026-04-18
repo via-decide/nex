@@ -145,16 +145,27 @@ class SubchatEngine:
         return "".join(self.chat_stream(thread_id, user_message))
 
     def chat_stream(self, thread_id: str, user_message: str) -> Iterator[str]:
-        """
-        Send a message and stream the response token-by-token.
-        Yields text chunks.
+        """Send a message and stream the response token-by-token.
+
+        Args:
+            thread_id: Thread identifier created by ``create_thread``.
+            user_message: User-provided message for this thread.
+
+        Yields:
+            Text chunks from the assistant stream or a terminal error message.
+
+        Raises:
+            None.
         """
         thread = self._threads.get(thread_id)
         if not thread:
             yield "Error: thread not found."
             return
 
-        finding = self._findings[thread.finding_id]
+        finding = self._findings.get(thread.finding_id)
+        if not finding:
+            yield f"Error: finding '{thread.finding_id}' not found in report."
+            return
         system = _build_system_prompt(finding, self._report)
 
         # Add user message to history

@@ -79,6 +79,21 @@ def _classify_source(url: str) -> str:
 
 
 def _is_open_access(url: str) -> bool:
+    """Determine if a URL is open-access.
+
+    Args:
+        url: URL to evaluate.
+
+    Returns:
+        True when the URL is considered open-access.
+
+    Raises:
+        None.
+
+    Notes:
+        Uses pessimistic default: unknown domains are treated as paywalled
+        unless explicitly allowlisted.
+    """
     domain = urlparse(url).netloc.lstrip("www.")
     if domain in _OPEN_ACCESS_DOMAINS:
         return True
@@ -86,7 +101,7 @@ def _is_open_access(url: str) -> bool:
         return False
     if _GOV_TLD_PATTERN.search(domain):
         return True
-    return True   # optimistic default; evidence collector will validate
+    return False  # pessimistic: require explicit allowlisting
 
 
 # ---------------------------------------------------------------------------
