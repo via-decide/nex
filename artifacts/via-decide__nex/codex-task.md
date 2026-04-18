@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create Zayvora corpus adapter.
+Create a reasoning trace recorder for capturing analytical reasoning steps.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
