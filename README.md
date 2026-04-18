@@ -1,6 +1,6 @@
 # Nex — Deep Research Engine
 
-Nex is an **Autonomous Research Agent** that transforms a natural-language question into a structured, evidence-backed research report by autonomously querying 50–100 open-access sources, verifying claims, building a knowledge graph, and synthesising findings into an interactive research document.
+Nex is an **Autonomous Research Agent** that transforms a natural-language question into a structured, evidence-backed research report by autonomously querying 10–100 open-access sources, verifying claims, building a knowledge graph, and synthesising findings into an interactive research document.
 
 ---
 
@@ -175,7 +175,8 @@ nex/
 │   ├── knowledge_graph.py         # Module 5: Build concept graph
 │   ├── research_synthesizer.py    # Module 6: Generate report
 │   ├── zayvora_integration.py     # Module 7: Run Zayvora simulations
-│   └── subchat_engine.py          # Module 9: Per-finding chat threads
+│   ├── subchat_engine.py          # Module 9: Per-finding chat threads
+│   └── utils.py                   # Shared text/similarity utilities
 │
 ├── api/                           # FastAPI backend
 │   ├── __init__.py
@@ -202,6 +203,10 @@ nex/
 │   ├── research_pipeline.md
 │   └── ui_architecture.md
 │
+├── research/                      # Supporting analysis utilities
+│   └── bias_detector.py
+├── tests/                         # Regression/unit tests
+│   └── test_bugfixes.py
 ├── .env.example
 ├── requirements.txt
 └── README.md
@@ -222,6 +227,7 @@ nex/
 | Zayvora Integration | `core/zayvora_integration.py` | Routes simulation requests to Zayvora tools; mock fallback when offline |
 | Subchat Engine | `core/subchat_engine.py` | Per-finding chat threads with streaming, citations, Zayvora triggers |
 | Pipeline | `core/pipeline.py` | Orchestrates all modules end-to-end with event streaming |
+| Shared Utils | `core/utils.py` | Shared tokenization and claim similarity helpers used across modules |
 | API | `api/main.py` | FastAPI: REST + SSE endpoints for frontend |
 
 ---
@@ -284,7 +290,7 @@ npm run dev
 
 ## Scaling Strategy
 
-For large research tasks (exhaustive depth, 60-100 sources):
+For large research tasks (exhaustive depth, 60–100 sources):
 
 | Concern | Strategy |
 |---------|----------|
