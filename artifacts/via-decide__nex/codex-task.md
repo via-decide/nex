@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create research assistant interface.
+Create decision engine bridge.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
