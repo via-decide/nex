@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Create a reasoning trace recorder for capturing analytical reasoning steps.
+Build a research memory engine that records reasoning chains and insights generated during research.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
