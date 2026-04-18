@@ -155,18 +155,37 @@ class KnowledgeGraph:
         return self._build_graph_data(raw, report, topic)
 
     def _extract_graph(self, claims: list[str], topic: str) -> dict[str, Any]:
-        claim_text = "\n".join(f"- {c}" for c in claims[:40])
-        user_msg = f"Topic: {topic}\n\nClaims:\n{claim_text}"
-        message = self._llm.messages.create(
-            model=self._model,
-            max_tokens=2048,
-            system=_RELATION_SYSTEM,
-            messages=[{"role": "user", "content": user_msg}],
-        )
-        text = message.content[0].text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-        return json.loads(text)
+        """Extract concepts and relationships from claims.
+
+        Args:
+            claims: Candidate claims used for concept and relation mining.
+            topic: Root topic label used for LLM context.
+
+        Returns:
+            Dict with keys: concepts, relationships.
+
+        Raises:
+            None.
+        """
+        try:
+            claim_text = "\n".join(f"- {c}" for c in claims[:40])
+            user_msg = f"Topic: {topic}\n\nClaims:\n{claim_text}"
+            message = self._llm.messages.create(
+                model=self._model,
+                max_tokens=2048,
+                system=_RELATION_SYSTEM,
+                messages=[{"role": "user", "content": user_msg}],
+            )
+            text = message.content[0].text.strip()
+            text = re.sub(r"^```(?:json)?\s*", "", text)
+            text = re.sub(r"\s*```$", "", text)
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            print(f"[KnowledgeGraph._extract_graph] JSON parse error: {exc}")
+            return {"concepts": [], "relationships": []}
+        except Exception as exc:
+            print(f"[KnowledgeGraph._extract_graph] Unexpected error: {exc}")
+            return {"concepts": [], "relationships": []}
 
     def _build_graph_data(
         self,
