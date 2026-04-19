@@ -229,3 +229,19 @@ def test_hallucination_guard_score(monkeypatch):
     evidence = [SimpleNamespace(evidence_item_id="e1", summary="sum", key_claims=["claim"])]
     result = asyncio.run(guard.run(report, evidence))
     assert result.hallucination_score > 0
+
+
+def test_hallucination_guard_parses_compact_json_grounded_true():
+    guard = HallucinationGuard.__new__(HallucinationGuard)
+    guard._model = "m"
+
+    class _FakeMessages:
+        @staticmethod
+        async def create(**kwargs):
+            return SimpleNamespace(content=[SimpleNamespace(text='{"grounded":true,"suggested_correction":"ok"}')])
+
+    guard._llm = SimpleNamespace(messages=_FakeMessages())
+
+    verdict = asyncio.run(guard._check_sentence("Sentence", "Evidence"))
+    assert verdict.grounded is True
+    assert verdict.suggested_correction == "ok"
