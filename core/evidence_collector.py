@@ -27,6 +27,7 @@ from .source_discovery import DiscoveredSource
 
 @dataclass
 class EvidenceItem:
+    evidence_item_id: str
     source_url: str
     source_title: str
     source_type: str
@@ -35,6 +36,8 @@ class EvidenceItem:
     citations: list[str]
     raw_text_length: int
     extraction_confidence: float   # 0.0 – 1.0
+    published_at: str | None = None
+    contradiction_pairs: list[dict[str, str]] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -126,6 +129,7 @@ Schema:
   "summary": "<2-4 sentence neutral summary of the source>",
   "key_claims": ["<factual claim 1>", ...],  // 3-10 specific, verifiable claims
   "citations": ["<reference or URL mentioned in text>", ...],  // up to 10
+  "published_at": "<ISO date string if available, else null>",
   "extraction_confidence": <0.0-1.0>  // how clearly the text supports extraction
 }
 
@@ -133,6 +137,7 @@ Rules:
 - Claims must be specific and factual (not opinions).
 - Each claim should be a single, complete sentence.
 - Do not invent information not present in the text.
+- Extract publication date if present via metadata tags, byline, DOI/arXiv history, or visible date strings.
 - extraction_confidence: 1.0 = clear academic text, 0.5 = general web, 0.2 = noisy/irrelevant.
 """
 
@@ -171,6 +176,7 @@ def _llm_extract(client: anthropic.Anthropic, model: str, text: str, url: str) -
             "summary": "",
             "key_claims": [],
             "citations": [],
+            "published_at": None,
             "extraction_confidence": 0.0,
         }
     except Exception as exc:
@@ -179,6 +185,7 @@ def _llm_extract(client: anthropic.Anthropic, model: str, text: str, url: str) -
             "summary": "",
             "key_claims": [],
             "citations": [],
+            "published_at": None,
             "extraction_confidence": 0.0,
         }
 
@@ -255,6 +262,7 @@ class EvidenceCollector:
                     conf = 0.5
 
                 return EvidenceItem(
+                    evidence_item_id=src.uid,
                     source_url=src.url,
                     source_title=src.title,
                     source_type=src.source_type,
@@ -263,6 +271,7 @@ class EvidenceCollector:
                     citations=extracted.get("citations", []),
                     raw_text_length=len(text),
                     extraction_confidence=conf,
+                    published_at=extracted.get("published_at"),
                     metadata={"domain": src.domain},
                 )
 
