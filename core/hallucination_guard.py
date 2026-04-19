@@ -5,6 +5,7 @@ Checks sentence-level grounding of synthesis output against collected evidence.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from dataclasses import dataclass, field
@@ -77,9 +78,9 @@ class HallucinationGuard:
                 messages=[{"role": "user", "content": prompt}],
             )
             raw = msg.content[0].text.strip()
-            grounded = '"grounded": true' in raw.lower()
-            correction_match = re.search(r'"suggested_correction"\s*:\s*"(.*?)"', raw, re.DOTALL)
-            correction = correction_match.group(1).strip() if correction_match else sentence
+            parsed = self._parse_verdict(raw)
+            grounded = bool(parsed.get("grounded", True))
+            correction = str(parsed.get("suggested_correction") or sentence).strip()
             return SentenceGrounding(
                 sentence=sentence,
                 grounded=grounded,
@@ -95,6 +96,24 @@ class HallucinationGuard:
     def _split_sentences(self, text: str) -> list[str]:
         parts = [p.strip() for p in re.split(r"(?<=[.!?])\s+", text) if p.strip()]
         return parts
+
+    def _parse_verdict(self, raw: str) -> dict[str, Any]:
+        candidates: list[str] = [raw]
+        fenced = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.DOTALL | re.IGNORECASE)
+        if fenced:
+            candidates.append(fenced.group(1))
+        first_obj = re.search(r"\{.*\}", raw, re.DOTALL)
+        if first_obj:
+            candidates.append(first_obj.group(0))
+
+        for candidate in candidates:
+            try:
+                parsed = json.loads(candidate)
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                continue
+        return {"grounded": True, "suggested_correction": raw}
 
     def _build_evidence_digest(self, evidence: list[EvidenceItem]) -> str:
         lines: list[str] = []
