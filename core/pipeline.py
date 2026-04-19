@@ -27,6 +27,7 @@ from .evidence_collector import EvidenceCollector, EvidenceItem
 from .verification_engine import VerificationEngine, VerificationReport
 from .knowledge_graph import KnowledgeGraph, KnowledgeGraphData
 from .research_synthesizer import ResearchSynthesizer, ResearchReport
+from .hallucination_guard import HallucinationGuard, HallucinationGuardResult
 from .zayvora_integration import ZayvoraIntegration
 
 
@@ -70,6 +71,7 @@ class PipelineResult:
     verification: VerificationReport
     knowledge_graph: KnowledgeGraphData
     report: ResearchReport
+    hallucination_guard: HallucinationGuardResult | None
     events: list[PipelineEvent]
     success: bool
     error: str | None = None
@@ -102,6 +104,7 @@ class DeepResearchPipeline:
         )
         self._kg_builder = KnowledgeGraph()
         self._synthesizer = ResearchSynthesizer()
+        self._hallucination_guard = HallucinationGuard()
         self._zayvora = ZayvoraIntegration() if self.config.enable_zayvora else None
 
     async def run(self, question: str) -> PipelineResult:
@@ -122,6 +125,9 @@ class DeepResearchPipeline:
             sources = await self._discovery.discover_sources(
                 plan.search_queries,
                 source_types=self.config.source_types,
+                event_callback=lambda stage, message, data: events.append(
+                    PipelineEvent(stage, "started", message, data)
+                ),
             )
             sources = self._discovery.rank_sources(sources, keywords=plan.keywords)
             events.append(PipelineEvent(
@@ -153,11 +159,13 @@ class DeepResearchPipeline:
                     f"Verification complete: "
                     f"{len(verification.verified)} VERIFIED, "
                     f"{len(verification.likely)} LIKELY, "
+                    f"{len(verification.contradicted)} CONTRADICTED, "
                     f"{len(verification.low_confidence)} LOW_CONFIDENCE."
                 ),
                 {
                     "verified": len(verification.verified),
                     "likely": len(verification.likely),
+                    "contradicted": len(verification.contradicted),
                     "low_confidence": len(verification.low_confidence),
                     "contradictions": len(verification.contradictions),
                 },
@@ -175,12 +183,22 @@ class DeepResearchPipeline:
             # Stage 6 — Synthesis
             events.append(PipelineEvent("synthesis", "started", "Synthesizing research report..."))
             report = self._synthesizer.synthesize(
-                plan, verification, graph, total_sources=len(sources)
+                plan, verification, graph, total_sources=len(sources), evidence_items=evidence
             )
             events.append(PipelineEvent(
                 "synthesis", "completed",
                 f"Report generated: {len(report.key_findings)} key findings.",
                 {"findings": len(report.key_findings)},
+            ))
+
+            # Stage 8 — Hallucination Guard
+            events.append(PipelineEvent("hallucination_guard", "started", "Running hallucination guard..."))
+            guard_result = await self._hallucination_guard.run(report, evidence)
+            events.append(PipelineEvent(
+                "hallucination_guard",
+                "completed",
+                f"Hallucination score: {guard_result.hallucination_score:.3f}",
+                {"hallucination_score": guard_result.hallucination_score},
             ))
 
             return PipelineResult(
@@ -190,6 +208,7 @@ class DeepResearchPipeline:
                 verification=verification,
                 knowledge_graph=graph,
                 report=report,
+                hallucination_guard=guard_result,
                 events=events,
                 success=True,
             )

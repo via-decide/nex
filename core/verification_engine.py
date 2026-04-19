@@ -32,6 +32,7 @@ from .utils import claims_are_similar
 class Confidence(str, Enum):
     VERIFIED = "VERIFIED"
     LIKELY = "LIKELY"
+    CONTRADICTED = "CONTRADICTED"
     LOW_CONFIDENCE = "LOW_CONFIDENCE"
 
 
@@ -49,16 +50,17 @@ class VerifiedClaim:
 class VerificationReport:
     verified: list[VerifiedClaim]
     likely: list[VerifiedClaim]
+    contradicted: list[VerifiedClaim]
     low_confidence: list[VerifiedClaim]
     contradictions: list[dict[str, Any]]
 
     @property
     def all_claims(self) -> list[VerifiedClaim]:
-        return self.verified + self.likely + self.low_confidence
+        return self.verified + self.likely + self.contradicted + self.low_confidence
 
     @property
     def high_confidence_claims(self) -> list[VerifiedClaim]:
-        return self.verified + self.likely
+        return self.verified + self.likely + self.contradicted
 
 
 # ---------------------------------------------------------------------------
@@ -135,31 +137,32 @@ class VerificationEngine:
         Cross-check all claims and produce a VerificationReport.
         """
         # Collect (claim, source_url, source_type) tuples
-        all_claims: list[tuple[str, str, str]] = []
+        all_claims: list[tuple[str, str, str, EvidenceItem]] = []
         for ev in evidence_list:
             for claim in ev.key_claims:
-                all_claims.append((claim, ev.source_url, ev.source_type))
+                all_claims.append((claim, ev.source_url, ev.source_type, ev))
 
         # Cluster similar claims
-        clusters: list[list[tuple[str, str, str]]] = []
+        clusters: list[list[tuple[str, str, str, EvidenceItem]]] = []
         assigned = [False] * len(all_claims)
 
-        for i, (ci, ui, ti) in enumerate(all_claims):
+        for i, (ci, ui, ti, ei) in enumerate(all_claims):
             if assigned[i]:
                 continue
-            cluster = [(ci, ui, ti)]
+            cluster = [(ci, ui, ti, ei)]
             assigned[i] = True
-            for j, (cj, uj, tj) in enumerate(all_claims):
+            for j, (cj, uj, tj, ej) in enumerate(all_claims):
                 if i == j or assigned[j]:
                     continue
                 if claims_are_similar(ci, cj):
-                    cluster.append((cj, uj, tj))
+                    cluster.append((cj, uj, tj, ej))
                     assigned[j] = True
             clusters.append(cluster)
 
         # Score each cluster
         verified: list[VerifiedClaim] = []
         likely: list[VerifiedClaim] = []
+        contradicted: list[VerifiedClaim] = []
         low_confidence: list[VerifiedClaim] = []
         contradictions: list[dict[str, Any]] = []
 
@@ -174,15 +177,24 @@ class VerificationEngine:
             # Detect contradictions within cluster
             for idx_a in range(len(cluster)):
                 for idx_b in range(idx_a + 1, len(cluster)):
-                    ca, ua, _ = cluster[idx_a]
-                    cb, ub, _ = cluster[idx_b]
+                    ca, ua, _, ea = cluster[idx_a]
+                    cb, ub, _, eb = cluster[idx_b]
                     if _claims_contradict(ca, cb):
-                        contradictions.append({
+                        contradiction = {
                             "claim_a": ca,
                             "source_a": ua,
+                            "evidence_item_id_a": ea.evidence_item_id,
                             "claim_b": cb,
                             "source_b": ub,
-                        })
+                            "evidence_item_id_b": eb.evidence_item_id,
+                        }
+                        contradictions.append(contradiction)
+                        ea.contradiction_pairs.append(
+                            {"opposing_claim": cb, "source_url": ub}
+                        )
+                        eb.contradiction_pairs.append(
+                            {"opposing_claim": ca, "source_url": ua}
+                        )
 
             # Collect sources that contradict this representative claim
             contradicting: list[str] = []
@@ -201,7 +213,10 @@ class VerificationEngine:
             )
 
             # Assign confidence
-            if len(unique_domains) >= 3 or quality_score >= 6:
+            if contradicting:
+                vc.confidence = Confidence.CONTRADICTED
+                contradicted.append(vc)
+            elif len(unique_domains) >= 3 or quality_score >= 6:
                 vc.confidence = Confidence.VERIFIED
                 verified.append(vc)
             elif len(unique_domains) == 2 or quality_score >= 3:
@@ -214,6 +229,7 @@ class VerificationEngine:
         return VerificationReport(
             verified=verified,
             likely=likely,
+            contradicted=contradicted,
             low_confidence=low_confidence,
             contradictions=contradictions,
         )

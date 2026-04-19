@@ -6,9 +6,10 @@ import pytest
 
 from api import main as api_main
 from core.evidence_collector import EvidenceCollector, _llm_extract
+from core.hallucination_guard import HallucinationGuard
 from core.knowledge_graph import KnowledgeGraph
 from core.research_planner import ResearchPlan
-from core.research_synthesizer import KnowledgeGraphData, ResearchFinding, ResearchReport, ResearchSynthesizer
+from core.research_synthesizer import KnowledgeGraphData, ResearchReport, ResearchSynthesizer
 from core.source_discovery import _is_open_access
 from core.subchat_engine import SubchatEngine, SubchatThread
 from core.utils import claims_are_similar
@@ -29,6 +30,7 @@ def test_llm_extract_handles_malformed_json():
         "summary": "",
         "key_claims": [],
         "citations": [],
+        "published_at": None,
         "extraction_confidence": 0.0,
     }
 
@@ -45,7 +47,7 @@ def test_llm_extract_invalid_confidence_value(monkeypatch):
     collector._llm = object()
     collector._model = "m"
 
-    src = SimpleNamespace(url="https://example.com/a", title="t", source_type="web", domain="example.com")
+    src = SimpleNamespace(url="https://example.com/a", title="t", source_type="web", domain="example.com", uid="e1")
     item = asyncio.run(collector._process(None, src))
     assert item is not None
     assert item.extraction_confidence == 0.5
@@ -148,6 +150,8 @@ def test_chat_stream_invalid_finding_id():
         topic="topic",
         depth="standard",
         total_sources_analyzed=0,
+        source_freshness_summary=None,
+        executive_brief=None,
     )
     engine = SubchatEngine.__new__(SubchatEngine)
     engine._report = report
@@ -191,3 +195,37 @@ def test_thread_lookup_with_and_without_map():
     api_main._thread_to_engine.clear()
     with pytest.raises(Exception):
         asyncio.run(api_main.export_subchat("thr-1"))
+
+
+def test_hallucination_guard_score(monkeypatch):
+    guard = HallucinationGuard.__new__(HallucinationGuard)
+    guard._model = "m"
+    guard._llm = None
+
+    async def _fake_check_sentences(sentences, _digest):
+        out = []
+        for s in sentences:
+            out.append(SimpleNamespace(sentence=s, grounded=("ungrounded" not in s), suggested_correction=s))
+        return out
+
+    guard._check_sentences = _fake_check_sentences
+
+    report = ResearchReport(
+        title="t",
+        executive_summary="Grounded sentence. ungrounded sentence.",
+        key_findings=[SimpleNamespace(id="f1", detail="Another grounded sentence.")],
+        evidence_sections=[],
+        limitations="l",
+        future_research=[],
+        sources=[],
+        knowledge_graph=KnowledgeGraphData(nodes=[], edges=[], root_topic="r"),
+        generated_at="now",
+        topic="topic",
+        depth="standard",
+        total_sources_analyzed=0,
+        source_freshness_summary=None,
+        executive_brief=None,
+    )
+    evidence = [SimpleNamespace(evidence_item_id="e1", summary="sum", key_claims=["claim"])]
+    result = asyncio.run(guard.run(report, evidence))
+    assert result.hallucination_score > 0
