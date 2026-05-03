@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "file": "README.md",
+      "type": "action",
+      "tags": ["entry", "surface"]
+    },
+    {
+      "file": "docs/research_pipeline.md",
+      "type": "action",
+      "tags": ["query", "synthesis"]
+    },
+    {
+      "file": "docs/ui_architecture.md",
+      "type": "flow",
+      "tags": ["interaction", "sequence"]
+    },
+    {
+      "file": "docs/execution-patterns.md",
+      "type": "flow",
+      "tags": ["validation", "execution"]
+    },
+    {
+      "file": "docs/nex_architecture.md",
+      "type": "primitive",
+      "tags": ["structure", "components"]
+    },
+    {
+      "file": "metadata/cookbook-index.json",
+      "type": "primitive",
+      "tags": ["index", "registry"]
+    }
+  ]
+}
