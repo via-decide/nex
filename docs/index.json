@@ -3,17 +3,32 @@
     {
       "file": "README.md",
       "category": "systems",
-      "tags": ["entrypoint", "navigation", "integration"]
+      "tags": ["entrypoint", "research-layer", "integration"]
     },
     {
-      "file": "docs/nex_architecture.md",
-      "category": "systems",
-      "tags": ["architecture", "modules", "verification"]
+      "file": "docs/research-map.md",
+      "category": "philosophy",
+      "tags": ["classification", "navigation", "non-destructive"]
+    },
+    {
+      "file": "docs/research-framework.md",
+      "category": "philosophy",
+      "tags": ["method", "constraint-driven", "abstraction"]
     },
     {
       "file": "docs/research_pipeline.md",
       "category": "actions",
-      "tags": ["pipeline", "stages", "execution"]
+      "tags": ["pipeline", "stages", "workflow"]
+    },
+    {
+      "file": "docs/execution-patterns.md",
+      "category": "actions",
+      "tags": ["patterns", "execution", "repeatability"]
+    },
+    {
+      "file": "docs/nex_architecture.md",
+      "category": "systems",
+      "tags": ["architecture", "components", "boundaries"]
     },
     {
       "file": "docs/ui_architecture.md",
@@ -21,19 +36,24 @@
       "tags": ["ui", "interaction", "inspection"]
     },
     {
+      "file": "docs/index-map.md",
+      "category": "systems",
+      "tags": ["indexing", "structure", "routing"]
+    },
+    {
       "file": "artifacts/via-decide__nex/antigravity-repair-task.md",
       "category": "constraints",
-      "tags": ["repair", "minimal-change", "regression"]
+      "tags": ["repair", "risk-control", "minimal-change"]
     },
     {
       "file": "artifacts/via-decide__nex/codex-task.md",
       "category": "constraints",
-      "tags": ["guardrails", "process", "scope"]
+      "tags": ["guardrails", "scope", "protocol"]
     },
     {
       "file": "artifacts/via-decide__nex/pr-package.md",
       "category": "execution",
-      "tags": ["release", "risk", "rollback"]
+      "tags": ["packaging", "validation", "rollback"]
     }
   ]
 }

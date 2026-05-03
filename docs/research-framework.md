@@ -1,50 +1,50 @@
 # Research Framework
 
-This framework makes the operating thinking model explicit without altering source documents.
+Explicit model for how NEX transforms raw markdown into executable system intelligence.
 
 ## 1) Observation
 
-Capture the explicit claim, objective, or architecture statement from a source markdown file in its native wording and context.
+Capture what the document is asserting, designing, or constraining in its native wording.
+
+- preserve author intent
+- preserve contextual boundaries
+- avoid interpretive rewriting
 
 ## 2) Constraint Identification
 
-Extract the limiting conditions that govern safe movement:
+Identify limiting forces that govern viable execution.
 
-- technical limits
-- process limits
-- verification limits
-- scope limits
-
-These constraints are treated as first-class design inputs.
+- resource limits (cost, latency, infrastructure)
+- process limits (scope, sequencing, ownership)
+- verification limits (evidence quality, testability)
+- integration limits (engine compatibility, dependency shape)
 
 ## 3) System Abstraction
 
-Convert observation + constraints into reusable system primitives:
+Convert observation + constraints into reusable system primitives.
 
-- inputs
-- transformation stages
+- input assumptions
+- transformation path
 - control gates
 - outputs
-- failure modes
+- measurable failure modes
 
-Abstractions are portable across domains (research, product, operations).
+This abstraction is the bridge layer between research artifacts and operational engines.
 
 ## 4) Execution Implication
 
-Translate abstractions into concrete execution pathways linked to active engines:
+Route each abstraction to concrete execution surfaces.
 
-- experiment pathways → KUP program
-- decision logic pathways → decide.engine-tools
-- deployment/computation pathways → Zayvora
+- experiment orchestration -> **KUP**
+- decision logic instrumentation -> **Decide engines**
+- deployment/action pathways -> **Zayvora**
 
 ---
 
-## Constraint → Execution Pattern
+## Constraint-Driven Pattern
 
-`observation -> constraint -> dependency shape -> execution path -> measurement loop`
+`observation -> constraint -> system dependency -> execution route -> measurement loop`
 
-### Example
+### Example Path
 
-`API cost pressure -> budget constraint -> external inference dependency -> local-first inference strategy + tool routing -> measured latency/cost/reliability deltas in KUP and Zayvora runs`
-
-This pattern is the framing layer used to interpret and route research into operational systems.
+`API cost pressure -> budget constraint -> external model dependency risk -> local inference + selective tool routing -> latency/cost/reliability measurement across KUP runs and Zayvora execution`

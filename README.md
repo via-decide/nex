@@ -1,29 +1,25 @@
 # NEX — Research Layer
 
 ## What this is
-# Zayvora Cookbook
 
-A collection of execution patterns.
+NEX is not a note pile. It is a structured research-thinking system designed to preserve raw, evolving markdown artifacts while making method and decision flow explicit.
 
-NEX is not a loose note dump. It is a structured research-thinking layer designed to keep raw exploration intact while making methodology explicit. The repository contains evolving research artifacts, but those artifacts are framed as part of a constraint-driven system: constraints shape execution, execution produces evidence, and evidence drives subsequent decisions.
+This layer frames research as a constraint-driven loop:
+
+`constraint -> execution pathway -> measurement -> next decision`
 
 ## How to read
 
-- Start with `docs/research-map.md` for navigation and classification.
-- Use the mapped markdown files for deep dives in their original form.
-- Treat the map and framework as framing layers around source material, not replacements for source material.
+- Entry point: `docs/research-map.md`
+- Framework model: `docs/research-framework.md`
+- Deep dives: existing markdown files in `docs/` and `artifacts/via-decide__nex/`
+
+The framing files organize navigation and methodology; they do not replace source content.
 
 ## Relation to system
 
-This research layer is designed to feed adjacent engines:
+This research layer feeds three connected systems:
 
-- **KUP program**: experiment definition, sequencing, and validation loops.
-- **decide.engine-tools**: decision logic, framing utilities, and operational reasoning pathways.
-- **Zayvora**: execution pathways where research constraints and abstractions become deployable systems.
-## actions
-
-## flows
-
-## primitives
-
-Patterns are designed to be composable.
+- **kup-program**: converts framed constraints into experiment tracks and measurable runs
+- **decide.engine-tools**: consumes abstractions for logic pathways and decision operators
+- **zayvora**: uses execution implications for deployment-oriented, local/remote tradeoff decisions
