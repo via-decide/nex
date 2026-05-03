@@ -1,0 +1,39 @@
+{
+  "topics": [
+    {
+      "file": "README.md",
+      "category": "systems",
+      "tags": ["entrypoint", "navigation", "integration"]
+    },
+    {
+      "file": "docs/nex_architecture.md",
+      "category": "systems",
+      "tags": ["architecture", "modules", "verification"]
+    },
+    {
+      "file": "docs/research_pipeline.md",
+      "category": "actions",
+      "tags": ["pipeline", "stages", "execution"]
+    },
+    {
+      "file": "docs/ui_architecture.md",
+      "category": "systems",
+      "tags": ["ui", "interaction", "inspection"]
+    },
+    {
+      "file": "artifacts/via-decide__nex/antigravity-repair-task.md",
+      "category": "constraints",
+      "tags": ["repair", "minimal-change", "regression"]
+    },
+    {
+      "file": "artifacts/via-decide__nex/codex-task.md",
+      "category": "constraints",
+      "tags": ["guardrails", "process", "scope"]
+    },
+    {
+      "file": "artifacts/via-decide__nex/pr-package.md",
+      "category": "execution",
+      "tags": ["release", "risk", "rollback"]
+    }
+  ]
+}
