@@ -1,0 +1,6 @@
+{
+  "id": "distributed_0003",
+  "protocols": [
+    "crdt"
+  ]
+}

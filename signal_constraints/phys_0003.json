@@ -1,0 +1,8 @@
+{
+  "id": "phys_0003",
+  "signal": [
+    "signal_to_noise_limit",
+    "clock_jitter",
+    "latency_floor"
+  ]
+}

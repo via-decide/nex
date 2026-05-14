@@ -1,0 +1,122 @@
+[
+  {
+    "model_family": "mixed-runtime-stack",
+    "runtime_constraints": [
+      "runtime replaceability",
+      "provider compatibility"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "quantization_profile": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "scheduler_dependencies": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "replay_boundaries": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ],
+    "continuity_guarantees": [
+      "deterministic replay window",
+      "canonical checksum"
+    ],
+    "divergence_classes": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "canonical_lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  },
+  {
+    "model_family": "mixed-runtime-stack",
+    "runtime_constraints": [
+      "runtime replaceability",
+      "provider compatibility"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "quantization_profile": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "scheduler_dependencies": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "replay_boundaries": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ],
+    "continuity_guarantees": [
+      "deterministic replay window",
+      "canonical checksum"
+    ],
+    "divergence_classes": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "canonical_lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  },
+  {
+    "model_family": "mixed-runtime-stack",
+    "runtime_constraints": [
+      "runtime replaceability",
+      "provider compatibility"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "quantization_profile": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "scheduler_dependencies": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "replay_boundaries": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ],
+    "continuity_guarantees": [
+      "deterministic replay window",
+      "canonical checksum"
+    ],
+    "divergence_classes": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "canonical_lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "id": "phys_0001",
+  "thermo": [
+    "thermal_density_limit",
+    "heat_dissipation_pressure",
+    "power_to_heat_coupling"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "nodes": [
+    {
+      "id": "actuator_divergence",
+      "kind": "failure"
+    },
+    {
+      "id": "emergency_cutoff",
+      "kind": "failure"
+    },
+    {
+      "id": "motor_oscillation",
+      "kind": "failure"
+    },
+    {
+      "id": "production_halt",
+      "kind": "failure"
+    },
+    {
+      "id": "safety_override",
+      "kind": "failure"
+    },
+    {
+      "id": "sensor_noise",
+      "kind": "failure"
+    },
+    {
+      "id": "sync_timeout",
+      "kind": "failure"
+    },
+    {
+      "id": "thermal_rise",
+      "kind": "failure"
+    },
+    {
+      "id": "timing_failure",
+      "kind": "failure"
+    },
+    {
+      "id": "unstable_pid_correction",
+      "kind": "failure"
+    }
+  ],
+  "edges": [
+    {
+      "from": "actuator_divergence",
+      "to": "timing_failure",
+      "relation": "propagates_to",
+      "edge_id": "f63830134a75"
+    },
+    {
+      "from": "emergency_cutoff",
+      "to": "production_halt",
+      "relation": "propagates_to",
+      "edge_id": "e83e20fa9dc8"
+    },
+    {
+      "from": "motor_oscillation",
+      "to": "thermal_rise",
+      "relation": "propagates_to",
+      "edge_id": "fe1b55c5aa0f"
+    },
+    {
+      "from": "safety_override",
+      "to": "production_halt",
+      "relation": "propagates_to",
+      "edge_id": "cf4cac7b9cd6"
+    },
+    {
+      "from": "sensor_noise",
+      "to": "unstable_pid_correction",
+      "relation": "propagates_to",
+      "edge_id": "662fcbf55063"
+    },
+    {
+      "from": "sync_timeout",
+      "to": "actuator_divergence",
+      "relation": "propagates_to",
+      "edge_id": "4afbbd61c37d"
+    },
+    {
+      "from": "thermal_rise",
+      "to": "emergency_cutoff",
+      "relation": "propagates_to",
+      "edge_id": "4d519b28f25f"
+    },
+    {
+      "from": "timing_failure",
+      "to": "safety_override",
+      "relation": "propagates_to",
+      "edge_id": "43506db05f3a"
+    },
+    {
+      "from": "unstable_pid_correction",
+      "to": "motor_oscillation",
+      "relation": "propagates_to",
+      "edge_id": "e7dbe489d5f8"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+llama.cpp GGUF CPU fallback, Ollama runtime swaps, ONNX Runtime execution providers, MLX local inference.

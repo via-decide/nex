@@ -1,752 +1,605 @@
-import re
-import json
-import logging
 import argparse
 import dataclasses
-from datetime import datetime
-from enum import Enum
+import datetime
+import json
+import logging
+import os
+import re
+import sys
 from pathlib import Path
-from typing import List, Dict, Optional, Any, Tuple, Pattern
+from typing import Dict, List, Optional, Tuple, Any, Pattern
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger("BiasDetector")
 
-# ============================================================================
-# ENUMS & DATACLASSES
-# ============================================================================
-
-class Severity(Enum):
-    """Enumeration representing the severity level of a detected cognitive bias."""
-    LOW = 1
-    MEDIUM = 2
-    HIGH = 3
-    CRITICAL = 4
-
-    def __str__(self) -> str:
-        return self.name
-
-    def __ge__(self, other: 'Severity') -> bool:
-        if self.__class__ is other.__class__:
-            return self.value >= other.value
-        return NotImplemented
+# ANSI Color Codes for Terminal Output
+class TerminalColors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 
 @dataclasses.dataclass
 class BiasAlert:
     """
-    Data structure representing a single detected cognitive bias.
-    
+    Represents a single detected cognitive bias in the founder's narrative.
+
     Attributes:
-        bias_type (str): The specific cognitive bias identified (e.g., "Sunk Cost Fallacy").
-        severity (Severity): The assessed severity of the bias.
-        evidence (str): The exact substring that triggered the detection.
+        bias_type (str): The name/category of the cognitive bias.
+        severity (int): The risk level of the bias (1-10).
+        evidence (str): The specific phrase or keyword that triggered the detection.
         counter_question (str): A Socratic question designed to challenge the bias.
-        source_segment (str): The broader sentence or paragraph containing the bias.
+        source_segment (str): The full sentence or paragraph where the bias was found.
         detected_at (str): ISO 8601 timestamp of when the detection occurred.
     """
     bias_type: str
-    severity: Severity
+    severity: int
     evidence: str
     counter_question: str
     source_segment: str
-    detected_at: str = dataclasses.field(default_factory=lambda: datetime.utcnow().isoformat())
+    detected_at: str
 
     def to_dict(self) -> Dict[str, Any]:
-        """Converts the BiasAlert to a dictionary for JSON serialization."""
-        return {
-            "bias_type": self.bias_type,
-            "severity": self.severity.name,
-            "evidence": self.evidence,
-            "counter_question": self.counter_question,
-            "source_segment": self.source_segment,
-            "detected_at": self.detected_at
-        }
+        """Converts the BiasAlert instance to a dictionary."""
+        return dataclasses.asdict(self)
 
 
 @dataclasses.dataclass
-class AnalysisResult:
+class AnalysisReport:
     """
-    Data structure representing the full result of a narrative analysis.
-    
+    Aggregate report containing all detected biases and the overall health score.
+
     Attributes:
         document_id (str): Identifier for the analyzed document.
-        health_score (float): Calculated Decision Health Score (0.0 to 100.0).
-        alerts (List[BiasAlert]): All bias alerts detected in the document.
-        segment_count (int): Total number of logical segments analyzed.
+        health_score (int): Overall Decision Health Score (0-100).
+        total_biases_detected (int): Number of biases found.
+        alerts (List[BiasAlert]): List of individual bias alerts.
         analyzed_at (str): ISO 8601 timestamp of the analysis.
     """
     document_id: str
-    health_score: float
+    health_score: int
+    total_biases_detected: int
     alerts: List[BiasAlert]
-    segment_count: int
-    analyzed_at: str = dataclasses.field(default_factory=lambda: datetime.utcnow().isoformat())
+    analyzed_at: str
 
     def to_dict(self) -> Dict[str, Any]:
-        """Converts the AnalysisResult to a dictionary for JSON serialization."""
-        return {
-            "document_id": self.document_id,
-            "health_score": round(self.health_score, 2),
-            "segment_count": self.segment_count,
-            "analyzed_at": self.analyzed_at,
-            "alerts": [alert.to_dict() for alert in self.alerts]
-        }
+        """Converts the AnalysisReport instance to a dictionary."""
+        return dataclasses.asdict(self)
 
-
-@dataclasses.dataclass
-class BiasDefinition:
-    """
-    Definition of a cognitive bias including detection patterns and mitigation strategies.
-    
-    Attributes:
-        name (str): The standard name of the bias.
-        severity (Severity): Default severity assigned to this bias in a founder context.
-        patterns (List[str]): List of regex pattern strings used to detect the bias.
-        counter_questions (List[str]): Socratic questions to challenge the founder's reasoning.
-    """
-    name: str
-    severity: Severity
-    patterns: List[str]
-    counter_questions: List[str]
-
-
-# ============================================================================
-# CORE ENGINE: TAXONOMY & PATTERN MATCHING
-# ============================================================================
 
 class BiasPatternEngine:
     """
-    Engine responsible for maintaining the bias taxonomy and executing regex-based
-    pattern matching against text segments.
+    Engine responsible for compiling and evaluating regex patterns against text 
+    to detect cognitive biases. Contains a built-in taxonomy of 20+ biases.
     """
 
-    def __init__(self) -> None:
+    # Built-in taxonomy of cognitive biases mapping to severity, regex patterns, and Socratic questions.
+    TAXONOMY = {
+        "Sunk Cost Fallacy": {
+            "severity": 8,
+            "patterns": [
+                r"already (spent|invested)", r"too much (time|money) in", r"can'?t turn back now",
+                r"wasted if we stop", r"put so much into", r"already committed", r"gone too far to"
+            ],
+            "question": "If you had not already invested resources into this, would you still make this decision today?"
+        },
+        "Confirmation Bias": {
+            "severity": 7,
+            "patterns": [
+                r"proves (my|our) point", r"just as I thought", r"obviously true",
+                r"everyone agrees", r"validates my assumption", r"exactly what I expected"
+            ],
+            "question": "What evidence exists that completely contradicts your current assumption? Have you actively sought it out?"
+        },
+        "Anchoring Bias": {
+            "severity": 6,
+            "patterns": [
+                r"initial (price|estimate|thought)", r"originally thought", r"starting point",
+                r"based on the first", r"compared to the original"
+            ],
+            "question": "Are you overly relying on the first piece of information you received? How would you decide if you never saw that initial number?"
+        },
+        "Survivorship Bias": {
+            "severity": 9,
+            "patterns": [
+                r"look at (apple|google|facebook|amazon|steve jobs|elon musk)", r"successful companies always",
+                r"they made it by", r"billionaires do", r"worked for them"
+            ],
+            "question": "For every successful example you cited, how many invisible failures did the exact same thing and still failed?"
+        },
+        "Availability Heuristic": {
+            "severity": 6,
+            "patterns": [
+                r"I just saw", r"recently happened", r"everyone is talking about",
+                r"in the news", r"top of mind", r"lately, I'?ve noticed"
+            ],
+            "question": "Are you prioritizing this because it is statistically probable, or simply because it is easy to recall right now?"
+        },
+        "Dunning-Kruger / Overconfidence": {
+            "severity": 9,
+            "patterns": [
+                r"100% sure", r"can'?t fail", r"guaranteed to work",
+                r"I know everything about", r"foolproof", r"absolute certainty", r"no doubt in my mind"
+            ],
+            "question": "What are the specific unknown variables in this scenario? If this fails catastrophically, what will be the most likely reason?"
+        },
+        "Bandwagon Effect": {
+            "severity": 7,
+            "patterns": [
+                r"everyone is doing", r"industry standard", r"all our competitors",
+                r"trending", r"jumping on the", r"following the market"
+            ],
+            "question": "If your competitors were not doing this, would it still make fundamental business sense for your specific company?"
+        },
+        "Optimism Bias": {
+            "severity": 8,
+            "patterns": [
+                r"best case scenario", r"will definitely succeed", r"nothing can go wrong",
+                r"easy win", r"smooth sailing", r"slam dunk"
+            ],
+            "question": "Have you conducted a premortem? Assume it is one year from now and this project completely failed. Why did it fail?"
+        },
+        "Pessimism Bias": {
+            "severity": 5,
+            "patterns": [
+                r"bound to fail", r"always goes wrong", r"worst case",
+                r"hopeless", r"no way this works", r"doomed"
+            ],
+            "question": "Are you letting past negative experiences cloud the objective probability of success for this specific instance?"
+        },
+        "Illusion of Control": {
+            "severity": 8,
+            "patterns": [
+                r"I can control the market", r"completely in my hands", r"my sheer willpower",
+                r"I will make it happen", r"we dictate the terms"
+            ],
+            "question": "What external macroeconomic or market factors exist that are 100% outside of your control?"
+        },
+        "Planning Fallacy": {
+            "severity": 7,
+            "patterns": [
+                r"will only take a (day|week)", r"quick fix", r"done by tomorrow",
+                r"under budget", r"easy to implement", r"won'?t take long"
+            ],
+            "question": "Historically, how accurate have your time and budget estimates been? Should you apply a 2x or 3x multiplier to this estimate?"
+        },
+        "Status Quo Bias": {
+            "severity": 6,
+            "patterns": [
+                r"always done it this way", r"change is too risky", r"let'?s stick to what we know",
+                r"if it ain'?t broke", r"don'?t rock the boat"
+            ],
+            "question": "Is the cost of inaction actually higher than the cost of changing? Are you avoiding change purely out of comfort?"
+        },
+        "Endowment Effect": {
+            "severity": 7,
+            "patterns": [
+                r"my idea is worth more", r"because I built it", r"my baby",
+                r"our proprietary", r"we created it so"
+            ],
+            "question": "If you were acquiring this asset from a third party, would you value it as highly as you do now?"
+        },
+        "Loss Aversion": {
+            "severity": 8,
+            "patterns": [
+                r"can'?t afford to lose", r"protect what we have", r"avoid losing at all costs",
+                r"play it safe", r"minimize loss"
+            ],
+            "question": "Are you missing out on a massive asymmetric upside because you are disproportionately afraid of a small, manageable downside?"
+        },
+        "Recency Bias": {
+            "severity": 6,
+            "patterns": [
+                r"the last customer said", r"our latest feedback", r"just yesterday",
+                r"most recent data", r"the last meeting"
+            ],
+            "question": "Does the most recent data point align with the long-term historical trend, or is it an anomaly?"
+        },
+        "False Consensus Effect": {
+            "severity": 7,
+            "patterns": [
+                r"everyone knows", r"obviously everyone thinks", r"it'?s common sense",
+                r"nobody would want", r"users clearly prefer"
+            ],
+            "question": "Do you have hard quantitative data proving that the majority of your target market shares this belief, or are you projecting?"
+        },
+        "Action Bias": {
+            "severity": 8,
+            "patterns": [
+                r"do something rather than nothing", r"just ship it", r"act now think later",
+                r"move fast and break things", r"we need to act immediately"
+            ],
+            "question": "Is taking immediate action actually better than waiting for more information? What is the cost of pausing for 24 hours?"
+        },
+        "Not Invented Here Syndrome": {
+            "severity": 7,
+            "patterns": [
+                r"didn'?t build it ourselves", r"external tools are bad", r"we must build in-house",
+                r"custom built is better", r"off the shelf is garbage"
+            ],
+            "question": "Is building this internally a core competitive advantage, or is it a distraction from your actual product offering?"
+        },
+        "Authority Bias": {
+            "severity": 8,
+            "patterns": [
+                r"elon musk said", r"the vc told me", r"experts declare",
+                r"because the advisor said", r"my mentor thinks"
+            ],
+            "question": "Even though an authority figure suggested this, does it mathematically and logically apply to your specific company's context?"
+        },
+        "Scarcity Heuristic": {
+            "severity": 7,
+            "patterns": [
+                r"running out of time", r"limited window", r"now or never",
+                r"last chance", r"exploding offer"
+            ],
+            "question": "Are you making this decision because it's fundamentally sound, or simply because you feel artificial time pressure?"
+        },
+        "Zero-Risk Bias": {
+            "severity": 6,
+            "patterns": [
+                r"eliminate all risk", r"100% safe", r"absolutely secure",
+                r"guarantee no loss", r"completely de-risked"
+            ],
+            "question": "Is the cost of eliminating the final 1% of risk actually higher than the cost of the risk itself occurring?"
+        }
+    }
+
+    def __init__(self):
         """Initializes the engine and compiles the regex corpus."""
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.taxonomy: List[BiasDefinition] = self._build_taxonomy()
-        self.compiled_patterns: Dict[str, List[Tuple[Pattern, str]]] = self._compile_corpus()
-        self.logger.debug(f"Initialized BiasPatternEngine with {len(self.taxonomy)} biases.")
+        self.compiled_patterns: Dict[str, Dict[str, Any]] = {}
+        self._compile_corpus()
 
-    def _build_taxonomy(self) -> List[BiasDefinition]:
-        """
-        Constructs the built-in taxonomy of 20+ cognitive biases relevant to solo founders.
-        
-        Returns:
-            List[BiasDefinition]: The complete bias taxonomy.
-        """
-        return [
-            BiasDefinition(
-                name="Sunk Cost Fallacy",
-                severity=Severity.CRITICAL,
-                patterns=[
-                    r"\b(?:already spent|invested too much|can'?t give up now|too late to stop|put so much time into|already built)\b"
-                ],
-                counter_questions=[
-                    "If you had invested $0 and 0 hours so far, would you make this same decision today?",
-                    "Are you continuing because it's the optimal path, or because you fear wasting past effort?"
-                ]
-            ),
-            BiasDefinition(
-                name="Confirmation Bias",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:proves my point|just as I thought|obviously true|everyone agrees|as expected, this shows)\b"
-                ],
-                counter_questions=[
-                    "What specific evidence would prove this assumption completely wrong?",
-                    "Are you selectively ignoring data that contradicts your preferred outcome?"
-                ]
-            ),
-            BiasDefinition(
-                name="Anchoring Bias",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:initial price|original estimate|first thought|started at|baseline assumption)\b"
-                ],
-                counter_questions=[
-                    "Is your current evaluation heavily skewed by the very first number or idea you encountered?",
-                    "If you were presented with this situation blindly today, what would your estimate be?"
-                ]
-            ),
-            BiasDefinition(
-                name="Survivorship Bias",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:they succeeded so|look at (?:steve jobs|elon musk|mark zuckerberg)|all successful founders|unicorns do this)\b"
-                ],
-                counter_questions=[
-                    "How many failed startups did the exact same thing but aren't around to tell the story?",
-                    "Are you optimizing for outlier success tactics rather than fundamental business mechanics?"
-                ]
-            ),
-            BiasDefinition(
-                name="Availability Heuristic",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:saw a tweet|read an article|just happened|everyone is talking about|trending right now)\b"
-                ],
-                counter_questions=[
-                    "Are you overvaluing this information just because it's recent or highly visible?",
-                    "Is there broader, less exciting historical data that contradicts this 'trend'?"
-                ]
-            ),
-            BiasDefinition(
-                name="Dunning-Kruger Effect",
-                severity=Severity.CRITICAL,
-                patterns=[
-                    r"\b(?:it'?s super easy|anyone can do it|I know exactly how|100% sure|foolproof|no brainer)\b"
-                ],
-                counter_questions=[
-                    "What are the unknown unknowns in this domain that experts worry about?",
-                    "If this is so easy, why hasn't it been completely solved by incumbents?"
-                ]
-            ),
-            BiasDefinition(
-                name="Bandwagon Effect",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:everyone is doing|industry trend|all the competitors|hottest new|standard practice now)\b"
-                ],
-                counter_questions=[
-                    "Does this actually serve your specific users, or are you just copying competitors out of FOMO?",
-                    "What is the strategic advantage of doing exactly what everyone else is doing?"
-                ]
-            ),
-            BiasDefinition(
-                name="Overconfidence Bias",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:guaranteed to work|can'?t fail|no risk|absolute certainty|definitely going to)\b"
-                ],
-                counter_questions=[
-                    "Let's assume this fails catastrophically. What was the most likely cause of that failure?",
-                    "Are you confusing your high conviction with actual statistical probability?"
-                ]
-            ),
-            BiasDefinition(
-                name="Illusion of Control",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:I can control|if I just work harder|up to me entirely|force it to happen|will it into existence)\b"
-                ],
-                counter_questions=[
-                    "What external market forces or macroeconomic factors could destroy this plan regardless of your effort?",
-                    "Are you underestimating the role of luck and timing in this outcome?"
-                ]
-            ),
-            BiasDefinition(
-                name="Optimism Bias",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:best case scenario|will definitely happen|nothing can go wrong|smooth sailing|easy win)\b"
-                ],
-                counter_questions=[
-                    "Have you built a realistic worst-case scenario model?",
-                    "Why do you believe you are immune to the standard friction and delays typical in this process?"
-                ]
-            ),
-            BiasDefinition(
-                name="Planning Fallacy",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:will only take a day|quick fix|done by tomorrow|easy weekend project|just a few lines of code)\b"
-                ],
-                counter_questions=[
-                    "Historically, how accurate have your time estimates been for similar tasks?",
-                    "If you multiply your current time estimate by 3, does the ROI still make sense?"
-                ]
-            ),
-            BiasDefinition(
-                name="Status Quo Bias",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:always done it this way|don'?t change it|stick to what we know|if it ain'?t broke)\b"
-                ],
-                counter_questions=[
-                    "Are you avoiding change because it's optimal, or because the transition requires uncomfortable effort?",
-                    "What is the hidden opportunity cost of maintaining the current state?"
-                ]
-            ),
-            BiasDefinition(
-                name="Loss Aversion",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:can'?t afford to lose|protect what we have|too risky to change|play it safe|don'?t want to risk)\b"
-                ],
-                counter_questions=[
-                    "Are you prioritizing not losing over actually winning?",
-                    "If you had nothing to lose right now, what aggressive move would you make?"
-                ]
-            ),
-            BiasDefinition(
-                name="Hindsight Bias",
-                severity=Severity.LOW,
-                patterns=[
-                    r"\b(?:I knew it all along|was obvious from the start|inevitable|bound to happen)\b"
-                ],
-                counter_questions=[
-                    "Did you actually document this prediction beforehand, or are you rewriting history?",
-                    "How does claiming this was 'obvious' help you make better decisions for the future?"
-                ]
-            ),
-            BiasDefinition(
-                name="Base Rate Fallacy",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:exception to the rule|doesn'?t apply to us|we are different|unique situation)\b"
-                ],
-                counter_questions=[
-                    "What empirical data proves you are the exception rather than the rule?",
-                    "If 90% of startups fail doing this, why exactly are you in the 10%?"
-                ]
-            ),
-            BiasDefinition(
-                name="Halo Effect",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:they are ex-google so|famous investor|top tier firm|brilliant because they)\b"
-                ],
-                counter_questions=[
-                    "Are you assuming competence in this specific area just because they have high status in another?",
-                    "If an unknown person gave you this exact same advice, would you follow it?"
-                ]
-            ),
-            BiasDefinition(
-                name="Not Invented Here Syndrome",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:didn'?t build it ourselves|external tools suck|we can build it better|roll our own)\b"
-                ],
-                counter_questions=[
-                    "Is building this in-house actually your core competency and competitive advantage?",
-                    "Are you reinventing the wheel out of ego rather than business utility?"
-                ]
-            ),
-            BiasDefinition(
-                name="False Consensus Effect",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:everyone wants this feature|users obviously need|nobody likes|it'?s common sense that users)\b"
-                ],
-                counter_questions=[
-                    "Do you have quantitative user data to back this up, or are you projecting your own preferences?",
-                    "Have you actually spoken to users who violently disagree with this assumption?"
-                ]
-            ),
-            BiasDefinition(
-                name="Action Bias",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:need to do something|can'?t just sit here|better than doing nothing|just ship it and see)\b"
-                ],
-                counter_questions=[
-                    "Is taking immediate action actually better than waiting for clearer data?",
-                    "Are you acting out of anxiety rather than strategic necessity?"
-                ]
-            ),
-            BiasDefinition(
-                name="Information Bias",
-                severity=Severity.MEDIUM,
-                patterns=[
-                    r"\b(?:need more data|let'?s wait for more research|not enough information yet|need to analyze further)\b"
-                ],
-                counter_questions=[
-                    "Will more information actually change your decision, or are you just delaying execution?",
-                    "What is the cost of waiting for perfect information?"
-                ]
-            ),
-            BiasDefinition(
-                name="Endowment Effect",
-                severity=Severity.HIGH,
-                patterns=[
-                    r"\b(?:our code is worth more|my idea is brilliant|can'?t give up equity for that|worth more because I made it)\b"
-                ],
-                counter_questions=[
-                    "If you were an objective third-party buyer, what would you genuinely pay for this?",
-                    "Are you overvaluing this asset simply because you own it?"
-                ]
-            )
-        ]
-
-    def _compile_corpus(self) -> Dict[str, List[Tuple[Pattern, str]]]:
-        """
-        Compiles all regex patterns for performance.
-        
-        Returns:
-            Dict mapping bias names to a list of tuples containing the compiled regex and the raw pattern string.
-        """
-        compiled = {}
-        for bias in self.taxonomy:
-            compiled[bias.name] = []
-            for pattern in bias.patterns:
+    def _compile_corpus(self) -> None:
+        """Compiles the regex patterns for performance."""
+        for bias_name, data in self.TAXONOMY.items():
+            compiled_regexes = []
+            for pattern in data["patterns"]:
+                # Use word boundaries and ignore case for robust matching
                 try:
-                    # Use IGNORECASE and DOTALL for robust matching
-                    compiled_regex = re.compile(pattern, re.IGNORECASE | re.DOTALL)
-                    compiled[bias.name].append((compiled_regex, pattern))
+                    compiled = re.compile(rf"\b{pattern}\b", re.IGNORECASE)
+                    compiled_regexes.append(compiled)
                 except re.error as e:
-                    self.logger.error(f"Failed to compile regex for {bias.name}: {pattern}. Error: {e}")
-        return compiled
+                    logger.error(f"Failed to compile regex '{pattern}' for {bias_name}: {e}")
+
+            self.compiled_patterns[bias_name] = {
+                "severity": data["severity"],
+                "question": data["question"],
+                "regexes": compiled_regexes
+            }
 
     def scan_segment(self, segment: str) -> List[BiasAlert]:
         """
-        Scans a single text segment against the compiled regex corpus.
-        
+        Scans a single logical segment (e.g., a sentence) for cognitive biases.
+
         Args:
-            segment (str): The text segment (e.g., a sentence or paragraph) to analyze.
-            
+            segment (str): The text segment to analyze.
+
         Returns:
             List[BiasAlert]: A list of detected biases in the segment.
         """
         alerts = []
-        if not segment.strip():
-            return alerts
+        timestamp = datetime.datetime.utcnow().isoformat() + "Z"
 
-        for bias in self.taxonomy:
-            patterns = self.compiled_patterns.get(bias.name, [])
-            for compiled_regex, raw_pattern in patterns:
-                match = compiled_regex.search(segment)
+        for bias_name, data in self.compiled_patterns.items():
+            for regex in data["regexes"]:
+                match = regex.search(segment)
                 if match:
-                    # Select the first counter question (could be randomized in future iterations)
-                    counter_q = bias.counter_questions[0] if bias.counter_questions else "Why do you believe this is absolutely true?"
-                    
                     alert = BiasAlert(
-                        bias_type=bias.name,
-                        severity=bias.severity,
+                        bias_type=bias_name,
+                        severity=data["severity"],
                         evidence=match.group(0),
-                        counter_question=counter_q,
-                        source_segment=segment.strip()
+                        counter_question=data["question"],
+                        source_segment=segment.strip(),
+                        detected_at=timestamp
                     )
                     alerts.append(alert)
-                    self.logger.debug(f"Detected {bias.name} in segment.")
-                    # Break after first match per bias type per segment to avoid alert fatigue
+                    # Break after first match of a specific bias type in a segment to avoid duplicates
                     break 
+
         return alerts
 
 
-# ============================================================================
-# ANALYSIS ORCHESTRATOR
-# ============================================================================
-
 class FounderNarrativeAnalyzer:
     """
-    High-level orchestrator that processes raw decision text, splits it into
-    logical segments, runs multi-pass bias detection, and calculates aggregate risk.
+    Processes raw decision text, splits it into logical segments, and runs 
+    multi-pass bias detection using the BiasPatternEngine.
     """
 
-    def __init__(self) -> None:
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.engine = BiasPatternEngine()
-
-    def _split_segments(self, text: str) -> List[str]:
+    def __init__(self, severity_threshold: int = 1):
         """
-        Splits raw text into logical segments (paragraphs or sentences) for granular analysis.
-        
         Args:
-            text (str): The raw input text.
-            
-        Returns:
-            List[str]: A list of text segments.
+            severity_threshold (int): Minimum severity (1-10) for an alert to be included.
         """
-        # First split by double newlines to get paragraphs
-        paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
-        segments = []
-        
-        for para in paragraphs:
-            # If a paragraph is exceptionally long, split by sentences.
-            # Using a simple heuristic: split by period followed by space.
-            if len(para) > 300:
-                sentences = re.split(r'(?<=\.)\s+', para)
-                segments.extend([s.strip() for s in sentences if s.strip()])
-            else:
-                segments.append(para)
-                
-        return segments
+        self.engine = BiasPatternEngine()
+        self.severity_threshold = severity_threshold
 
-    def _calculate_health_score(self, alerts: List[BiasAlert], total_segments: int) -> float:
+    def _split_into_segments(self, text: str) -> List[str]:
         """
-        Computes an overall Decision Health Score (0-100) based on bias density and severity.
+        Splits raw text into logical sentences/segments.
+
+        Args:
+            text (str): The raw narrative text.
+
+        Returns:
+            List[str]: A list of sentence segments.
+        """
+        # Replace newlines with spaces
+        text = text.replace('\n', ' ')
+        # Split by common sentence terminators followed by a space
+        segments = re.split(r'(?<=[.!?]) +', text)
+        return [seg.strip() for seg in segments if len(seg.strip()) > 5]
+
+    def _calculate_health_score(self, alerts: List[BiasAlert]) -> int:
+        """
+        Computes the Decision Health Score (0-100) based on bias density and severity.
         
         Args:
             alerts (List[BiasAlert]): Detected biases.
-            total_segments (int): Total number of segments analyzed.
-            
+
         Returns:
-            float: The calculated health score.
+            int: Health score from 0 to 100.
         """
-        if total_segments == 0:
-            return 100.0
+        base_score = 100
+        penalty = 0
 
-        score = 100.0
-        
-        # Deductions based on severity
-        severity_weights = {
-            Severity.LOW: 2.0,
-            Severity.MEDIUM: 5.0,
-            Severity.HIGH: 10.0,
-            Severity.CRITICAL: 15.0
-        }
+        for alert in alerts:
+            # Higher severity biases carry exponentially more weight
+            if alert.severity >= 9:
+                penalty += 15
+            elif alert.severity >= 7:
+                penalty += 10
+            elif alert.severity >= 5:
+                penalty += 5
+            else:
+                penalty += 2
 
-        total_deduction = sum(severity_weights.get(alert.severity, 0.0) for alert in alerts)
-        
-        # Density penalty: if a high percentage of segments have biases, penalize further
-        bias_density = len(alerts) / total_segments
-        density_penalty = (bias_density * 20.0) # Max 20 points penalty for density
-        
-        final_score = score - total_deduction - density_penalty
-        
-        # Clamp between 0 and 100
-        return max(0.0, min(100.0, final_score))
+        final_score = base_score - penalty
+        return max(0, min(final_score, 100))
 
-    def analyze(self, text: str, document_id: str = "doc_unknown") -> AnalysisResult:
+    def analyze(self, narrative_text: str, document_id: str = "unknown") -> AnalysisReport:
         """
-        Executes the full reasoning audit pipeline on the provided text.
-        
+        Analyzes a founder's narrative for cognitive biases.
+
         Args:
-            text (str): The founder's decision narrative.
-            document_id (str): An identifier for the document.
-            
+            narrative_text (str): The raw decision text.
+            document_id (str): Optional identifier for the document.
+
         Returns:
-            AnalysisResult: The complete analysis result.
+            AnalysisReport: The comprehensive analysis report.
         """
-        self.logger.info(f"Starting analysis for document: {document_id}")
-        segments = self._split_segments(text)
+        logger.info(f"Starting analysis for document: {document_id}")
+        segments = self._split_into_segments(narrative_text)
         all_alerts: List[BiasAlert] = []
-        
+
         for segment in segments:
             alerts = self.engine.scan_segment(segment)
-            all_alerts.extend(alerts)
-            
-        health_score = self._calculate_health_score(all_alerts, len(segments))
-        
-        result = AnalysisResult(
+            filtered_alerts = [a for a in alerts if a.severity >= self.severity_threshold]
+            all_alerts.extend(filtered_alerts)
+
+        health_score = self._calculate_health_score(all_alerts)
+        timestamp = datetime.datetime.utcnow().isoformat() + "Z"
+
+        report = AnalysisReport(
             document_id=document_id,
             health_score=health_score,
+            total_biases_detected=len(all_alerts),
             alerts=all_alerts,
-            segment_count=len(segments)
+            analyzed_at=timestamp
         )
-        
-        self.logger.info(f"Analysis complete. Score: {health_score:.2f}, Alerts: {len(all_alerts)}")
-        return result
+
+        logger.info(f"Analysis complete. Score: {health_score}, Biases found: {len(all_alerts)}")
+        return report
 
 
-# ============================================================================
-# EXPORT & REPORTING
-# ============================================================================
+class ReportExporter:
+    """Handles exporting the AnalysisReport to various formats (JSON, Markdown, Terminal)."""
 
-class ReportGenerator:
-    """Handles the formatting and exporting of analysis results to various formats."""
-
-    # ANSI Color Codes for Terminal Output
-    C_RESET = "\033[0m"
-    C_RED = "\033[91m"
-    C_YELLOW = "\033[93m"
-    C_GREEN = "\033[92m"
-    C_CYAN = "\033[96m"
-    C_BOLD = "\033[1m"
-
-    @classmethod
-    def export_json(cls, result: AnalysisResult, filepath: Optional[Path] = None) -> str:
-        """Exports the result as a JSON string, optionally writing to a file."""
-        json_data = json.dumps(result.to_dict(), indent=4)
+    @staticmethod
+    def to_json(report: AnalysisReport, filepath: Optional[str] = None) -> str:
+        """Exports report to a JSON string, optionally saving to a file."""
+        json_data = json.dumps(report.to_dict(), indent=4)
         if filepath:
-            filepath.write_text(json_data, encoding="utf-8")
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(json_data)
+            logger.info(f"JSON report saved to {filepath}")
         return json_data
 
-    @classmethod
-    def export_markdown(cls, result: AnalysisResult, filepath: Optional[Path] = None) -> str:
-        """Exports the result as a Markdown advisory report."""
+    @staticmethod
+    def to_markdown(report: AnalysisReport, filepath: Optional[str] = None) -> str:
+        """Exports report to a formatted Markdown string, optionally saving to a file."""
         lines = [
-            f"# Cognitive Bias Advisory Report: `{result.document_id}`",
-            f"**Analyzed At:** {result.analyzed_at}",
-            f"**Total Segments Analyzed:** {result.segment_count}",
-            "",
-            f"## Decision Health Score: **{result.health_score:.2f} / 100**",
-            ""
+            f"# Cognitive Bias Analysis Report",
+            f"**Document ID:** `{report.document_id}`",
+            f"**Analyzed At:** `{report.analyzed_at}`",
+            f"**Decision Health Score:** `{report.health_score}/100`",
+            f"**Total Biases Detected:** `{report.total_biases_detected}`",
+            "\n## Detected Biases\n"
         ]
 
-        if result.health_score >= 80:
-            lines.append("> **Status:** Healthy reasoning. Minimal cognitive distortion detected.")
-        elif result.health_score >= 50:
-            lines.append("> **Status:** Warning. Several biases detected that may compromise judgment. Review counter-questions.")
+        if not report.alerts:
+            lines.append("*No significant cognitive biases detected. Reasoning appears sound.*")
         else:
-            lines.append("> **Status:** CRITICAL. High density of severe cognitive biases. Do not execute decision without peer review.")
-
-        lines.append("\n## Detected Biases\n")
-        
-        if not result.alerts:
-            lines.append("*No significant cognitive biases detected.*")
-        else:
-            # Sort alerts by severity descending
-            sorted_alerts = sorted(result.alerts, key=lambda a: a.severity.value, reverse=True)
-            for alert in sorted_alerts:
+            for i, alert in enumerate(report.alerts, 1):
                 lines.extend([
-                    f"### {alert.bias_type} `[{alert.severity.name}]`",
+                    f"### {i}. {alert.bias_type} (Severity: {alert.severity}/10)",
                     f"- **Trigger Evidence:** \"{alert.evidence}\"",
-                    f"- **Context:** \"{alert.source_segment}\"",
+                    f"- **Context Segment:** > {alert.source_segment}",
                     f"- **Socratic Challenge:** **{alert.counter_question}**",
                     ""
                 ])
 
         md_data = "\n".join(lines)
         if filepath:
-            filepath.write_text(md_data, encoding="utf-8")
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(md_data)
+            logger.info(f"Markdown report saved to {filepath}")
         return md_data
 
-    @classmethod
-    def export_terminal(cls, result: AnalysisResult) -> str:
-        """Exports a color-formatted summary for terminal output."""
-        lines = []
+    @staticmethod
+    def to_terminal(report: AnalysisReport) -> None:
+        """Prints a color-formatted summary of the report to the terminal."""
+        c = TerminalColors
+        print(f"\n{c.HEADER}{c.BOLD}=== ANTIGRAVITY BIAS DETECTOR: ANALYSIS REPORT ==={c.ENDC}")
+        print(f"Document ID: {c.OKCYAN}{report.document_id}{c.ENDC}")
         
-        # Header
-        lines.append(f"\n{cls.C_BOLD}{cls.C_CYAN}=== VIA DECIDE REASONING AUDIT ==={cls.C_RESET}")
-        lines.append(f"Document: {result.document_id}")
-        
-        # Score Color Logic
-        if result.health_score >= 80:
-            score_color = cls.C_GREEN
-        elif result.health_score >= 50:
-            score_color = cls.C_YELLOW
-        else:
-            score_color = cls.C_RED
+        # Color code the health score
+        score_color = c.OKGREEN
+        if report.health_score < 50:
+            score_color = c.FAIL
+        elif report.health_score < 80:
+            score_color = c.WARNING
             
-        lines.append(f"Decision Health Score: {cls.C_BOLD}{score_color}{result.health_score:.2f} / 100{cls.C_RESET}")
-        lines.append(f"Segments Analyzed: {result.segment_count}")
-        lines.append("-" * 40)
+        print(f"Decision Health Score: {score_color}{c.BOLD}{report.health_score}/100{c.ENDC}")
+        print(f"Total Biases Detected: {c.WARNING}{report.total_biases_detected}{c.ENDC}\n")
 
-        if not result.alerts:
-            lines.append(f"{cls.C_GREEN}No cognitive biases detected. Clear reasoning.{cls.C_RESET}")
-        else:
-            sorted_alerts = sorted(result.alerts, key=lambda a: a.severity.value, reverse=True)
-            for alert in sorted_alerts:
-                sev_color = cls.C_RED if alert.severity in (Severity.CRITICAL, Severity.HIGH) else cls.C_YELLOW
-                lines.append(f"{cls.C_BOLD}{sev_color}[{alert.severity.name}] {alert.bias_type}{cls.C_RESET}")
-                lines.append(f"  {cls.C_CYAN}Evidence:{cls.C_RESET} \"{alert.evidence}\"")
-                lines.append(f"  {cls.C_YELLOW}Challenge:{cls.C_RESET} {alert.counter_question}")
-                lines.append("")
+        if not report.alerts:
+            print(f"{c.OKGREEN}Excellent! No significant cognitive biases detected.{c.ENDC}\n")
+            return
 
-        lines.append(f"{cls.C_BOLD}{cls.C_CYAN}=================================={cls.C_RESET}\n")
-        return "\n".join(lines)
-
-
-# ============================================================================
-# BATCH PROCESSING & CLI
-# ============================================================================
-
-def process_batch(directory: Path, analyzer: FounderNarrativeAnalyzer, threshold: Severity) -> List[AnalysisResult]:
-    """
-    Processes all text/markdown files in a given directory.
-    
-    Args:
-        directory (Path): The directory to scan.
-        analyzer (FounderNarrativeAnalyzer): The instantiated analyzer.
-        threshold (Severity): The minimum severity threshold for alerts.
+        print(f"{c.UNDERLINE}Detailed Alerts:{c.ENDC}\n")
+        for alert in report.alerts:
+            severity_color = c.FAIL if alert.severity >= 8 else c.WARNING
+            print(f"[{severity_color}Severity {alert.severity}{c.ENDC}] {c.BOLD}{alert.bias_type}{c.ENDC}")
+            print(f"  {c.OKBLUE}Evidence:{c.ENDC} \"{alert.evidence}\"")
+            print(f"  {c.OKBLUE}Context:{c.ENDC}  {alert.source_segment}")
+            print(f"  {c.FAIL}Challenge:{c.ENDC} {alert.counter_question}\n")
         
-    Returns:
-        List[AnalysisResult]: A list of results for all processed documents.
-    """
-    results = []
-    valid_extensions = {".txt", ".md"}
-    
-    for filepath in directory.rglob("*"):
-        if filepath.is_file() and filepath.suffix.lower() in valid_extensions:
+        print(f"{c.HEADER}=================================================={c.ENDC}\n")
+
+
+class BatchProcessor:
+    """Handles processing multiple decision documents from a directory."""
+
+    def __init__(self, analyzer: FounderNarrativeAnalyzer):
+        self.analyzer = analyzer
+
+    def process_directory(self, dir_path: str, output_dir: str, format_type: str = "json") -> None:
+        """
+        Scans a directory for .txt files, analyzes them, and exports reports.
+
+        Args:
+            dir_path (str): Path to the directory containing input texts.
+            output_dir (str): Path to the directory where reports will be saved.
+            format_type (str): Output format ('json', 'md', or 'both').
+        """
+        input_path = Path(dir_path)
+        out_path = Path(output_dir)
+        
+        if not input_path.is_dir():
+            logger.error(f"Input directory does not exist: {dir_path}")
+            sys.exit(1)
+
+        out_path.mkdir(parents=True, exist_ok=True)
+        
+        text_files = list(input_path.glob("*.txt"))
+        if not text_files:
+            logger.warning(f"No .txt files found in {dir_path}")
+            return
+
+        logger.info(f"Found {len(text_files)} files to process in batch mode.")
+
+        for file_path in text_files:
             try:
-                text = filepath.read_text(encoding="utf-8")
-                result = analyzer.analyze(text, document_id=filepath.name)
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
                 
-                # Filter alerts by threshold
-                filtered_alerts = [a for a in result.alerts if a.severity >= threshold]
-                result.alerts = filtered_alerts
+                report = self.analyzer.analyze(content, document_id=file_path.name)
                 
-                # Recalculate score based on filtered alerts
-                result.health_score = analyzer._calculate_health_score(filtered_alerts, result.segment_count)
-                
-                results.append(result)
+                base_name = file_path.stem
+                if format_type in ["json", "both"]:
+                    ReportExporter.to_json(report, str(out_path / f"{base_name}_report.json"))
+                if format_type in ["md", "both"]:
+                    ReportExporter.to_markdown(report, str(out_path / f"{base_name}_report.md"))
+                    
             except Exception as e:
-                logging.error(f"Failed to process {filepath.name}: {e}")
-                
-    return results
+                logger.error(f"Error processing file {file_path.name}: {e}")
 
-def setup_logging(verbose: bool) -> None:
-    """Configures the root logger based on verbosity."""
-    level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
 
-def main() -> None:
-    """CLI Entry Point."""
+def main():
+    """CLI Entry point for the Bias Detector."""
     parser = argparse.ArgumentParser(
-        description="Nex Bias Detector: Solo Founder Cognitive Bias & Reasoning Auditor",
+        description="Antigravity Cognitive Bias Detector & Reasoning Auditor",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    
+
     input_group = parser.add_mutually_exclusive_group(required=True)
-    input_group.add_argument("--text", type=str, help="Raw narrative text to analyze directly.")
-    input_group.add_argument("--file", type=Path, help="Path to a single text or markdown file.")
-    input_group.add_argument("--dir", type=Path, help="Path to a directory for batch processing.")
-    
-    parser.add_argument("--threshold", type=str, choices=[s.name for s in Severity], default="LOW",
-                        help="Minimum severity threshold to report.")
-    parser.add_argument("--format", type=str, choices=["terminal", "json", "markdown"], default="terminal",
-                        help="Output format.")
-    parser.add_argument("--outdir", type=Path, default=None,
-                        help="Directory to save output reports (JSON/Markdown). If omitted, prints to stdout.")
-    parser.add_argument("--verbose", action="store_true", help="Enable debug logging.")
-    
+    input_group.add_argument("--text", type=str, help="Raw text string to analyze")
+    input_group.add_argument("--file", type=str, help="Path to a single text file to analyze")
+    input_group.add_argument("--dir", type=str, help="Path to a directory of text files for batch processing")
+
+    parser.add_argument("--threshold", type=int, default=1, choices=range(1, 11), 
+                        help="Minimum severity threshold (1-10) to flag an alert")
+    parser.add_argument("--format", type=str, default="term", choices=["term", "json", "md", "all"],
+                        help="Output format for single file/text analysis")
+    parser.add_argument("--outdir", type=str, default="./bias_reports",
+                        help="Output directory for reports (used with --dir or --format json/md)")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose debug logging")
+
     args = parser.parse_args()
-    setup_logging(args.verbose)
-    
-    analyzer = FounderNarrativeAnalyzer()
-    threshold_enum = Severity[args.threshold]
-    
-    results: List[AnalysisResult] = []
-    
-    # --- Input Processing ---
-    if args.text:
-        res = analyzer.analyze(args.text, document_id="inline_text")
-        res.alerts = [a for a in res.alerts if a.severity >= threshold_enum]
-        res.health_score = analyzer._calculate_health_score(res.alerts, res.segment_count)
-        results.append(res)
-        
-    elif args.file:
-        if not args.file.exists():
-            logging.error(f"File not found: {args.file}")
-            sys.exit(1)
-        text = args.file.read_text(encoding="utf-8")
-        res = analyzer.analyze(text, document_id=args.file.name)
-        res.alerts = [a for a in res.alerts if a.severity >= threshold_enum]
-        res.health_score = analyzer._calculate_health_score(res.alerts, res.segment_count)
-        results.append(res)
-        
-    elif args.dir:
-        if not args.dir.is_dir():
-            logging.error(f"Directory not found: {args.dir}")
-            sys.exit(1)
-        results = process_batch(args.dir, analyzer, threshold_enum)
-        
-    if not results:
-        logging.info("No documents processed.")
+
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
+    analyzer = FounderNarrativeAnalyzer(severity_threshold=args.threshold)
+
+    # Handle Batch Directory Mode
+    if args.dir:
+        batch_format = "both" if args.format == "all" else args.format
+        if batch_format == "term":
+            batch_format = "json" # Default to json for batch if term is selected
+            logger.info("Terminal format not supported for batch, defaulting to JSON output.")
+            
+        processor = BatchProcessor(analyzer)
+        processor.process_directory(args.dir, args.outdir, format_type=batch_format)
         sys.exit(0)
 
-    # --- Output Generation ---
-    if args.outdir:
-        args.outdir.mkdir(parents=True, exist_ok=True)
+    # Handle Single Text or File Mode
+    narrative_text = ""
+    doc_id = "cli_input"
+
+    if args.text:
+        narrative_text = args.text
+    elif args.file:
+        file_path = Path(args.file)
+        if not file_path.exists():
+            logger.error(f"File not found: {args.file}")
+            sys.exit(1)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            narrative_text = f.read()
+        doc_id = file_path.name
+
+    if not narrative_text.strip():
+        logger.error("Input text is empty.")
+        sys.exit(1)
+
+    # Run Analysis
+    report = analyzer.analyze(narrative_text, document_id=doc_id)
+
+    # Handle Output
+    if args.format in ["term", "all"]:
+        ReportExporter.to_terminal(report)
+    
+    if args.format in ["json", "all"]:
+        out_path = Path(args.outdir)
+        out_path.mkdir(parents=True, exist_ok=True)
+        ReportExporter.to_json(report, str(out_path / f"{doc_id}_report.json"))
         
-    for res in results:
-        if args.format == "json":
-            out_path = args.outdir / f"{res.document_id}_report.json" if args.outdir else None
-            output = ReportGenerator.export_json(res, out_path)
-            if not args.outdir:
-                print(output)
-                
-        elif args.format == "markdown":
-            out_path = args.outdir / f"{res.document_id}_report.md" if args.outdir else None
-            output = ReportGenerator.export_markdown(res, out_path)
-            if not args.outdir:
-                print(output)
-                
-        elif args.format == "terminal":
-            print(ReportGenerator.export_terminal(res))
+    if args.format in ["md", "all"]:
+        out_path = Path(args.outdir)
+        out_path.mkdir(parents=True, exist_ok=True)
+        ReportExporter.to_markdown(report, str(out_path / f"{doc_id}_report.md"))
+
 
 if __name__ == "__main__":
-    import sys
     main()

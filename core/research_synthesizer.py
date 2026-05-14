@@ -35,6 +35,26 @@ class ResearchFinding:
     supporting_sources: list[str]
     related_concepts: list[str]
     subchat_seed: str              # suggested question to seed subchat thread
+    citation_chain: list["CitationLink"] = field(default_factory=list)
+    stale_data_warning: bool = False
+    stale_data_warning_text: str | None = None
+
+
+@dataclass
+class ExecutiveBrief:
+    one_liner: str
+    top_findings: list[str]
+    confidence_bar: float
+    word_count: int
+
+
+@dataclass
+class CitationLink:
+    claim: str
+    evidence_item_id: str
+    source_url: str
+    domain: str
+    publication_date: str
 
 
 @dataclass
@@ -51,6 +71,10 @@ class ResearchReport:
     topic: str
     depth: str
     total_sources_analyzed: int
+    source_freshness_summary: dict[str, Any] | None = None
+    executive_brief: ExecutiveBrief | None = None
+    disputed_claims: list[dict[str, Any]] = field(default_factory=list)
+    hallucination_score: float | None = None
 
     # ------------------------------------------------------------------
     # Export helpers
@@ -73,6 +97,18 @@ class ResearchReport:
                     "supporting_sources": f.supporting_sources,
                     "related_concepts": f.related_concepts,
                     "subchat_seed": f.subchat_seed,
+                    "citation_chain": [
+                        {
+                            "claim": c.claim,
+                            "evidence_item_id": c.evidence_item_id,
+                            "source_url": c.source_url,
+                            "domain": c.domain,
+                            "publication_date": c.publication_date,
+                        }
+                        for c in f.citation_chain
+                    ],
+                    "stale_data_warning": f.stale_data_warning,
+                    "stale_data_warning_text": f.stale_data_warning_text,
                 }
                 for f in self.key_findings
             ],
@@ -81,6 +117,18 @@ class ResearchReport:
             "future_research": self.future_research,
             "sources": self.sources,
             "knowledge_graph": self.knowledge_graph.to_dict(),
+            "source_freshness_summary": self.source_freshness_summary,
+            "executive_brief": (
+                {
+                    "one_liner": self.executive_brief.one_liner,
+                    "top_findings": self.executive_brief.top_findings,
+                    "confidence_bar": self.executive_brief.confidence_bar,
+                    "word_count": self.executive_brief.word_count,
+                }
+                if self.executive_brief else None
+            ),
+            "disputed_claims": self.disputed_claims,
+            "hallucination_score": self.hallucination_score,
         }
 
     def to_markdown(self) -> str:
@@ -94,7 +142,7 @@ class ResearchReport:
         lines.append(self.executive_summary + "\n")
         lines.append("## Key Findings\n")
         for i, f in enumerate(self.key_findings, 1):
-            badge = {"VERIFIED": "✓", "LIKELY": "~", "LOW_CONFIDENCE": "?"}[f.confidence]
+            badge = {"VERIFIED": "✓", "LIKELY": "~", "CONTRADICTED": "!", "LOW_CONFIDENCE": "?"}[f.confidence]
             lines.append(f"### {i}. {f.headline}  `[{badge} {f.confidence}]`\n")
             lines.append(f.detail + "\n")
             if f.supporting_sources:
@@ -104,6 +152,13 @@ class ResearchReport:
         for section in self.evidence_sections:
             lines.append(f"### {section.get('title', 'Section')}\n")
             lines.append(section.get("content", "") + "\n")
+        if self.disputed_claims:
+            lines.append("## Disputed Claims\n")
+            for item in self.disputed_claims:
+                lines.append(
+                    f"- **Conflict:** {item.get('claim_a', '')} ↔ {item.get('claim_b', '')}  "
+                    f"(sources: {item.get('source_a', '')}, {item.get('source_b', '')})"
+                )
         lines.append("## Limitations\n")
         lines.append(self.limitations + "\n")
         lines.append("## Future Research\n")
@@ -150,7 +205,13 @@ Schema:
     }
   ],  // 3-6 sections matching subtopics
   "limitations": "<paragraph on research limitations and gaps>",
-  "future_research": ["<specific research direction 1>", ...]  // 4-8 items
+  "future_research": ["<specific research direction 1>", ...],  // 4-8 items
+  "executive_brief": {
+    "one_liner": "<single sentence answer summary>",
+    "top_findings": ["<plain english finding>", "<finding>", "<finding>"],
+    "confidence_bar": <0.0-1.0>,
+    "word_count": <int total words in full report body>
+  }
 }
 
 Rules:
@@ -180,6 +241,7 @@ class ResearchSynthesizer:
         verification_report: VerificationReport,
         graph: KnowledgeGraphData,
         total_sources: int,
+        evidence_items: list[dict[str, Any]] | list[Any] | None = None,
     ) -> ResearchReport:
         """Produce a complete ResearchReport."""
         # Build claim digest
@@ -206,10 +268,9 @@ class ResearchSynthesizer:
 
         # Attach confidence to findings
         findings = []
-        verified_claims = {vc.claim for vc in verification_report.verified}
-        likely_claims = {vc.claim for vc in verification_report.likely}
-        claim_sources: dict[str, list[str]] = {
-            vc.claim: vc.supporting_sources for vc in verification_report.all_claims
+        evidence_items = evidence_items or []
+        evidence_by_url: dict[str, Any] = {
+            item.source_url: item for item in evidence_items if getattr(item, "source_url", None)
         }
 
         for i, f in enumerate(raw.get("key_findings", []), 1):
@@ -223,6 +284,31 @@ class ResearchSynthesizer:
                     matched_sources = vc_claim.supporting_sources[:3]
                     break
 
+            citation_chain: list[CitationLink] = []
+            stale_count = 0
+            dated_count = 0
+            for src in matched_sources:
+                ev = evidence_by_url.get(src)
+                domain = src.split("/")[2] if "://" in src else ""
+                published_at = getattr(ev, "published_at", None) if ev else None
+                if published_at:
+                    dated_count += 1
+                    if self._is_stale(published_at):
+                        stale_count += 1
+                citation_chain.append(CitationLink(
+                    claim=headline,
+                    evidence_item_id=getattr(ev, "evidence_item_id", ""),
+                    source_url=src,
+                    domain=domain,
+                    publication_date=published_at or "",
+                ))
+
+            stale_data_warning = dated_count > 0 and (stale_count / dated_count) >= 0.5
+            stale_data_warning_text = (
+                "Most dated sources for this finding are over two years old; validate with newer evidence."
+                if stale_data_warning else None
+            )
+
             findings.append(ResearchFinding(
                 id=f"finding-{i}",
                 headline=headline,
@@ -231,7 +317,19 @@ class ResearchSynthesizer:
                 supporting_sources=matched_sources,
                 related_concepts=f.get("related_concepts", []),
                 subchat_seed=f.get("subchat_seed", f"Tell me more about: {headline}"),
+                citation_chain=citation_chain,
+                stale_data_warning=stale_data_warning,
+                stale_data_warning_text=stale_data_warning_text,
             ))
+
+        source_freshness_summary = self._build_source_freshness_summary(evidence_items)
+        executive_brief_raw = raw.get("executive_brief", {})
+        executive_brief = ExecutiveBrief(
+            one_liner=executive_brief_raw.get("one_liner", ""),
+            top_findings=executive_brief_raw.get("top_findings", [])[:3],
+            confidence_bar=float(executive_brief_raw.get("confidence_bar", self._avg_confidence(findings))),
+            word_count=int(executive_brief_raw.get("word_count", self._estimate_word_count(raw))),
+        )
 
         return ResearchReport(
             title=raw.get("title", f"Research Report: {plan.topic}"),
@@ -246,6 +344,9 @@ class ResearchSynthesizer:
             topic=plan.topic,
             depth=plan.depth,
             total_sources_analyzed=total_sources,
+            source_freshness_summary=source_freshness_summary,
+            executive_brief=executive_brief,
+            disputed_claims=verification_report.contradictions,
         )
 
     # ------------------------------------------------------------------
@@ -268,6 +369,53 @@ class ResearchSynthesizer:
             for c in report.contradictions[:5]:
                 lines.append(f"CONFLICT: '{c['claim_a']}' vs '{c['claim_b']}'")
         return "\n".join(lines)
+
+    def _is_stale(self, published_at: str) -> bool:
+        try:
+            date_part = published_at[:10]
+            source_date = datetime.fromisoformat(date_part)
+            return (datetime.utcnow() - source_date).days > 730
+        except Exception:
+            return False
+
+    def _build_source_freshness_summary(self, evidence_items: list[Any]) -> dict[str, Any]:
+        total = len(evidence_items)
+        dated = 0
+        stale = 0
+        for item in evidence_items:
+            published_at = getattr(item, "published_at", None)
+            if not published_at:
+                continue
+            dated += 1
+            if self._is_stale(published_at):
+                stale += 1
+        return {
+            "total_sources": total,
+            "sources_with_dates": dated,
+            "stale_sources": stale,
+            "fresh_sources": max(dated - stale, 0),
+        }
+
+    def _avg_confidence(self, findings: list[ResearchFinding]) -> float:
+        mapping = {
+            Confidence.VERIFIED.value: 1.0,
+            Confidence.LIKELY.value: 0.75,
+            Confidence.CONTRADICTED.value: 0.35,
+            Confidence.LOW_CONFIDENCE.value: 0.2,
+        }
+        if not findings:
+            return 0.0
+        return round(sum(mapping.get(f.confidence, 0.2) for f in findings) / len(findings), 3)
+
+    def _estimate_word_count(self, raw: dict[str, Any]) -> int:
+        chunks = [
+            raw.get("executive_summary", ""),
+            " ".join(f.get("detail", "") for f in raw.get("key_findings", [])),
+            " ".join(s.get("content", "") for s in raw.get("evidence_sections", [])),
+            raw.get("limitations", ""),
+            " ".join(raw.get("future_research", [])),
+        ]
+        return len(" ".join(chunks).split())
 
     def _call_llm(self, plan: ResearchPlan, claim_digest: str) -> dict[str, Any]:
         """Call LLM to synthesize research report from evidence digest.

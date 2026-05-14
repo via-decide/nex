@@ -1,0 +1,107 @@
+[
+  {
+    "id": "distributed_0001",
+    "states": [
+      {
+        "state": "node_partition",
+        "next": "wal_divergence",
+        "edge_id": "7b4d215e4f57"
+      },
+      {
+        "state": "wal_divergence",
+        "next": "replay_backlog",
+        "edge_id": "ff5860dd98e7"
+      },
+      {
+        "state": "replay_backlog",
+        "next": "vector_clock_mismatch",
+        "edge_id": "f45823cc8781"
+      },
+      {
+        "state": "vector_clock_mismatch",
+        "next": "reconciliation_phase",
+        "edge_id": "cde0169b6836"
+      },
+      {
+        "state": "reconciliation_phase",
+        "next": "canonical_continuity_restoration",
+        "edge_id": "a49e50eee9b8"
+      },
+      {
+        "state": "canonical_continuity_restoration",
+        "next": null,
+        "edge_id": "a15bd03ca291"
+      }
+    ]
+  },
+  {
+    "id": "distributed_0002",
+    "states": [
+      {
+        "state": "node_partition",
+        "next": "wal_divergence",
+        "edge_id": "e6710735591d"
+      },
+      {
+        "state": "wal_divergence",
+        "next": "replay_backlog",
+        "edge_id": "8fb34306adf1"
+      },
+      {
+        "state": "replay_backlog",
+        "next": "vector_clock_mismatch",
+        "edge_id": "4dcc66f81862"
+      },
+      {
+        "state": "vector_clock_mismatch",
+        "next": "reconciliation_phase",
+        "edge_id": "8d8046093d26"
+      },
+      {
+        "state": "reconciliation_phase",
+        "next": "canonical_continuity_restoration",
+        "edge_id": "c1f7299aa6e8"
+      },
+      {
+        "state": "canonical_continuity_restoration",
+        "next": null,
+        "edge_id": "3b2687651a39"
+      }
+    ]
+  },
+  {
+    "id": "distributed_0003",
+    "states": [
+      {
+        "state": "node_partition",
+        "next": "wal_divergence",
+        "edge_id": "cc014533c1fd"
+      },
+      {
+        "state": "wal_divergence",
+        "next": "replay_backlog",
+        "edge_id": "0a8005fa560e"
+      },
+      {
+        "state": "replay_backlog",
+        "next": "vector_clock_mismatch",
+        "edge_id": "1d4f4f086f72"
+      },
+      {
+        "state": "vector_clock_mismatch",
+        "next": "reconciliation_phase",
+        "edge_id": "d2b8920fdd50"
+      },
+      {
+        "state": "reconciliation_phase",
+        "next": "canonical_continuity_restoration",
+        "edge_id": "e38452081077"
+      },
+      {
+        "state": "canonical_continuity_restoration",
+        "next": null,
+        "edge_id": "b45ed039f0cb"
+      }
+    ]
+  }
+]

@@ -20,7 +20,7 @@ SOP: REPAIR PROTOCOL (MANDATORY)
 
 REPO CONTEXT
 - README snippet:
-# Nex — Deep Research Engine Nex is an **Autonomous Research Agent** that transforms a natural-language question into a structured, evidence-backed research report by autonomously querying 50–100 open-access sources, verifying claims, building a knowledge graph, and synthesising findings into an in
+# Nex — Deep Research Engine Nex is an **Autonomous Research Agent** that transforms a natural-language question into a structured, evidence-backed research report by autonomously querying 10–100 open-access sources, verifying claims, building a knowledge graph, and synthesising findings into an in
 - AGENTS snippet:
 not found
 - package.json snippet:

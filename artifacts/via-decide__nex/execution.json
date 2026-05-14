@@ -13,5 +13,5 @@
   "codex_prompt_path": "codex-task.md",
   "repair_prompt_path": "antigravity-repair-task.md",
   "synthesized_file": "research/bias_detector.py",
-  "synthesized_size": 32130
+  "synthesized_size": 24820
 }

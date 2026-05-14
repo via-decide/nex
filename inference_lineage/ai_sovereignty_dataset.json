@@ -1,0 +1,125 @@
+[
+  {
+    "runtime_problem": "runtime_continuity_case_1",
+    "hardware_constraints": [
+      "cpu/gpu memory bandwidth",
+      "numa locality"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "scheduler_constraints": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "quantization_dependencies": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "failure_modes": [
+      "kv eviction",
+      "scheduler jitter",
+      "runtime incompatibility"
+    ],
+    "divergence_risks": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "continuity_requirements": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ],
+    "replay_constraints": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ]
+  },
+  {
+    "runtime_problem": "runtime_continuity_case_2",
+    "hardware_constraints": [
+      "cpu/gpu memory bandwidth",
+      "numa locality"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "scheduler_constraints": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "quantization_dependencies": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "failure_modes": [
+      "kv eviction",
+      "scheduler jitter",
+      "runtime incompatibility"
+    ],
+    "divergence_risks": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "continuity_requirements": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ],
+    "replay_constraints": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ]
+  },
+  {
+    "runtime_problem": "runtime_continuity_case_3",
+    "hardware_constraints": [
+      "cpu/gpu memory bandwidth",
+      "numa locality"
+    ],
+    "memory_constraints": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "scheduler_constraints": [
+      "batch scheduler",
+      "prefill-decode separation"
+    ],
+    "quantization_dependencies": [
+      "q4",
+      "q5",
+      "q8",
+      "mixed_precision"
+    ],
+    "failure_modes": [
+      "kv eviction",
+      "scheduler jitter",
+      "runtime incompatibility"
+    ],
+    "divergence_risks": [
+      "QUANTIZATION_DIVERGENCE",
+      "SCHEDULER_DIVERGENCE",
+      "HARDWARE_DRIFT"
+    ],
+    "continuity_requirements": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ],
+    "replay_constraints": [
+      "token stream boundary",
+      "runtime swap boundary"
+    ]
+  }
+]

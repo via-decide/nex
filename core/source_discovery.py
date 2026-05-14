@@ -9,11 +9,13 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import urlencode, urlparse
 
+import anthropic
 import httpx
 
 
@@ -233,11 +235,14 @@ class SourceDiscovery:
 
     def __init__(self, max_sources: int = 60) -> None:
         self.max_sources = max_sources
+        self._llm = anthropic.AsyncAnthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        self._model = "claude-haiku-4-5-20251001"
 
     async def discover_sources(
         self,
         queries: list[str],
         source_types: list[str] | None = None,
+        event_callback: Any | None = None,
     ) -> list[DiscoveredSource]:
         """
         Run parallel searches across all enabled source types.
@@ -248,22 +253,27 @@ class SourceDiscovery:
         """
         source_types = source_types or ["wikipedia", "arxiv", "semanticscholar"]
         all_sources: list[DiscoveredSource] = []
+        capped_queries = queries[:10]
 
         async with httpx.AsyncClient(follow_redirects=True) as client:
-            tasks: list[asyncio.Task] = []
-            for query in queries[:10]:  # cap at 10 queries to avoid rate limits
-                if "wikipedia" in source_types:
-                    tasks.append(asyncio.create_task(_wiki_search(client, query, limit=5)))
-                if "arxiv" in source_types:
-                    tasks.append(asyncio.create_task(_arxiv_search(client, query, limit=8)))
-                if "semanticscholar" in source_types:
-                    tasks.append(asyncio.create_task(_s2_search(client, query, limit=6)))
-
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        for result in results:
-            if isinstance(result, list):
-                all_sources.extend(result)
+            for query in capped_queries:
+                query_sources = await self._discover_for_query(client, query, source_types)
+                open_count = len([s for s in query_sources if s.is_open_access])
+                retries = 0
+                current_query = query
+                while open_count < 3 and retries < 2:
+                    retries += 1
+                    current_query = await self._rephrase_query(current_query)
+                    if event_callback:
+                        event_callback(
+                            "reformulation",
+                            "Refining search...",
+                            {"original_query": query, "refined_query": current_query, "retry": retries},
+                        )
+                    retry_sources = await self._discover_for_query(client, current_query, source_types)
+                    query_sources.extend(retry_sources)
+                    open_count = len([s for s in query_sources if s.is_open_access])
+                all_sources.extend(query_sources)
 
         # Deduplicate by URL
         seen: set[str] = set()
@@ -276,6 +286,42 @@ class SourceDiscovery:
         # Filter out paywalled sources
         open_sources = [s for s in unique if s.is_open_access]
         return open_sources
+
+    async def _discover_for_query(
+        self,
+        client: httpx.AsyncClient,
+        query: str,
+        source_types: list[str],
+    ) -> list[DiscoveredSource]:
+        tasks: list[asyncio.Task] = []
+        if "wikipedia" in source_types:
+            tasks.append(asyncio.create_task(_wiki_search(client, query, limit=5)))
+        if "arxiv" in source_types:
+            tasks.append(asyncio.create_task(_arxiv_search(client, query, limit=8)))
+        if "semanticscholar" in source_types:
+            tasks.append(asyncio.create_task(_s2_search(client, query, limit=6)))
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        merged: list[DiscoveredSource] = []
+        for result in results:
+            if isinstance(result, list):
+                merged.extend(result)
+        return merged
+
+    async def _rephrase_query(self, query: str) -> str:
+        prompt = (
+            "Rephrase this research query to improve open-access discoverability. "
+            "Use a different angle/synonyms/specific terms. Return only the rewritten query.\n\n"
+            f"Query: {query}"
+        )
+        try:
+            message = await self._llm.messages.create(
+                model=self._model,
+                max_tokens=120,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return message.content[0].text.strip().split("\n")[0]
+        except Exception:
+            return query
 
     def rank_sources(
         self,
