@@ -1,0 +1,107 @@
+[
+  {
+    "id": "ai_runtime_0001",
+    "states": [
+      {
+        "state": "quantization_change",
+        "next": "embedding_variance",
+        "edge_id": "08f6fdecbb26"
+      },
+      {
+        "state": "embedding_variance",
+        "next": "token_probability_shift",
+        "edge_id": "72dfeeba5068"
+      },
+      {
+        "state": "token_probability_shift",
+        "next": "reasoning_divergence",
+        "edge_id": "84d316b70e0f"
+      },
+      {
+        "state": "reasoning_divergence",
+        "next": "replay_mismatch",
+        "edge_id": "311062709f7f"
+      },
+      {
+        "state": "replay_mismatch",
+        "next": "continuity_admissibility_check",
+        "edge_id": "6f9d5d6efbd8"
+      },
+      {
+        "state": "continuity_admissibility_check",
+        "next": null,
+        "edge_id": "b8865b64d186"
+      }
+    ]
+  },
+  {
+    "id": "ai_runtime_0002",
+    "states": [
+      {
+        "state": "quantization_change",
+        "next": "embedding_variance",
+        "edge_id": "f9798232f292"
+      },
+      {
+        "state": "embedding_variance",
+        "next": "token_probability_shift",
+        "edge_id": "e55589ca314c"
+      },
+      {
+        "state": "token_probability_shift",
+        "next": "reasoning_divergence",
+        "edge_id": "ad2ccc4dac49"
+      },
+      {
+        "state": "reasoning_divergence",
+        "next": "replay_mismatch",
+        "edge_id": "f9b480874aa5"
+      },
+      {
+        "state": "replay_mismatch",
+        "next": "continuity_admissibility_check",
+        "edge_id": "60b1028a74ed"
+      },
+      {
+        "state": "continuity_admissibility_check",
+        "next": null,
+        "edge_id": "108d86a84b63"
+      }
+    ]
+  },
+  {
+    "id": "ai_runtime_0003",
+    "states": [
+      {
+        "state": "quantization_change",
+        "next": "embedding_variance",
+        "edge_id": "1609cac53e47"
+      },
+      {
+        "state": "embedding_variance",
+        "next": "token_probability_shift",
+        "edge_id": "c5d34734fab8"
+      },
+      {
+        "state": "token_probability_shift",
+        "next": "reasoning_divergence",
+        "edge_id": "7e6fbb7139c0"
+      },
+      {
+        "state": "reasoning_divergence",
+        "next": "replay_mismatch",
+        "edge_id": "57817a652428"
+      },
+      {
+        "state": "replay_mismatch",
+        "next": "continuity_admissibility_check",
+        "edge_id": "2d2aa61e1413"
+      },
+      {
+        "state": "continuity_admissibility_check",
+        "next": null,
+        "edge_id": "a332d44a939f"
+      }
+    ]
+  }
+]
