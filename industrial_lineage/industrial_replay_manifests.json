@@ -1,0 +1,126 @@
+[
+  {
+    "facility_type": "process_control_facility",
+    "industrial_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "timing_constraints": [
+      "control loop jitter < 5ms",
+      "failover ack < 200ms"
+    ],
+    "safety_dependencies": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_dependencies": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "operator_authority": [
+      "manual_override",
+      "restart_approval"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "recovery_sequences": [
+      "safe_shutdown",
+      "diagnostics",
+      "controlled_restart"
+    ],
+    "continuity_lineage": [
+      "process_sync",
+      "state_transition"
+    ]
+  },
+  {
+    "facility_type": "factory_automation_cell",
+    "industrial_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "timing_constraints": [
+      "control loop jitter < 5ms",
+      "failover ack < 200ms"
+    ],
+    "safety_dependencies": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_dependencies": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "operator_authority": [
+      "manual_override",
+      "restart_approval"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "recovery_sequences": [
+      "safe_shutdown",
+      "diagnostics",
+      "controlled_restart"
+    ],
+    "continuity_lineage": [
+      "process_sync",
+      "state_transition"
+    ]
+  },
+  {
+    "facility_type": "process_control_facility",
+    "industrial_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "timing_constraints": [
+      "control loop jitter < 5ms",
+      "failover ack < 200ms"
+    ],
+    "safety_dependencies": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_dependencies": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "operator_authority": [
+      "manual_override",
+      "restart_approval"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "recovery_sequences": [
+      "safe_shutdown",
+      "diagnostics",
+      "controlled_restart"
+    ],
+    "continuity_lineage": [
+      "operator_authority",
+      "safety_override",
+      "restart_sequence"
+    ]
+  }
+]

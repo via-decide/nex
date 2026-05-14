@@ -1,0 +1,123 @@
+[
+  {
+    "physical_problem": "physical_continuity_case_1",
+    "mathematical_dependencies": [
+      "linear algebra",
+      "graph theory",
+      "information theory"
+    ],
+    "energy_constraints": [
+      "finite power budget",
+      "heat dissipation limit"
+    ],
+    "signal_constraints": [
+      "snr floor",
+      "clock jitter budget"
+    ],
+    "timing_constraints": [
+      "latency bound",
+      "sync window"
+    ],
+    "thermodynamic_pressures": [
+      "thermal density",
+      "hotspot accumulation"
+    ],
+    "failure_modes": [
+      "signal corruption",
+      "timing drift",
+      "energy collapse"
+    ],
+    "continuity_requirements": [
+      "causal order preservation",
+      "deterministic retry policy"
+    ],
+    "replay_constraints": [
+      "memory_bandwidth_limit",
+      "inference_bottleneck",
+      "scheduler_pressure",
+      "token_latency_variance",
+      "orchestration_divergence"
+    ]
+  },
+  {
+    "physical_problem": "physical_continuity_case_2",
+    "mathematical_dependencies": [
+      "linear algebra",
+      "graph theory",
+      "information theory"
+    ],
+    "energy_constraints": [
+      "finite power budget",
+      "heat dissipation limit"
+    ],
+    "signal_constraints": [
+      "snr floor",
+      "clock jitter budget"
+    ],
+    "timing_constraints": [
+      "latency bound",
+      "sync window"
+    ],
+    "thermodynamic_pressures": [
+      "thermal density",
+      "hotspot accumulation"
+    ],
+    "failure_modes": [
+      "signal corruption",
+      "timing drift",
+      "energy collapse"
+    ],
+    "continuity_requirements": [
+      "causal order preservation",
+      "deterministic retry policy"
+    ],
+    "replay_constraints": [
+      "increased_compute_density",
+      "thermal_pressure",
+      "clock_instability",
+      "synchronization_drift",
+      "replay_divergence",
+      "continuity_risk"
+    ]
+  },
+  {
+    "physical_problem": "physical_continuity_case_3",
+    "mathematical_dependencies": [
+      "linear algebra",
+      "graph theory",
+      "information theory"
+    ],
+    "energy_constraints": [
+      "finite power budget",
+      "heat dissipation limit"
+    ],
+    "signal_constraints": [
+      "snr floor",
+      "clock jitter budget"
+    ],
+    "timing_constraints": [
+      "latency bound",
+      "sync window"
+    ],
+    "thermodynamic_pressures": [
+      "thermal density",
+      "hotspot accumulation"
+    ],
+    "failure_modes": [
+      "signal corruption",
+      "timing drift",
+      "energy collapse"
+    ],
+    "continuity_requirements": [
+      "causal order preservation",
+      "deterministic retry policy"
+    ],
+    "replay_constraints": [
+      "memory_bandwidth_limit",
+      "inference_bottleneck",
+      "scheduler_pressure",
+      "token_latency_variance",
+      "orchestration_divergence"
+    ]
+  }
+]

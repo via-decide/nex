@@ -1,0 +1,8 @@
+{
+  "id": "distributed_0001",
+  "protocols": [
+    "dns",
+    "quic",
+    "tcp/ip"
+  ]
+}

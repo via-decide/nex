@@ -1,0 +1,70 @@
+{
+  "divergence_classes": [
+    "THERMAL_DIVERGENCE",
+    "SIGNAL_NOISE_DIVERGENCE",
+    "CLOCK_DRIFT",
+    "POWER_INSTABILITY",
+    "LATENCY_DIVERGENCE",
+    "MEMORY_PRESSURE",
+    "ENERGY_COLLAPSE",
+    "UNKNOWN_PHYSICAL_STATE"
+  ],
+  "nodes": [
+    {
+      "id": "signal_noise",
+      "kind": "signal_or_thermal"
+    },
+    {
+      "id": "packet_corruption",
+      "kind": "signal_or_thermal"
+    },
+    {
+      "id": "synchronization_retry",
+      "kind": "signal_or_thermal"
+    },
+    {
+      "id": "queue_buildup",
+      "kind": "signal_or_thermal"
+    },
+    {
+      "id": "scheduler_instability",
+      "kind": "signal_or_thermal"
+    },
+    {
+      "id": "orchestration_divergence",
+      "kind": "signal_or_thermal"
+    }
+  ],
+  "edges": [
+    {
+      "from": "signal_noise",
+      "to": "packet_corruption",
+      "relation": "propagates_to",
+      "edge_id": "b9ac82c6f730"
+    },
+    {
+      "from": "packet_corruption",
+      "to": "synchronization_retry",
+      "relation": "propagates_to",
+      "edge_id": "f5780008ca59"
+    },
+    {
+      "from": "synchronization_retry",
+      "to": "queue_buildup",
+      "relation": "propagates_to",
+      "edge_id": "40b0df13ef9f"
+    },
+    {
+      "from": "queue_buildup",
+      "to": "scheduler_instability",
+      "relation": "propagates_to",
+      "edge_id": "c31a1427114d"
+    },
+    {
+      "from": "scheduler_instability",
+      "to": "orchestration_divergence",
+      "relation": "propagates_to",
+      "edge_id": "754735725006"
+    }
+  ]
+}

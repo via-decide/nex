@@ -1,0 +1,90 @@
+[
+  {
+    "id": "fp_0001",
+    "replay_targets": [
+      "kernel evolution",
+      "distributed emergence",
+      "orchestration formation",
+      "replay-system necessity",
+      "local-first sovereignty"
+    ],
+    "causal_chain": [
+      "slow_memory_access",
+      "cache_hierarchy",
+      "locality_optimization",
+      "paging_systems",
+      "virtual_memory",
+      "scheduler_coordination"
+    ],
+    "divergence_class": "MEMORY_PRESSURE_DIVERGENCE",
+    "allowed_classes": [
+      "THERMAL_PRESSURE_DIVERGENCE",
+      "MEMORY_PRESSURE_DIVERGENCE",
+      "LATENCY_PRESSURE_DIVERGENCE",
+      "SYNCHRONIZATION_DIVERGENCE",
+      "CONTINUITY_COLLAPSE",
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_DISCONTINUITY",
+      "UNKNOWN_ENGINEERING_STATE"
+    ],
+    "uncertainty": "none"
+  },
+  {
+    "id": "fp_0002",
+    "replay_targets": [
+      "kernel evolution",
+      "distributed emergence",
+      "orchestration formation",
+      "replay-system necessity",
+      "local-first sovereignty"
+    ],
+    "causal_chain": [
+      "distributed_latency",
+      "eventual_consistency",
+      "vector_clocks",
+      "reconciliation_systems",
+      "replay_divergence_handling"
+    ],
+    "divergence_class": "LATENCY_PRESSURE_DIVERGENCE",
+    "allowed_classes": [
+      "THERMAL_PRESSURE_DIVERGENCE",
+      "MEMORY_PRESSURE_DIVERGENCE",
+      "LATENCY_PRESSURE_DIVERGENCE",
+      "SYNCHRONIZATION_DIVERGENCE",
+      "CONTINUITY_COLLAPSE",
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_DISCONTINUITY",
+      "UNKNOWN_ENGINEERING_STATE"
+    ],
+    "uncertainty": "none"
+  },
+  {
+    "id": "fp_0003",
+    "replay_targets": [
+      "kernel evolution",
+      "distributed emergence",
+      "orchestration formation",
+      "replay-system necessity",
+      "local-first sovereignty"
+    ],
+    "causal_chain": [
+      "distributed_latency",
+      "eventual_consistency",
+      "vector_clocks",
+      "reconciliation_systems",
+      "replay_divergence_handling"
+    ],
+    "divergence_class": "LATENCY_PRESSURE_DIVERGENCE",
+    "allowed_classes": [
+      "THERMAL_PRESSURE_DIVERGENCE",
+      "MEMORY_PRESSURE_DIVERGENCE",
+      "LATENCY_PRESSURE_DIVERGENCE",
+      "SYNCHRONIZATION_DIVERGENCE",
+      "CONTINUITY_COLLAPSE",
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_DISCONTINUITY",
+      "UNKNOWN_ENGINEERING_STATE"
+    ],
+    "uncertainty": "none"
+  }
+]

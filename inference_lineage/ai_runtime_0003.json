@@ -1,0 +1,8 @@
+{
+  "id": "ai_runtime_0003",
+  "lineage": [
+    "replay_boundary",
+    "continuity_check",
+    "canonical_restore"
+  ]
+}

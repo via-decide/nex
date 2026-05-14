@@ -1,0 +1,11 @@
+{
+  "title": "Safety standard lineage",
+  "safety_terms": [
+    "IEC 61508",
+    "ISO 26262",
+    "SIL",
+    "emergency",
+    "fail-safe",
+    "redundancy"
+  ]
+}

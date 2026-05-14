@@ -1,0 +1,59 @@
+[
+  {
+    "id": "fp_0001",
+    "thermal_pressure": "moderate",
+    "synchronization_pressure": "high",
+    "memory_pressure": "high",
+    "throughput_pressure": "high",
+    "continuity_pressure": "high",
+    "orchestration_pressure": "medium",
+    "replay_pressure": "high",
+    "authority_pressure": "medium",
+    "evolution_path": [
+      "larger_models",
+      "vram_exhaustion",
+      "quantization_systems",
+      "kv_cache_optimization",
+      "scheduler_complexity",
+      "replay_instability"
+    ]
+  },
+  {
+    "id": "fp_0002",
+    "thermal_pressure": "moderate",
+    "synchronization_pressure": "high",
+    "memory_pressure": "high",
+    "throughput_pressure": "high",
+    "continuity_pressure": "high",
+    "orchestration_pressure": "medium",
+    "replay_pressure": "high",
+    "authority_pressure": "medium",
+    "evolution_path": [
+      "larger_models",
+      "vram_exhaustion",
+      "quantization_systems",
+      "kv_cache_optimization",
+      "scheduler_complexity",
+      "replay_instability"
+    ]
+  },
+  {
+    "id": "fp_0003",
+    "thermal_pressure": "moderate",
+    "synchronization_pressure": "high",
+    "memory_pressure": "high",
+    "throughput_pressure": "high",
+    "continuity_pressure": "high",
+    "orchestration_pressure": "medium",
+    "replay_pressure": "high",
+    "authority_pressure": "medium",
+    "evolution_path": [
+      "larger_models",
+      "vram_exhaustion",
+      "quantization_systems",
+      "kv_cache_optimization",
+      "scheduler_complexity",
+      "replay_instability"
+    ]
+  }
+]

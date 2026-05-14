@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><title>NEX Research Workstation</title><style>body{font-family:system-ui;margin:16px;background:#0f172a;color:#e2e8f0}button{margin:2px}pre{white-space:pre-wrap;background:#111827;padding:8px;border-radius:6px;max-height:250px;overflow:auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}li{cursor:pointer}.ok{color:#22c55e}.bad{color:#ef4444}</style></head><body>
+<h1>NEX Research Workstation</h1>
+<div id="filters"></div><div class="grid"><section><h3>Corpus Browser</h3><ul id="docs"></ul><h4>Preview</h4><pre id="preview"></pre><h4>Human Approval</h4><button id="approve">Approve</button><button id="reject">Reject</button><button id="quarantine">Quarantine</button><button id="canonical">Canonical</button><pre id="approval"></pre></section><section><h3>Metadata + Tags</h3><pre id="meta"></pre><h3>Graph Navigation</h3><pre id="graph"></pre></section></div>
+<script type="module">
+const domains=["all","electrical","electronics","math","embedded","control","distributed"],state={docs:[],graph:{nodes:[],edges:[]},selected:null,approval:{}};
+const byId=id=>document.getElementById(id),docsEl=byId('docs'),metaEl=byId('meta'),graphEl=byId('graph'),previewEl=byId('preview'),approvalEl=byId('approval');
+const fit=(d,q)=>q==='all'||JSON.stringify(d).toLowerCase().includes(q);
+async function loadJson(path,fallback){try{return await fetch(path).then(r=>r.ok?r.json():fallback)}catch{return fallback}}
+async function boot(){state.docs=await loadJson('./metadata/harvest_manifest.json',[]);state.graph=await loadJson('./engineering_graph/graph.json',{nodes:[],edges:[]});renderFilters();renderDocs('all');graphEl.textContent=JSON.stringify(state.graph,null,2)}
+function renderFilters(){const f=byId('filters');f.innerHTML='';domains.forEach(d=>{const b=document.createElement('button');b.textContent=d;b.onclick=()=>renderDocs(d);f.appendChild(b);});}
+function renderDocs(domain){docsEl.innerHTML='';state.docs.filter(d=>fit(d,domain)).forEach(d=>{const li=document.createElement('li');li.textContent=`${d.title||'untitled'} [${(d.domain_hits||[]).join(',')}]`;li.onclick=()=>selectDoc(d);docsEl.appendChild(li);});}
+async function selectDoc(doc){state.selected=doc;const stem=(doc.text_path||'').split('/').pop()?.replace('.txt','');metaEl.textContent=JSON.stringify(await loadJson(`./metadata/${stem}.semantic.json`,doc),null,2);previewEl.textContent=await fetch(doc.text_path||'').then(r=>r.ok?r.text():'').then(t=>t.slice(0,1800)).catch(()=>"preview unavailable");}
+function mark(status){if(!state.selected)return;state.approval[state.selected.source]={status,ts:new Date().toISOString()};approvalEl.textContent=JSON.stringify(state.approval,null,2);approvalEl.className=status==='reject'||status==='quarantine'?'bad':'ok';}
+['approve','reject','quarantine','canonical'].forEach(id=>byId(id).onclick=()=>mark(id));boot();
+</script></body></html>

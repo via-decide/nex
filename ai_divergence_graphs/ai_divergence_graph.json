@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {
+      "id": "gpu_memory_exhaustion",
+      "kind": "divergence"
+    },
+    {
+      "id": "kv_cache_eviction",
+      "kind": "divergence"
+    },
+    {
+      "id": "context_truncation",
+      "kind": "divergence"
+    },
+    {
+      "id": "reasoning_degradation",
+      "kind": "divergence"
+    },
+    {
+      "id": "replay_divergence",
+      "kind": "divergence"
+    },
+    {
+      "id": "continuity_classification",
+      "kind": "divergence"
+    }
+  ],
+  "edges": [
+    {
+      "from": "gpu_memory_exhaustion",
+      "to": "kv_cache_eviction",
+      "relation": "propagates_to",
+      "edge_id": "3a3d7398603b"
+    },
+    {
+      "from": "kv_cache_eviction",
+      "to": "context_truncation",
+      "relation": "propagates_to",
+      "edge_id": "e2c6a52365f0"
+    },
+    {
+      "from": "context_truncation",
+      "to": "reasoning_degradation",
+      "relation": "propagates_to",
+      "edge_id": "f631635ffb14"
+    },
+    {
+      "from": "reasoning_degradation",
+      "to": "replay_divergence",
+      "relation": "propagates_to",
+      "edge_id": "5813886226c1"
+    },
+    {
+      "from": "replay_divergence",
+      "to": "continuity_classification",
+      "relation": "propagates_to",
+      "edge_id": "b5c3d0e814f0"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "phys_0001",
+  "energy": [
+    "finite_energy_budget",
+    "bandwidth_energy_tradeoff",
+    "sustained_power_window"
+  ]
+}
