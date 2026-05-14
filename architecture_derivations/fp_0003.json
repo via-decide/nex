@@ -1,0 +1,9 @@
+{
+  "id": "fp_0003",
+  "derivations": [
+    "constraint_detected",
+    "primitive_selected",
+    "architecture_formed",
+    "continuity_validated"
+  ]
+}

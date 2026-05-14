@@ -1,0 +1,9 @@
+{
+  "id": "fp_0003",
+  "primitives": [
+    "scheduler",
+    "cache",
+    "virtual_memory",
+    "vector_clock_reconciliation"
+  ]
+}

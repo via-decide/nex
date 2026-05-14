@@ -1,0 +1,138 @@
+[
+  {
+    "engineering_problem": "first_principles_case_1",
+    "primitive_constraints": [
+      "latency floor",
+      "memory ceiling",
+      "sync delay"
+    ],
+    "mathematical_dependencies": [
+      "graph theory",
+      "optimization",
+      "numerical stability"
+    ],
+    "physical_constraints": [
+      "thermal limit",
+      "voltage stability",
+      "bandwidth ceiling"
+    ],
+    "continuity_pressures": [
+      "replay pressure",
+      "orchestration pressure"
+    ],
+    "tradeoff_surfaces": [
+      "throughput vs determinism",
+      "memory vs accuracy"
+    ],
+    "architecture_emergence": [
+      "slow_memory_access",
+      "cache_hierarchy",
+      "locality_optimization",
+      "paging_systems",
+      "virtual_memory",
+      "scheduler_coordination"
+    ],
+    "failure_boundaries": [
+      "continuity collapse",
+      "authority collapse"
+    ],
+    "replay_constraints": [
+      "causal order preservation",
+      "append-only lineage"
+    ],
+    "sovereignty_requirements": [
+      "local-first execution",
+      "runtime replaceability"
+    ]
+  },
+  {
+    "engineering_problem": "first_principles_case_2",
+    "primitive_constraints": [
+      "latency floor",
+      "memory ceiling",
+      "sync delay"
+    ],
+    "mathematical_dependencies": [
+      "graph theory",
+      "optimization",
+      "numerical stability"
+    ],
+    "physical_constraints": [
+      "thermal limit",
+      "voltage stability",
+      "bandwidth ceiling"
+    ],
+    "continuity_pressures": [
+      "replay pressure",
+      "orchestration pressure"
+    ],
+    "tradeoff_surfaces": [
+      "throughput vs determinism",
+      "memory vs accuracy"
+    ],
+    "architecture_emergence": [
+      "distributed_latency",
+      "eventual_consistency",
+      "vector_clocks",
+      "reconciliation_systems",
+      "replay_divergence_handling"
+    ],
+    "failure_boundaries": [
+      "continuity collapse",
+      "authority collapse"
+    ],
+    "replay_constraints": [
+      "causal order preservation",
+      "append-only lineage"
+    ],
+    "sovereignty_requirements": [
+      "local-first execution",
+      "runtime replaceability"
+    ]
+  },
+  {
+    "engineering_problem": "first_principles_case_3",
+    "primitive_constraints": [
+      "latency floor",
+      "memory ceiling",
+      "sync delay"
+    ],
+    "mathematical_dependencies": [
+      "graph theory",
+      "optimization",
+      "numerical stability"
+    ],
+    "physical_constraints": [
+      "thermal limit",
+      "voltage stability",
+      "bandwidth ceiling"
+    ],
+    "continuity_pressures": [
+      "replay pressure",
+      "orchestration pressure"
+    ],
+    "tradeoff_surfaces": [
+      "throughput vs determinism",
+      "memory vs accuracy"
+    ],
+    "architecture_emergence": [
+      "distributed_latency",
+      "eventual_consistency",
+      "vector_clocks",
+      "reconciliation_systems",
+      "replay_divergence_handling"
+    ],
+    "failure_boundaries": [
+      "continuity collapse",
+      "authority collapse"
+    ],
+    "replay_constraints": [
+      "causal order preservation",
+      "append-only lineage"
+    ],
+    "sovereignty_requirements": [
+      "local-first execution",
+      "runtime replaceability"
+    ]
+  }
+]

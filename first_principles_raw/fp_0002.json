@@ -1,0 +1,4 @@
+{
+  "title": "Compute hierarchy constraints",
+  "text": "cache hierarchy, NUMA bandwidth, SIMD throughput, thermal throttling, voltage stability."
+}
