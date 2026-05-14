@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset='utf-8'><title>NEX Research Workstation</title><style>body{font-family:system-ui;margin:16px}button{margin:2px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}pre{background:#f5f5f5;padding:8px;height:240px;overflow:auto}</style></head><body>
+<h1>NEX Research Workstation</h1><div>
+  <button data-domain="all">All</button><button data-domain="electrical">Electrical</button><button data-domain="electronics">Electronics</button><button data-domain="math">Mathematics</button><button data-domain="embedded">Embedded</button><button data-domain="control">Control Systems</button><button data-domain="distributed">Distributed Systems</button>
+</div><div class="grid"><div><h3>Corpus</h3><ul id="docs"></ul><h3>Approval</h3><button id="approve">Approve</button><button id="reject">Reject</button><button id="quarantine">Quarantine</button><p id="status"></p></div><div><h3>Metadata / Tags</h3><pre id="meta"></pre><h3>Graph</h3><pre id="graph"></pre></div></div>
+<script type="module">
+const docsEl=document.getElementById('docs'), metaEl=document.getElementById('meta'), graphEl=document.getElementById('graph'), statusEl=document.getElementById('status'); let selected=null; let docs=[];
+async function load(){const r=await fetch('./metadata/harvest_manifest.json').then(r=>r.json()).catch(()=>[]); docs=r; render('all'); const g=await fetch('./engineering_graph/graph.json').then(r=>r.json()).catch(()=>({nodes:[],edges:[]})); graphEl.textContent=JSON.stringify(g,null,2)}
+function render(domain){docsEl.innerHTML=''; docs.filter(d=>domain==='all'||(d.title||'').toLowerCase().includes(domain)).forEach(d=>{const li=document.createElement('li');li.textContent=d.title;li.onclick=()=>selectDoc(d);docsEl.append(li);});}
+async function selectDoc(d){selected=d; const stem=(d.text_path||'').split('/').pop()?.replace('.txt',''); const m=await fetch(`./metadata/${stem}.semantic.json`).then(r=>r.json()).catch(()=>d); metaEl.textContent=JSON.stringify(m,null,2)}
+document.querySelectorAll('[data-domain]').forEach(b=>b.onclick=()=>render(b.dataset.domain)); ['approve','reject','quarantine'].forEach(id=>document.getElementById(id).onclick=()=>statusEl.textContent=`${id}: ${selected?.title||'none selected'}`);
+load();
+</script></body></html>
