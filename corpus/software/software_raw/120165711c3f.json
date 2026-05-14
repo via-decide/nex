@@ -1,0 +1,8 @@
+{
+  "title": "Execution replay and debugging",
+  "url": "https://arxiv.org/abs/cs/0011006v1",
+  "snippet": "As most parallel and distributed programs are internally non-deterministic -- consecutive runs with the same input might result in a different program flow -- vanilla cyclic debugging techniques as such are useless. In order to use cyclic debugging tools, we need a tool that records information about an execution so that it can be replayed for debugging. Because recording information interferes with the execution, we must limit the amount of information and keep the processing of the information fast. This paper contains a survey of existing execution replay techniques and tools.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:26.961473+00:00",
+  "domain": "debugging systems"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Replay Debugging of Complex Real-Time Systems: Experiences from Two Industrial Case Studies",
+  "url": "https://arxiv.org/abs/cs/0311019v1",
+  "snippet": "Deterministic replay is a method for allowing complex multitasking real-time systems to be debugged using standard interactive debuggers. Even though several replay techniques have been proposed for parallel, multi-tasking and real-time systems, the solutions have so far lingered on a prototype academic level, with very little results to show from actual state-of-the-practice commercial applications. This paper describes a major deterministic replay debugging case study performed on a full-scale industrial robot control system, as well as a minor replay instrumentation case study performed on a military aircraft radar system. In this article, we will show that replay debugging is feasible in complex multi-million lines of code software projects running on top of off-the-shelf real-time operating systems. Furthermore, we will discuss how replay debugging can be introduced in existing systems without impracticable analysis efforts. In addition, we will present benchmarking results from both studies, indicating that the instrumentation overhead is acceptable and affordable.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:26.962129+00:00",
+  "domain": "debugging systems"
+}

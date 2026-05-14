@@ -1,0 +1,8 @@
+{
+  "title": "ManyClaw: Slicing and dicing Riemann solvers for next generation highly parallel architectures",
+  "url": "https://arxiv.org/abs/1308.1464v1",
+  "snippet": "Next generation computer architectures will include order of magnitude more intra-node parallelism; however, many application programmers have a difficult time keeping their codes current with the state-of-the-art machines. In this context, we analyze Hyperbolic PDE solvers, which are used in the solution of many important applications in science and engineering. We present ManyClaw, a project intended to explore the exploitation of intra-node parallelism in hyperbolic PDE solvers via the Clawpack software package for solving hyperbolic PDEs. Our goal is to separate the low level parallelism and the physical equations thus providing users the capability to leverage intra-node parallelism without explicitly writing code to take advantage of newer architectures.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:44.322418+00:00",
+  "domain": "local-first architectures"
+}

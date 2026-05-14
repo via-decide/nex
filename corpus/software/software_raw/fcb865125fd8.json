@@ -1,0 +1,8 @@
+{
+  "title": "Triangulation, Persistence, and Fukaya categories",
+  "url": "https://arxiv.org/abs/2304.01785v2",
+  "snippet": "This paper introduces a new algebraic notion - triangulated persistence category (TPC) - that refines that of triangulated category in the same sense that a persistence module is a refinement of the notion of a vector space. The spaces of morphisms of such a TPC are persistence modules and this category is endowed with a class of weighted distinguished triangles. Under favourable conditions we show that the derived Fukaya category admits a TPC refinement and this is applied to deduce a global rigidity result for spaces of compact, exact Lagrangians in certain Liouville manifolds: we construct a metric on this space with intrinsic symplectic properties.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:40.251018+00:00",
+  "domain": "persistence layers"
+}

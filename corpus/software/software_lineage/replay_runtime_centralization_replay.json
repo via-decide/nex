@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "replay_id": "runtime_centralization_replay",
+    "target": "Runtime Centralization",
+    "executed_at": "2026-05-14T17:08:28.352972+00:00",
+    "determinism_check": "passed"
+  },
+  "timeline": [
+    {
+      "t": "2005",
+      "event": "Web browsers as runtimes",
+      "divergence": null
+    },
+    {
+      "t": "2013",
+      "event": "Electron (Atom Shell)",
+      "divergence": "CONTINUITY_BREAK"
+    },
+    {
+      "t": "2018",
+      "event": "Cloud IDEs (Codeanywhere, Gitpod)",
+      "divergence": "AUTHORITY_LOCKIN"
+    },
+    {
+      "t": "2024",
+      "event": "Sovereign local runtimes (NEX/Zayvora)",
+      "divergence": "STATE_DIVERGENCE"
+    }
+  ],
+  "divergence_summary": [
+    "CONTINUITY_BREAK",
+    "AUTHORITY_LOCKIN",
+    "STATE_DIVERGENCE"
+  ]
+}

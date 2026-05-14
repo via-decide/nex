@@ -1,0 +1,8 @@
+{
+  "title": "Soft GPGPUs for Embedded FPGAs: An Architectural Evaluation",
+  "url": "https://arxiv.org/abs/1606.06454v1",
+  "snippet": "We present a customizable soft architecture which allows for the execution of GPGPU code on an FPGA without the need to recompile the design. Issues related to scaling the overlay architecture to multiple GPGPU multiprocessors are considered along with application-class architectural optimizations. The overlay architecture is optimized for FPGA implementation to support efficient use of embedded block memories and DSP blocks. This architecture supports direct CUDA compilation of integer computations to a binary which is executable on the FPGA-based GPGPU. The benefits of our architecture are evaluated for a collection of five standard CUDA benchmarks which are compiled using standard GPGPU compilation tools. Speedups of 44x, on average, versus a MicroBlaze microprocessor are achieved. We show dynamic energy savings versus a soft-core processor of 80% on average. Application-customized versions of the soft GPGPU can be used to further reduce dynamic energy consumption by an average of 14%.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:44.322700+00:00",
+  "domain": "local-first architectures"
+}

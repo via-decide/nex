@@ -1,0 +1,4 @@
+TITLE: Constructive Safety-Critical Control: Synthesizing Control Barrier Functions for Partially Feedback Linearizable Systems
+URL: https://arxiv.org/abs/2406.02709v1
+SOURCE: arxiv
+SNIPPET: Certifying the safety of nonlinear systems, through the lens of set invariance and control barrier functions (CBFs), offers a powerful method for controller synthesis, provided a CBF can be constructed. This paper draws connections between partial feedback linearization and CBF synthesis. We illustrate that when a control affine system is input-output linearizable with respect to a smooth output function, then, under mild regularity conditions, one may extend any safety constraint defined on the output to a CBF for the full-order dynamics. These more general results are specialized to robotic systems where the conditions required to synthesize CBFs simplify. The CBFs constructed from our approach are applied and verified in simulation and hardware experiments on a quadrotor.

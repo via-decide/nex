@@ -1,0 +1,140 @@
+2026-05-14 22:35:42,074 [INFO] Starting Software Civilization Harvesting...
+2026-05-14 22:35:42,074 [INFO] Searching arXiv: VSCode architecture
+2026-05-14 22:35:42,595 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3AVSCode+architecture&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:35:42,597 [ERROR] arXiv search failed for VSCode architecture: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3AVSCode+architecture&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:35:42,597 [INFO] Searching Wikipedia: VSCode architecture
+2026-05-14 22:35:42,955 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=VSCode+architecture&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:35:42,957 [ERROR] Wiki search failed for VSCode architecture: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=VSCode+architecture&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:35:43,958 [INFO] Searching arXiv: Electron internals
+2026-05-14 22:35:44,414 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3AElectron+internals&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:35:44,416 [ERROR] arXiv search failed for Electron internals: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3AElectron+internals&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:35:44,416 [INFO] Searching Wikipedia: Electron internals
+2026-05-14 22:35:44,498 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Electron+internals&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:35:44,498 [ERROR] Wiki search failed for Electron internals: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Electron+internals&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:35:45,499 [INFO] Searching arXiv: Monaco editor
+2026-05-14 22:35:46,051 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3AMonaco+editor&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:35:46,052 [ERROR] arXiv search failed for Monaco editor: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3AMonaco+editor&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:35:46,052 [INFO] Searching Wikipedia: Monaco editor
+2026-05-14 22:35:46,134 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Monaco+editor&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:35:46,135 [ERROR] Wiki search failed for Monaco editor: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Monaco+editor&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:35:47,136 [INFO] Searching arXiv: browser rendering engines
+2026-05-14 22:36:03,058 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Abrowser+rendering+engines&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Too Many Requests"
+2026-05-14 22:36:03,060 [ERROR] arXiv search failed for browser rendering engines: Client error '429 Too Many Requests' for url 'https://export.arxiv.org/api/query?search_query=all%3Abrowser+rendering+engines&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:36:03,061 [INFO] Searching Wikipedia: browser rendering engines
+2026-05-14 22:36:03,385 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=browser+rendering+engines&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:36:03,387 [ERROR] Wiki search failed for browser rendering engines: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=browser+rendering+engines&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:36:04,388 [INFO] Searching arXiv: terminal systems
+2026-05-14 22:36:04,893 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Aterminal+systems&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:36:04,894 [ERROR] arXiv search failed for terminal systems: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3Aterminal+systems&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:36:04,894 [INFO] Searching Wikipedia: terminal systems
+2026-05-14 22:36:04,975 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=terminal+systems&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:36:04,975 [ERROR] Wiki search failed for terminal systems: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=terminal+systems&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:36:05,977 [INFO] Searching arXiv: runtime abstraction layers
+2026-05-14 22:36:21,551 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Aruntime+abstraction+layers&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:36:21,552 [ERROR] arXiv search failed for runtime abstraction layers: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3Aruntime+abstraction+layers&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:36:21,553 [INFO] Searching Wikipedia: runtime abstraction layers
+2026-05-14 22:36:21,881 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=runtime+abstraction+layers&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:36:21,883 [ERROR] Wiki search failed for runtime abstraction layers: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=runtime+abstraction+layers&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:36:22,884 [INFO] Searching arXiv: plugin architectures
+2026-05-14 22:36:23,325 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Aplugin+architectures&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:36:23,327 [ERROR] arXiv search failed for plugin architectures: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3Aplugin+architectures&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:36:23,328 [INFO] Searching Wikipedia: plugin architectures
+2026-05-14 22:36:23,410 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=plugin+architectures&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:36:23,411 [ERROR] Wiki search failed for plugin architectures: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=plugin+architectures&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:36:24,412 [INFO] Searching arXiv: Git internals
+2026-05-14 22:36:54,416 [ERROR] arXiv search failed for Git internals: 
+2026-05-14 22:36:54,417 [INFO] Searching Wikipedia: Git internals
+2026-05-14 22:36:54,764 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Git+internals&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:36:54,765 [ERROR] Wiki search failed for Git internals: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Git+internals&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:36:55,767 [INFO] Searching arXiv: Docker evolution
+2026-05-14 22:37:25,858 [ERROR] arXiv search failed for Docker evolution: 
+2026-05-14 22:37:25,858 [INFO] Searching Wikipedia: Docker evolution
+2026-05-14 22:37:26,232 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Docker+evolution&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:37:26,232 [ERROR] Wiki search failed for Docker evolution: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Docker+evolution&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:37:27,234 [INFO] Searching arXiv: package managers
+2026-05-14 22:37:27,940 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Apackage+managers&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:37:27,942 [ERROR] arXiv search failed for package managers: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3Apackage+managers&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:37:27,942 [INFO] Searching Wikipedia: package managers
+2026-05-14 22:37:28,027 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=package+managers&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:37:28,028 [ERROR] Wiki search failed for package managers: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=package+managers&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:37:29,029 [INFO] Searching arXiv: build systems
+2026-05-14 22:37:44,854 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Abuild+systems&start=0&max_results=10&sortBy=relevance "HTTP/1.1 429 Unknown Error"
+2026-05-14 22:37:44,858 [ERROR] arXiv search failed for build systems: Client error '429 Unknown Error' for url 'https://export.arxiv.org/api/query?search_query=all%3Abuild+systems&start=0&max_results=10&sortBy=relevance'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2026-05-14 22:37:44,858 [INFO] Searching Wikipedia: build systems
+2026-05-14 22:37:45,246 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=build+systems&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:37:45,248 [ERROR] Wiki search failed for build systems: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=build+systems&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:37:46,249 [INFO] Searching arXiv: local-first tooling
+2026-05-14 22:38:16,256 [ERROR] arXiv search failed for local-first tooling: 
+2026-05-14 22:38:16,256 [INFO] Searching Wikipedia: local-first tooling
+2026-05-14 22:38:16,617 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=local-first+tooling&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:16,617 [ERROR] Wiki search failed for local-first tooling: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=local-first+tooling&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:17,619 [INFO] Searching arXiv: debugging systems
+2026-05-14 22:38:26,614 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Adebugging+systems&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:26,617 [INFO] Searching Wikipedia: debugging systems
+2026-05-14 22:38:26,960 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=debugging+systems&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:26,960 [ERROR] Wiki search failed for debugging systems: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=debugging+systems&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:27,963 [INFO] Searching arXiv: orchestration pipelines
+2026-05-14 22:38:34,989 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Aorchestration+pipelines&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:35,005 [INFO] Searching Wikipedia: orchestration pipelines
+2026-05-14 22:38:35,345 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=orchestration+pipelines&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:35,346 [ERROR] Wiki search failed for orchestration pipelines: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=orchestration+pipelines&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:36,350 [INFO] Searching arXiv: save-state systems
+2026-05-14 22:38:38,395 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Asave-state+systems&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:38,398 [INFO] Searching Wikipedia: save-state systems
+2026-05-14 22:38:38,482 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=save-state+systems&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:38,483 [ERROR] Wiki search failed for save-state systems: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=save-state+systems&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:39,486 [INFO] Searching arXiv: persistence layers
+2026-05-14 22:38:40,152 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Apersistence+layers&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:40,163 [INFO] Searching Wikipedia: persistence layers
+2026-05-14 22:38:40,249 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=persistence+layers&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:40,249 [ERROR] Wiki search failed for persistence layers: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=persistence+layers&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:41,252 [INFO] Searching arXiv: offline sync
+2026-05-14 22:38:42,185 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Aoffline+sync&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:42,188 [INFO] Searching Wikipedia: offline sync
+2026-05-14 22:38:42,273 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=offline+sync&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:42,274 [ERROR] Wiki search failed for offline sync: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=offline+sync&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:43,277 [INFO] Searching arXiv: local-first architectures
+2026-05-14 22:38:44,233 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Alocal-first+architectures&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:44,236 [INFO] Searching Wikipedia: local-first architectures
+2026-05-14 22:38:44,321 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=local-first+architectures&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:44,321 [ERROR] Wiki search failed for local-first architectures: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=local-first+architectures&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:45,325 [INFO] Searching arXiv: deterministic workflows
+2026-05-14 22:38:46,509 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Adeterministic+workflows&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:46,529 [INFO] Searching Wikipedia: deterministic workflows
+2026-05-14 22:38:46,614 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=deterministic+workflows&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:46,614 [ERROR] Wiki search failed for deterministic workflows: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=deterministic+workflows&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:47,618 [INFO] Searching arXiv: replayable editing systems
+2026-05-14 22:38:48,479 [INFO] HTTP Request: GET https://export.arxiv.org/api/query?search_query=all%3Areplayable+editing+systems&start=0&max_results=10&sortBy=relevance "HTTP/1.1 200 OK"
+2026-05-14 22:38:48,491 [INFO] Searching Wikipedia: replayable editing systems
+2026-05-14 22:38:48,575 [INFO] HTTP Request: GET https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=replayable+editing+systems&srlimit=5&format=json&origin=%2A "HTTP/1.1 403 Forbidden"
+2026-05-14 22:38:48,575 [ERROR] Wiki search failed for replayable editing systems: Client error '403 Forbidden' for url 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=replayable+editing+systems&srlimit=5&format=json&origin=%2A'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-05-14 22:38:49,578 [INFO] Harvesting Complete. Total unique sources identified: 80

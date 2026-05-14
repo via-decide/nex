@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "id": "package_management_emergence",
+    "generated_at": "2026-05-14T17:08:28.287332+00:00",
+    "engine_version": "1.0.0"
+  },
+  "root_constraint": "larger_codebases",
+  "derivation_graph": [
+    {
+      "constraint": "modularization pressure",
+      "solution": "manual shared libs"
+    },
+    {
+      "constraint": "version hell",
+      "solution": "package managers"
+    },
+    {
+      "constraint": "dependency graph complexity",
+      "solution": "automated resolvers"
+    },
+    {
+      "constraint": "runtime isolation",
+      "solution": "plugin ecosystems"
+    },
+    {
+      "constraint": "orchestration complexity",
+      "solution": "containerization / k8s"
+    }
+  ],
+  "lineage_string": "C -> M -> P -> D -> PE -> OC"
+}

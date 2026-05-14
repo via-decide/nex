@@ -1,0 +1,4 @@
+TITLE: Supercomputing with MPI meets the Common Workflow Language standards: an experience report
+URL: https://arxiv.org/abs/2010.00422v1
+SOURCE: arxiv
+SNIPPET: Use of standards-based workflows is still somewhat unusual by high-performance computing users. In this paper we describe the experience of using the Common Workflow Language (CWL) standards to describe the execution, in parallel, of MPI-parallelised applications. In particular, we motivate and describe the simple extension to the specification which was required, as well as our implementation of this within the CWL reference runner. We discuss some of the unexpected benefits, such as simple use of HPC-oriented performance measurement tools, and CWL software requirements interfacing with HPC module systems. We close with a request for comment from the community on how these features could be adopted within versions of the CWL standards.

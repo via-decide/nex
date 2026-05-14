@@ -1,0 +1,4 @@
+TITLE: Communication channel prioritization in a publish-subscribe architecture
+URL: https://arxiv.org/abs/1504.02128v2
+SOURCE: arxiv
+SNIPPET: Real-Time communication are important in all those distributed applications where timing constraints on data proccessing and task executation play a fundamental role. Standards-base software engineering does not yet specify how real-time properties should be integrated into a publish/subscribe middleware. This article describes an approach for integration of priority quality of service in a publish/subscribe middleware. The approach simply leverages the operating system functionalities to provide a framework where specific communication channels can be prioritized at run-time. The quality of service is implemented in YARP (Yet Another Robot Platform) framework and the primarily results of performance tests are presented.

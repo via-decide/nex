@@ -1,0 +1,8 @@
+{
+  "title": "Persistent Cost of Lipschitz Maps",
+  "url": "https://arxiv.org/abs/2511.07674v2",
+  "snippet": "A $1$-Lipschitz map between compact metric spaces $f\\colon X\\to Y$ induces a homomorphism of persistence modules on degree-$d$ Vietoris--Rips persistent homology. We define the persistent cost of $f$ from this induced homomorphism by quantifying the persistence carried by its kernel and cokernel modules.   We prove that the persistent cost controls the interleaving distance between the degree-$d$ Vietoris--Rips persistent homology modules of $X$ and $Y$. Moreover, we obtain an explicit upper bound for the persistent cost in purely metric terms. Finally, we give a self-contained proof of the stability of the persistent cost introducing a Gromov-Hausdorff type distance for maps between compact metric spaces.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:40.249985+00:00",
+  "domain": "persistence layers"
+}

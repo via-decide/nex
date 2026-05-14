@@ -1,0 +1,8 @@
+{
+  "title": "Contextual Constraint Modeling in Grid Application Workflows",
+  "url": "https://arxiv.org/abs/cs/0503045v1",
+  "snippet": "This paper introduces a new mechanism for specifying constraints in distributed workflows. By introducing constraints in a contextual form, it is shown how different people and groups within collaborative communities can cooperatively constrain workflows. A comparison with existing state-of-the-art workflow systems is made. These ideas are explored in practice with an illustrative example from High Energy Physics.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:46.615747+00:00",
+  "domain": "deterministic workflows"
+}

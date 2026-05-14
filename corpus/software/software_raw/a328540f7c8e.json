@@ -1,0 +1,8 @@
+{
+  "title": "Reliability-Aware Overlay Architectures for FPGAs: Features and Design Challenges",
+  "url": "https://arxiv.org/abs/1606.06452v1",
+  "snippet": "The FPGA overlay architectures have been mainly proposed to improve design productivity, circuit portability and system debugging. In this paper, we address the use of overlay architectures for building fault tolerant SRAM-based FPGA systems and discuss the main features and design challenges of a reliability-aware overlay architecture.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:44.322567+00:00",
+  "domain": "local-first architectures"
+}

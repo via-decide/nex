@@ -1,0 +1,8 @@
+{
+  "title": "RISCBench: Benchmarking RISC-V Orchestration Efficiency in FPGA and FPGA-Like Computing Engines",
+  "url": "https://arxiv.org/abs/2603.06580v1",
+  "snippet": "Heterogeneous systems increasingly rely on RISC-V cores as orchestration engines to manage data movement, synchronization, and scheduling across accelerators and reconfigurable fabrics. Conventional performance metrics, such as FLOPs, TOPS/W, or energy per operation, do not capture orchestration efficiency, even though it often dictates sustained system behavior. This gap is increasingly relevant as systems evolve toward tightly coupled heterogeneous fabrics and co-packaged accelerators, where control-plane behavior determines whether these platforms achieve their promised performance.   We present RISCBench, a kernel benchmark suite and open methodology for quantifying orchestration efficiency. RISCBench introduces the Sustained Instantaneous Throughput (SIT) metric, which accumulates instantaneous throughput over near-aggregate execution intervals, capturing sustained efficiency beyond peak rates. The methodology is evaluated across representative platforms spanning soft and hard RISC-V orchestration engines, including FPGA-based prototyping and accelerator-class implementations. Results highlight synchronization and data residency driven tradeoffs that limit realized throughput beyond peak performance, motivating SIT as a practical, platform-independent descriptor for evaluating orchestration efficiency in heterogeneous systems and AI inference applications.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.347529+00:00",
+  "domain": "orchestration pipelines"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "A Dataflow Language for Decentralised Orchestration of Web Service Workflows",
+  "url": "https://arxiv.org/abs/1305.1840v1",
+  "snippet": "Orchestrating centralised service-oriented workflows presents significant scalability challenges that include: the consumption of network bandwidth, degradation of performance, and single points of failure. This paper presents a high-level dataflow specification language that attempts to address these scalability challenges. This language provides simple abstractions for orchestrating large-scale web service workflows, and separates between the workflow logic and its execution. It is based on a data-driven model that permits parallelism to improve the workflow performance. We provide a decentralised architecture that allows the computation logic to be moved \"closer\" to services involved in the workflow. This is achieved through partitioning the workflow specification into smaller fragments that may be sent to remote orchestration services for execution. The orchestration services rely on proxies that exploit connectivity to services in the workflow. These proxies perform service invocations and compositions on behalf of the orchestration services, and carry out data collection, retrieval, and mediation tasks. The evaluation of our architecture implementation concludes that our decentralised approach reduces the execution time of workflows, and scales accordingly with the increasing size of data sets.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:46.615217+00:00",
+  "domain": "deterministic workflows"
+}

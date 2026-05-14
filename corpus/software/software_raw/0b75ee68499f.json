@@ -1,0 +1,8 @@
+{
+  "title": "Predicting the Performance of Scientific Workflow Tasks for Cluster Resource Management: An Overview of the State of the Art",
+  "url": "https://arxiv.org/abs/2504.20867v1",
+  "snippet": "Scientific workflow management systems support large-scale data analysis on cluster infrastructures. For this, they interact with resource managers which schedule workflow tasks onto cluster nodes. In addition to workflow task descriptions, resource managers rely on task performance estimates such as main memory consumption and runtime to efficiently manage cluster resources. Such performance estimates should be automated, as user-based task performance estimates are error-prone.   In this book chapter, we describe key characteristics of methods for workflow task runtime and memory prediction, provide an overview and a detailed comparison of state-of-the-art methods from the literature, and discuss how workflow task performance prediction is useful for scheduling, energy-efficient and carbon-aware computing, and cost prediction.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:46.616524+00:00",
+  "domain": "deterministic workflows"
+}

@@ -1,0 +1,4 @@
+TITLE: Generalized Systematic Debugging for Attribute Grammars
+URL: https://arxiv.org/abs/cs/0310026v1
+SOURCE: arxiv
+SNIPPET: Attribute grammars (AGs) are known to be a useful formalism for semantic analysis and translation. However, debugging AGs is complex owing to inherent difficulties of AGs, such as recursive grammar structure and attribute dependency. In this paper, a new systematic method of debugging AGs is proposed. Our approach is, in principle, based on previously proposed algorithmic debugging of AGs, but is more general. This easily enables integration of various query-based systematic debugging methods, including the slice-based method. The proposed method has been implemented in Aki, a debugger for AG description. We evaluated our new approach experimentally using Aki, which demonstrates the usability of our debugging method.

@@ -1,0 +1,4 @@
+TITLE: Reliability-Aware Overlay Architectures for FPGAs: Features and Design Challenges
+URL: https://arxiv.org/abs/1606.06452v1
+SOURCE: arxiv
+SNIPPET: The FPGA overlay architectures have been mainly proposed to improve design productivity, circuit portability and system debugging. In this paper, we address the use of overlay architectures for building fault tolerant SRAM-based FPGA systems and discuss the main features and design challenges of a reliability-aware overlay architecture.

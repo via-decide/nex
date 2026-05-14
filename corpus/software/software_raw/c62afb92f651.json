@@ -1,0 +1,8 @@
+{
+  "title": "The Mathematical Syntax of Architectures",
+  "url": "https://arxiv.org/abs/2004.03719v3",
+  "snippet": "Despite several (accepted) standards, core notions typically employed in information technology or system engineering architectures lack the precise and exact foundations encountered in logic, algebra, and other branches of mathematics.   In this contribution we define the syntactical aspects of the term architecture in a mathematically rigorous way. We motivate our particular choice by demonstrating (i) how commonly understood and expected properties of an architecture -- as defined by various standards -- can be suitably identified or derived within our formalization, (ii) how our concept is fully compatible with real life (business) architectures, and (iii) how our definition complements recent foundational work in this area (Wilkinson 2018, Dickersen 2020, Efatmaneshnik 2020).   We furthermore develop a rigorous notion of architectural similarity based on the notion of homomorphisms allowing the class of architectures to be regarded as a category, Arch. We demonstrate the applicability of our concepts to theory by deriving theorems on the classification of certain types of architectures. Inter alia, we derive a no go theorem proving that, in contrast to n-tier architectures, one cannot sensibly define generic architectural modularity on the syntactical level alone.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:44.322855+00:00",
+  "domain": "local-first architectures"
+}

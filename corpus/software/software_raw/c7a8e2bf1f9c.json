@@ -1,0 +1,8 @@
+{
+  "title": "Container Orchestration on HPC Systems",
+  "url": "https://arxiv.org/abs/2012.08866v2",
+  "snippet": "Containerisation demonstrates its efficiency in application deployment in cloud computing. Containers can encapsulate complex programs with their dependencies in isolated environments, hence are being adopted in HPC clusters. HPC workload managers lack micro-services support and deeply integrated container management, as opposed to container orchestrators (e.g. Kubernetes). We introduce Torque-Operator (a plugin) which serves as a bridge between HPC workload managers and container Orchestrators.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.346729+00:00",
+  "domain": "orchestration pipelines"
+}

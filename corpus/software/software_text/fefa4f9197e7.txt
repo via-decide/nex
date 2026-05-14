@@ -1,0 +1,4 @@
+TITLE: Numeric Invariants from Multidimensional Persistence
+URL: https://arxiv.org/abs/1411.4022v3
+SOURCE: arxiv
+SNIPPET: We extend the results of Adcock, Carlsson, and Carlsson by constructing numeric invariants from the computation of a multidimensional persistence module as given by Carlsson, Singh, and Zomorodian.

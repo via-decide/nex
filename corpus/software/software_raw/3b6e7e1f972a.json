@@ -1,0 +1,8 @@
+{
+  "title": "Prompt Compression in Production Task Orchestration: A Pre-Registered Randomized Trial",
+  "url": "https://arxiv.org/abs/2603.23525v1",
+  "snippet": "The economics of prompt compression depend not only on reducing input tokens but on how compression changes output length, which is typically priced several times higher. We evaluate this in a pre-registered six-arm randomized controlled trial of prompt compression on production multi-agent task-orchestration, analyzing 358 successful Claude Sonnet 4.5 runs (59-61 per arm) drawn from a randomized corpus of 1,199 real orchestration instructions. We compare an uncompressed control with three uniform retention rates (r=0.8, 0.5, 0.2) and two structure-aware strategies (entropy-adaptive and recency-weighted), measuring total inference cost (input+output) and embedding-based response similarity. Moderate compression (r=0.5) reduced mean total cost by 27.9%, while aggressive compression (r=0.2) increased mean cost by 1.8% despite substantial input reduction, consistent with small mean output expansion (1.03x vs. control) and heavy-tailed uncertainty. Recency-weighted compression achieved 23.5% savings and, together with moderate compression, occupied the empirical cost-similarity Pareto frontier, whereas aggressive compression was dominated on both cost and similarity. These results show that \"compress more\" is not a reliable production heuristic and that output tokens must be treated as a first-class outcome when designing compression policies.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.348187+00:00",
+  "domain": "orchestration pipelines"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Agentic Verifier-in-the-Loop Solver Orchestration for Cell-Free Massive MIMO Downlink Power Control",
+  "url": "https://arxiv.org/abs/2603.23128v1",
+  "snippet": "Cell-free massive multiple-input multiple-output (MIMO) systems can provide uniformly strong service through distributed access points, but performance still depends critically on downlink power control. Existing methods are typically selected offline and then applied uniformly across channel and load regimes, even though no single solver is uniformly best. We therefore propose VISO-PC, a verifier-in-the-loop solver-orchestration framework in which an agent routes among trusted solvers rather than generating power coefficients directly. Given a structured instance descriptor, the router selects an initial solver and fallback order, and an independent verifier accepts only candidates that satisfy the constraints and produce a valid verified common rate. For fairness-oriented downlink cell-free power control under per-AP constraints, verification-aware orchestration improves accepted rate over all fixed single-solver baselines on a reproducible prototype benchmark. Moreover, a lightweight memory-based router matches the accepted rate of a strong rule-based router while reducing average runtime and fallback rate. These results show that solver orchestration is a practical agentic layer for cell-free massive MIMO downlink power control.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.348353+00:00",
+  "domain": "orchestration pipelines"
+}

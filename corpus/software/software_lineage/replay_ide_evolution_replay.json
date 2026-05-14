@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "replay_id": "ide_evolution_replay",
+    "target": "IDE Evolution",
+    "executed_at": "2026-05-14T17:08:28.352565+00:00",
+    "determinism_check": "passed"
+  },
+  "timeline": [
+    {
+      "t": "1990s",
+      "event": "Single-binary IDEs",
+      "divergence": null
+    },
+    {
+      "t": "2000s",
+      "event": "Plugin-heavy Eclipse/IntelliJ",
+      "divergence": "DEPENDENCY_EXPLOSION"
+    },
+    {
+      "t": "2010s",
+      "event": "VSCode / Language Server Protocol",
+      "divergence": "RUNTIME_FRAGMENTATION"
+    },
+    {
+      "t": "2020s",
+      "event": "Local-first / AI-integrated substrates",
+      "divergence": "AUTHORITY_LOCKIN"
+    }
+  ],
+  "divergence_summary": [
+    "DEPENDENCY_EXPLOSION",
+    "RUNTIME_FRAGMENTATION",
+    "AUTHORITY_LOCKIN"
+  ]
+}

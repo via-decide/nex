@@ -1,0 +1,8 @@
+{
+  "title": "Towards autonomic orchestration of machine learning pipelines in future networks",
+  "url": "https://arxiv.org/abs/2107.08194v1",
+  "snippet": "Machine learning (ML) techniques are being increasingly used in mobile networks for network planning, operation, management, optimisation and much more. These techniques are realised using a set of logical nodes known as ML pipeline. A single network operator might have thousands of such ML pipelines distributed across its network. These pipelines need to be managed and orchestrated across network domains. Thus it is essential to have autonomic multi-domain orchestration of ML pipelines in mobile networks. International Telecommunications Union (ITU) has provided an architectural framework for management and orchestration of ML pipelines in future networks. We extend this framework to enable autonomic orchestration of ML pipelines across multiple network domains. We present our system architecture and describe its application using a smart factory use case. Our work allows autonomic orchestration of multi-domain ML pipelines in a standardised, technology agnostic, privacy preserving fashion.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.347111+00:00",
+  "domain": "orchestration pipelines"
+}

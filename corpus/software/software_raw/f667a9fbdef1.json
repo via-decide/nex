@@ -1,0 +1,8 @@
+{
+  "title": "Systematic Debugging of Attribute Grammars",
+  "url": "https://arxiv.org/abs/cs/0011029v1",
+  "snippet": "Although attribute grammars are commonly used for compiler construction, little investigation has been conducted on debugging attribute grammars. The paper proposes two types of systematic debugging methods, an algorithmic debugging and slice-based debugging, both tailored for attribute grammars. By means of query-based interaction with the developer, our debugging methods effectively narrow the potential bug space in the attribute grammar description and eventually identify the incorrect attribution rule. We have incorporated this technology in our visual debugging tool called Aki.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:26.960916+00:00",
+  "domain": "debugging systems"
+}

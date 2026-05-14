@@ -1,0 +1,4 @@
+TITLE: Persistence in Nonequilibrium Systems
+URL: https://arxiv.org/abs/cond-mat/9907407v1
+SOURCE: arxiv
+SNIPPET: This is a brief review of recent theoretical efforts to understand persistence in nonequilibrium systems. Some of the recent experimental results are also briefly mentioned. I also discuss recent generalizations of persistence in various directions and conclude with a summary of open questions.

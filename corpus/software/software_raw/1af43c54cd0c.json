@@ -1,0 +1,8 @@
+{
+  "title": "Deterministic Integer Factorization Algorithms",
+  "url": "https://arxiv.org/abs/1308.2891v3",
+  "snippet": "A new integer deterministic factorization algorithm, rated at arithmetic operations to $O(N^{1/6+\\varepsilon})$ arithmetic operations, is presented in this note. Equivalently, given the least $(\\log N)/6$ bits of a factor of the balanced integer $N = pq$, where $p$ and $q$ are primes, the algorithm factors the integer in polynomial time $O(\\log(N)^c)$, with $c \\geq 0$ constant, and $\\varepsilon &gt; 0$ an arbitrarily small number. It improves the current deterministic factorization algorithm, rated at arithmetic operations to $O(N^{1/5+\\varepsilon})$ arithmetic operations.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:46.616387+00:00",
+  "domain": "deterministic workflows"
+}

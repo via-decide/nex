@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "id": "sovereign_runtime_emergence",
+    "generated_at": "2026-05-14T17:08:28.288225+00:00",
+    "engine_version": "1.0.0"
+  },
+  "root_constraint": "cloud_dependency",
+  "derivation_graph": [
+    {
+      "constraint": "offline failure",
+      "solution": "local-first architectures"
+    },
+    {
+      "constraint": "data ownership pressure",
+      "solution": "sovereign identity / DIDs"
+    },
+    {
+      "constraint": "vendor lock-in",
+      "solution": "portable continuity manifests"
+    },
+    {
+      "constraint": "execution fragility",
+      "solution": "deterministic replay systems"
+    },
+    {
+      "constraint": "trust centralization",
+      "solution": "Zayvora / LogicHub authority"
+    }
+  ],
+  "lineage_string": "CD -> LF -> SI -> PCM -> DR"
+}

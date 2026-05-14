@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "generated_at": "2026-05-14T17:08:28.320276+00:00",
+    "version": "1.0.0"
+  },
+  "pressure_classes": {
+    "workflow_pressure": {
+      "description": "Pressure to optimize developer feedback loops and task orchestration.",
+      "examples": [
+        "hot-module reloading",
+        "IDE intellisense",
+        "CI/CD pipelines"
+      ],
+      "impact": "Increases complexity of local runtimes."
+    },
+    "persistence_pressure": {
+      "description": "Pressure to maintain state across runtime restarts and network gaps.",
+      "examples": [
+        "local-first sync",
+        "CRDTs",
+        "persistent disk buffers"
+      ],
+      "impact": "Forces decoupling of UI state from runtime."
+    },
+    "fragmentation_pressure": {
+      "description": "Pressure caused by diverging runtime environments (OS, browser, device).",
+      "examples": [
+        "polyfilling",
+        "abstraction layers",
+        "containerization"
+      ],
+      "impact": "Drives the emergence of 'write once, run anywhere' runtimes (JVM, WASM, Electron)."
+    },
+    "centralization_pressure": {
+      "description": "Economic or operational pressure to centralize authority and data.",
+      "examples": [
+        "Cloud SaaS",
+        "centralized package registries",
+        "identity providers"
+      ],
+      "impact": "Creates sovereignty risks and continuity fragility."
+    },
+    "sovereignty_pressure": {
+      "description": "Counter-pressure to reclaim control over data and execution.",
+      "examples": [
+        "local-first movement",
+        "self-hosting",
+        "sovereign runtimes"
+      ],
+      "impact": "Leads to NEX-style deterministic substrates."
+    }
+  }
+}

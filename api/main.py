@@ -36,6 +36,7 @@ from core.pipeline import DeepResearchPipeline, PipelineConfig, PipelineResult
 from core.research_synthesizer import ResearchReport
 from core.subchat_engine import SubchatEngine
 from core.zayvora_integration import ZayvoraIntegration, ZayvoraRequest, ZayvoraToolType
+from core.fused_rag import FusedRAG
 
 
 # ---------------------------------------------------------------------------
@@ -88,6 +89,11 @@ class ZayvoraRunRequest(BaseModel):
     parameters: dict[str, Any]
     context: str
     finding_id: str | None = None
+
+
+class RagQueryRequest(BaseModel):
+    query: str = Field(..., min_length=2, max_length=500)
+    limit: int = Field(5, ge=1, le=20)
 
 
 
@@ -411,3 +417,14 @@ async def run_zayvora(request: ZayvoraRunRequest) -> dict[str, Any]:
 async def list_zayvora_tools() -> list[dict[str, str]]:
     zayvora = ZayvoraIntegration()
     return zayvora.available_tools()
+
+
+@app.post("/api/rag/query")
+async def rag_query(request: RagQueryRequest) -> dict[str, Any]:
+    """Execute a Fused RAG query across software lineage and engineering research.
+
+    Returns:
+        Fused context items with relevance scoring.
+    """
+    rag = FusedRAG()
+    return await rag.query(request.query, limit=request.limit)

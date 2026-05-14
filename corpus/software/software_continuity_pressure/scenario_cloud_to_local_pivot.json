@@ -1,0 +1,18 @@
+{
+  "id": "cloud_to_local_pivot",
+  "trigger": "cloud_dependency",
+  "sequence": [
+    {
+      "pressure": "offline failure",
+      "response": "local-first requirement"
+    },
+    {
+      "pressure": "sovereignty risk",
+      "response": "decentralized identity"
+    },
+    {
+      "pressure": "continuity break",
+      "response": "portable state manifests"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+TITLE: A T-depth two Toffoli gate for 2D square lattice architectures
+URL: https://arxiv.org/abs/2311.12510v1
+SOURCE: arxiv
+SNIPPET: We present a novel Clifford+T decomposition of a Toffoli gate. Our decomposition requires no SWAP gates in order to be implemented on 2D square lattices of qubits. This decomposition enables shallower, more fault-tolerant quantum computations on both NISQ and error-corrected architectures. We present the derivation of the circuit, and illustrate the qubit mapping on a Sycamore-like architecture.

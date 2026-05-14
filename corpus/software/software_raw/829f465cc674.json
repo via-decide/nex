@@ -1,0 +1,8 @@
+{
+  "title": "Timed Orchestration for Component-based Systems",
+  "url": "https://arxiv.org/abs/1504.05513v3",
+  "snippet": "Individual machines in flexible production lines explicitly expose capabilities at their interfaces by means of parametric skills. Given such a set of configurable machines, a line integrator is faced with the problem of finding and tuning parameters for each machine such that the overall production line implements given safety and temporal requirements in an optimized and robust fashion. We formalize this problem of configuring and orchestrating flexible production lines as a parameter synthesis problem for systems of parametric timed automata, where interactions are based on skills. Parameter synthesis problems for interaction-level LTL properties are translated to parameter synthesis problems for state-based safety properties. For safety properties, synthesis problems are solved by checking satisfiability of $\\exists\\forall$SMT constraints. For constraint generation, we provide a set of computationally cheap over-approximations of the set of reachable states, together with fence constructions as sufficient conditions for safety formulas. We demonstrate the feasibility of our approach by solving typical machine configuration problems as encountered in industrial automation.",
+  "source": "arxiv",
+  "harvested_at": "2026-05-14T17:08:35.348514+00:00",
+  "domain": "orchestration pipelines"
+}

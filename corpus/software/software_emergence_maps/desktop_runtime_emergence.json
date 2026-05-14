@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "id": "desktop_runtime_emergence",
+    "generated_at": "2026-05-14T17:08:28.288058+00:00",
+    "engine_version": "1.0.0"
+  },
+  "root_constraint": "browser_limitations",
+  "derivation_graph": [
+    {
+      "constraint": "filesystem access requirement",
+      "solution": "node.js integration"
+    },
+    {
+      "constraint": "native windowing need",
+      "solution": "Electron / NW.js"
+    },
+    {
+      "constraint": "performance overhead",
+      "solution": "VSCode-like optimized runtimes"
+    },
+    {
+      "constraint": "extensibility pressure",
+      "solution": "plugin-native workflows"
+    },
+    {
+      "constraint": "memory footprint",
+      "solution": "Tauri / local-first lightweight runtimes"
+    }
+  ],
+  "lineage_string": "BL -> NI -> ER -> PNW -> LF"
+}
