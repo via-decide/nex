@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","required":["contradiction_id","class","claim_a","claim_b","assumptions"],"properties":{"contradiction_id":{"type":"string"},"class":{"type":"string"},"claim_a":{"type":"string"},"claim_b":{"type":"string"},"assumptions":{"type":"array","items":{"type":"string"}}}}
