@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Engineering Replay Viewer</title><style>body{font-family:system-ui;background:#020617;color:#e2e8f0;margin:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}pre{background:#111827;padding:8px;border-radius:8px;max-height:260px;overflow:auto}li{cursor:pointer}</style></head><body>
+<h1>Engineering Continuity Replay Viewer</h1>
+<div class="grid"><section><h3>Replay Timeline</h3><ul id="timeline"></ul><h3>Failure Navigation</h3><pre id="failure"></pre></section><section><h3>Constraint Inspection</h3><pre id="constraints"></pre><h3>Continuity Graphs</h3><pre id="graph"></pre></section></div>
+<script type="module">
+const byId=id=>document.getElementById(id),timeline=byId('timeline'),failure=byId('failure'),constraints=byId('constraints'),graph=byId('graph');
+async function load(path,d){try{return await fetch(path).then(r=>r.ok?r.json():d)}catch{return d}}
+async function boot(){const replays=await load('./replay_manifests/engineering_reasoning_replay.json',[]), fail=await load('./failure_lineage/failure_lineage_graph.json',{nodes:[],edges:[]}), matrix=await load('./constraint_matrix/cross_domain_constraint_matrix.json',[]); graph.textContent=JSON.stringify(replays.map(r=>({id:r.manifest_id,divergence:r.divergence_classification})),null,2); failure.textContent=JSON.stringify(fail,null,2); constraints.textContent=JSON.stringify(matrix,null,2); timeline.innerHTML=''; replays.forEach(r=>{const li=document.createElement('li');li.textContent=`${r.manifest_id} :: ${r.divergence_classification}`;li.onclick=()=>graph.textContent=JSON.stringify(r,null,2);timeline.appendChild(li);});}
+boot();
+</script></body></html>
