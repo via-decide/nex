@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json
+import hashlib, json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 META, OUT = ROOT / "metadata", ROOT / "engineering_graph"
-OUT.mkdir(exist_ok=True)
-nodes, edges = {}, []
+OUT.mkdir(parents=True, exist_ok=True)
 
-def add_node(name, kind): nodes.setdefault(name, {"id": name, "kind": kind})
-def link(a, b, rel): edges.append({"from": a, "to": b, "relation": rel})
+nodes, edges = {}, set()
 
-for f in META.glob("*.semantic.json"):
+def n(node_id: str, kind: str): nodes[node_id] = {"id": node_id, "kind": kind}
+def e(a: str, b: str, rel: str): edges.add((a, b, rel))
+
+for f in sorted(META.glob("*.semantic.json")):
     d = json.loads(f.read_text())
-    for domain, items in d.items():
+    for domain, items in sorted(d.items()):
         if isinstance(items, list):
-            add_node(domain, "domain")
-            for it in items: add_node(it, "concept"); link(domain, it, "mentions")
+            n(domain, "domain")
+            for item in sorted(set(items)):
+                n(item, "concept"); e(domain, item, "mentions")
 
-for a,b in [("fourier","signal integrity"),("control","motor"),("optimization","power system")]:
-    add_node(a,"math"); add_node(b,"engineering"); link(a,b,"supports")
+for a, b in [("fourier transform", "dsp"), ("dsp", "rf systems"), ("rf systems", "signal compression"), ("control theory", "motor controllers"), ("control theory", "power regulation"), ("control theory", "autonomous systems")]:
+    n(a, "math_or_control"); n(b, "engineering_stack"); e(a, b, "supports")
 
-(OUT/"graph.json").write_text(json.dumps({"nodes": list(nodes.values()), "edges": edges}, indent=2))
+edge_list = [{"from": a, "to": b, "relation": r, "edge_id": hashlib.sha1(f"{a}|{b}|{r}".encode()).hexdigest()[:12]} for a,b,r in sorted(edges)]
+(OUT / "graph.json").write_text(json.dumps({"nodes": [nodes[k] for k in sorted(nodes)], "edges": edge_list}, indent=2))
 print("engineering_graph/graph.json generated")
