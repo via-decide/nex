@@ -1,0 +1,8 @@
+{
+  "id": "phys_0003",
+  "divergence": [
+    "thermal_divergence_risk",
+    "signal_noise_divergence",
+    "sync_instability"
+  ]
+}

@@ -1,0 +1,1 @@
+cpu thermals, gpu memory bandwidth, clock synchronization drift, voltage stability, timing pressure.

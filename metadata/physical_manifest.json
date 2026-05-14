@@ -1,0 +1,95 @@
+[
+  {
+    "id": "phys_0001",
+    "title": "Math as infrastructure substrate",
+    "text": "/workspace/nex/physical_text/phys_0001.txt",
+    "math": [
+      "linear_algebra",
+      "graph_theory",
+      "information_theory",
+      "optimization"
+    ],
+    "signal": [
+      "signal_to_noise_limit",
+      "clock_jitter",
+      "latency_floor"
+    ],
+    "thermo": [
+      "thermal_density_limit",
+      "heat_dissipation_pressure",
+      "power_to_heat_coupling"
+    ],
+    "energy": [
+      "finite_energy_budget",
+      "bandwidth_energy_tradeoff",
+      "sustained_power_window"
+    ],
+    "divergence": [
+      "thermal_divergence_risk",
+      "signal_noise_divergence",
+      "sync_instability"
+    ]
+  },
+  {
+    "id": "phys_0002",
+    "title": "Physics shaping computation",
+    "text": "/workspace/nex/physical_text/phys_0002.txt",
+    "math": [
+      "linear_algebra",
+      "graph_theory",
+      "information_theory",
+      "optimization"
+    ],
+    "signal": [
+      "signal_to_noise_limit",
+      "clock_jitter",
+      "latency_floor"
+    ],
+    "thermo": [
+      "thermal_density_limit",
+      "heat_dissipation_pressure",
+      "power_to_heat_coupling"
+    ],
+    "energy": [
+      "finite_energy_budget",
+      "bandwidth_energy_tradeoff",
+      "sustained_power_window"
+    ],
+    "divergence": [
+      "thermal_divergence_risk",
+      "signal_noise_divergence",
+      "sync_instability"
+    ]
+  },
+  {
+    "id": "phys_0003",
+    "title": "Engineering physics continuity",
+    "text": "/workspace/nex/physical_text/phys_0003.txt",
+    "math": [
+      "linear_algebra",
+      "graph_theory",
+      "information_theory",
+      "optimization"
+    ],
+    "signal": [
+      "signal_to_noise_limit",
+      "clock_jitter",
+      "latency_floor"
+    ],
+    "thermo": [
+      "thermal_density_limit",
+      "heat_dissipation_pressure",
+      "power_to_heat_coupling"
+    ],
+    "energy": [
+      "finite_energy_budget",
+      "bandwidth_energy_tradeoff",
+      "sustained_power_window"
+    ],
+    "divergence": [
+      "thermal_divergence_risk",
+      "signal_noise_divergence",
+      "sync_instability"
+    ]
+  }
+]
