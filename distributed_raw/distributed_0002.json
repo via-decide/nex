@@ -1,0 +1,4 @@
+{
+  "title": "Consensus and causality",
+  "text": "Raft leader election, Paxos quorum, vector clocks, append-only logs, event sourcing."
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "distributed_0001",
+    "title": "RFC and transport internals",
+    "text": "/workspace/nex/distributed_text/distributed_0001.txt",
+    "protocols": [
+      "tcp/ip",
+      "quic",
+      "dns"
+    ],
+    "topology": [
+      "partition-aware",
+      "offline-capable",
+      "authority-propagating"
+    ],
+    "sync": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  },
+  {
+    "id": "distributed_0002",
+    "title": "Consensus and causality",
+    "text": "/workspace/nex/distributed_text/distributed_0002.txt",
+    "protocols": [
+      "raft",
+      "paxos",
+      "vector clocks"
+    ],
+    "topology": [
+      "partition-aware",
+      "offline-capable",
+      "authority-propagating"
+    ],
+    "sync": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  },
+  {
+    "id": "distributed_0003",
+    "title": "Mesh sovereign sync",
+    "text": "/workspace/nex/distributed_text/distributed_0003.txt",
+    "protocols": [
+      "crdt"
+    ],
+    "topology": [
+      "partition-aware",
+      "offline-capable",
+      "authority-propagating"
+    ],
+    "sync": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  }
+]
