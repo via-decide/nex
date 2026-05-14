@@ -1,0 +1,129 @@
+[
+  {
+    "industrial_problem": "facility_1_deterministic_recovery",
+    "facility_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_constraints": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "mathematics_required": [
+      "control stability",
+      "queueing bounds",
+      "timing analysis"
+    ],
+    "control_systems": [
+      "PLC",
+      "SCADA",
+      "DCS"
+    ],
+    "safety_requirements": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "continuity_requirements": [
+      "process_sync",
+      "state_transition"
+    ],
+    "operator_dependencies": [
+      "manual_override",
+      "restart_approval"
+    ]
+  },
+  {
+    "industrial_problem": "facility_2_deterministic_recovery",
+    "facility_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_constraints": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "mathematics_required": [
+      "control stability",
+      "queueing bounds",
+      "timing analysis"
+    ],
+    "control_systems": [
+      "PLC",
+      "SCADA",
+      "DCS"
+    ],
+    "safety_requirements": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "continuity_requirements": [
+      "process_sync",
+      "state_transition"
+    ],
+    "operator_dependencies": [
+      "manual_override",
+      "restart_approval"
+    ]
+  },
+  {
+    "industrial_problem": "facility_3_deterministic_recovery",
+    "facility_constraints": [
+      "deterministic cycle time",
+      "bounded actuator response"
+    ],
+    "electrical_constraints": [
+      "voltage stability",
+      "overload protection"
+    ],
+    "embedded_constraints": [
+      "PLC runtime",
+      "RTOS task scheduling"
+    ],
+    "mathematics_required": [
+      "control stability",
+      "queueing bounds",
+      "timing analysis"
+    ],
+    "control_systems": [
+      "PLC",
+      "SCADA",
+      "DCS"
+    ],
+    "safety_requirements": [
+      "IEC 61508",
+      "SIL controls"
+    ],
+    "failure_modes": [
+      "sensor_noise",
+      "timing_failure",
+      "actuator_divergence"
+    ],
+    "continuity_requirements": [
+      "operator_authority",
+      "safety_override",
+      "restart_sequence"
+    ],
+    "operator_dependencies": [
+      "manual_override",
+      "restart_approval"
+    ]
+  }
+]
