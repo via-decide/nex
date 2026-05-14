@@ -1,0 +1,4 @@
+{
+  "title": "Kernel scheduling origins",
+  "text": "interrupt latency, process fairness, memory paging, synchronization primitives, device driver contention."
+}

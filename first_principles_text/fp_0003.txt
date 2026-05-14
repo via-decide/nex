@@ -1,0 +1,1 @@
+graph theory, information theory, eventual consistency, vector clocks, replay divergence, reconciliation.

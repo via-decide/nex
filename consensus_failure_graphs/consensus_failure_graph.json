@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {
+      "id": "canonical_replay_validation",
+      "kind": "failure"
+    },
+    {
+      "id": "causality_divergence",
+      "kind": "failure"
+    },
+    {
+      "id": "conflicting_writes",
+      "kind": "failure"
+    },
+    {
+      "id": "network_partition",
+      "kind": "failure"
+    },
+    {
+      "id": "reconciliation_pressure",
+      "kind": "failure"
+    },
+    {
+      "id": "stale_leader_election",
+      "kind": "failure"
+    }
+  ],
+  "edges": [
+    {
+      "from": "causality_divergence",
+      "to": "reconciliation_pressure",
+      "relation": "propagates_to",
+      "edge_id": "fac011582ff0"
+    },
+    {
+      "from": "conflicting_writes",
+      "to": "causality_divergence",
+      "relation": "propagates_to",
+      "edge_id": "c4e951452be8"
+    },
+    {
+      "from": "network_partition",
+      "to": "stale_leader_election",
+      "relation": "propagates_to",
+      "edge_id": "7b7ffdebf5a1"
+    },
+    {
+      "from": "reconciliation_pressure",
+      "to": "canonical_replay_validation",
+      "relation": "propagates_to",
+      "edge_id": "75bd6f0dc9b1"
+    },
+    {
+      "from": "stale_leader_election",
+      "to": "conflicting_writes",
+      "relation": "propagates_to",
+      "edge_id": "cb91dbbd6d0c"
+    }
+  ]
+}

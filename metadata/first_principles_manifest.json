@@ -1,0 +1,71 @@
+[
+  {
+    "id": "fp_0001",
+    "title": "Kernel scheduling origins",
+    "text": "/workspace/nex/first_principles_text/fp_0001.txt",
+    "origins": [
+      "memory_ceiling",
+      "latency_floor",
+      "thermal_limit",
+      "sync_pressure"
+    ],
+    "pressures": [
+      "memory_pressure",
+      "throughput_pressure",
+      "continuity_pressure",
+      "replay_pressure"
+    ],
+    "primitives": [
+      "scheduler",
+      "cache",
+      "virtual_memory",
+      "vector_clock_reconciliation"
+    ]
+  },
+  {
+    "id": "fp_0002",
+    "title": "Compute hierarchy constraints",
+    "text": "/workspace/nex/first_principles_text/fp_0002.txt",
+    "origins": [
+      "memory_ceiling",
+      "latency_floor",
+      "thermal_limit",
+      "sync_pressure"
+    ],
+    "pressures": [
+      "memory_pressure",
+      "throughput_pressure",
+      "continuity_pressure",
+      "replay_pressure"
+    ],
+    "primitives": [
+      "scheduler",
+      "cache",
+      "virtual_memory",
+      "vector_clock_reconciliation"
+    ]
+  },
+  {
+    "id": "fp_0003",
+    "title": "Distributed continuity foundations",
+    "text": "/workspace/nex/first_principles_text/fp_0003.txt",
+    "origins": [
+      "memory_ceiling",
+      "latency_floor",
+      "thermal_limit",
+      "sync_pressure"
+    ],
+    "pressures": [
+      "memory_pressure",
+      "throughput_pressure",
+      "continuity_pressure",
+      "replay_pressure"
+    ],
+    "primitives": [
+      "scheduler",
+      "cache",
+      "virtual_memory",
+      "vector_clock_reconciliation"
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "id": "ai_runtime_0001",
+  "topology": [
+    "runtime_substitution",
+    "scheduler_chain",
+    "offline_local_first"
+  ]
+}

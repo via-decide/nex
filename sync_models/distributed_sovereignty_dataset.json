@@ -1,0 +1,116 @@
+[
+  {
+    "distributed_problem": "distributed_continuity_case_1",
+    "network_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_requirements": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_dependencies": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_scenarios": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "recovery_sequences": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ],
+    "continuity_requirements": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  },
+  {
+    "distributed_problem": "distributed_continuity_case_2",
+    "network_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_requirements": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_dependencies": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_scenarios": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "recovery_sequences": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ],
+    "continuity_requirements": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  },
+  {
+    "distributed_problem": "distributed_continuity_case_3",
+    "network_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_requirements": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_dependencies": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_scenarios": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "recovery_sequences": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ],
+    "continuity_requirements": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ]
+  }
+]

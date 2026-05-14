@@ -1,0 +1,8 @@
+{
+  "title": "PLC SCADA coordination baseline",
+  "protocols": [
+    "modbus",
+    "opc-ua",
+    "rs-485"
+  ]
+}

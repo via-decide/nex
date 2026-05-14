@@ -1,0 +1,8 @@
+{
+  "id": "distributed_0001",
+  "topology": [
+    "partition-aware",
+    "offline-capable",
+    "authority-propagating"
+  ]
+}
