@@ -1,0 +1,97 @@
+[
+  {
+    "id": "fp_0001",
+    "chain": [
+      {
+        "step": "slow_memory_access",
+        "next": "cache_hierarchy",
+        "edge_id": "5f25b3f929e3"
+      },
+      {
+        "step": "cache_hierarchy",
+        "next": "locality_optimization",
+        "edge_id": "121a8eb8ea6b"
+      },
+      {
+        "step": "locality_optimization",
+        "next": "paging_systems",
+        "edge_id": "32d821698fe1"
+      },
+      {
+        "step": "paging_systems",
+        "next": "virtual_memory",
+        "edge_id": "743a50fe5bce"
+      },
+      {
+        "step": "virtual_memory",
+        "next": "scheduler_coordination",
+        "edge_id": "ba7cf1cbb243"
+      },
+      {
+        "step": "scheduler_coordination",
+        "next": null,
+        "edge_id": "45bfbe94c67a"
+      }
+    ]
+  },
+  {
+    "id": "fp_0002",
+    "chain": [
+      {
+        "step": "distributed_latency",
+        "next": "eventual_consistency",
+        "edge_id": "7a865969565a"
+      },
+      {
+        "step": "eventual_consistency",
+        "next": "vector_clocks",
+        "edge_id": "09a8df41056d"
+      },
+      {
+        "step": "vector_clocks",
+        "next": "reconciliation_systems",
+        "edge_id": "6d0c60e2eaae"
+      },
+      {
+        "step": "reconciliation_systems",
+        "next": "replay_divergence_handling",
+        "edge_id": "9de16ea34de7"
+      },
+      {
+        "step": "replay_divergence_handling",
+        "next": null,
+        "edge_id": "247cdadae126"
+      }
+    ]
+  },
+  {
+    "id": "fp_0003",
+    "chain": [
+      {
+        "step": "distributed_latency",
+        "next": "eventual_consistency",
+        "edge_id": "2103c9627195"
+      },
+      {
+        "step": "eventual_consistency",
+        "next": "vector_clocks",
+        "edge_id": "fe9cc786b4ce"
+      },
+      {
+        "step": "vector_clocks",
+        "next": "reconciliation_systems",
+        "edge_id": "00927a4e7c2e"
+      },
+      {
+        "step": "reconciliation_systems",
+        "next": "replay_divergence_handling",
+        "edge_id": "a93dd1e66fee"
+      },
+      {
+        "step": "replay_divergence_handling",
+        "next": null,
+        "edge_id": "c82f4459a445"
+      }
+    ]
+  }
+]

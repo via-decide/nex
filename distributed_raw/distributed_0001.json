@@ -1,0 +1,4 @@
+{
+  "title": "RFC and transport internals",
+  "text": "TCP/IP congestion control, QUIC streams, DNS authority, NAT traversal, routing convergence."
+}

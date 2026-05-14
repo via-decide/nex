@@ -1,0 +1,7 @@
+{
+  "title": "Robotics conveyor orchestration",
+  "protocols": [
+    "can bus",
+    "ethercat"
+  ]
+}

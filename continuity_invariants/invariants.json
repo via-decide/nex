@@ -1,0 +1,21 @@
+{
+  "bundle_id": "vialogic-invariants-v1",
+  "invariants": [
+    {
+      "class": "AUTHORITY",
+      "law": "execution cannot redefine truth"
+    },
+    {
+      "class": "REPLAY",
+      "law": "if you cannot replay it, you do not control it"
+    },
+    {
+      "class": "CONTINUITY",
+      "law": "causal lineage must survive replacement"
+    },
+    {
+      "class": "DIVERGENCE",
+      "law": "suppressed contradiction causes canonical drift"
+    }
+  ]
+}

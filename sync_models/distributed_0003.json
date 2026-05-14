@@ -1,0 +1,8 @@
+{
+  "id": "distributed_0003",
+  "sync": [
+    "wal replay",
+    "causal ordering",
+    "reconciliation"
+  ]
+}

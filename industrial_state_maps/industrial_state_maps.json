@@ -1,0 +1,97 @@
+[
+  {
+    "id": "industrial_0001",
+    "transitions": [
+      {
+        "step": "sensor_drift",
+        "next": "pid_recalculation",
+        "edge_id": "31f7e58742a1"
+      },
+      {
+        "step": "pid_recalculation",
+        "next": "safe_mode",
+        "edge_id": "5d8a62a46d29"
+      },
+      {
+        "step": "safe_mode",
+        "next": "operator_review",
+        "edge_id": "926f5989a1d5"
+      },
+      {
+        "step": "operator_review",
+        "next": "resume",
+        "edge_id": "e900a287ed0d"
+      },
+      {
+        "step": "resume",
+        "next": null,
+        "edge_id": "e1a8cff606c8"
+      }
+    ]
+  },
+  {
+    "id": "industrial_0002",
+    "transitions": [
+      {
+        "step": "motor_overheat",
+        "next": "emergency_shutdown",
+        "edge_id": "a29496166f19"
+      },
+      {
+        "step": "emergency_shutdown",
+        "next": "relay_disconnect",
+        "edge_id": "764de94dee2e"
+      },
+      {
+        "step": "relay_disconnect",
+        "next": "conveyor_pause",
+        "edge_id": "ad736b1bd69e"
+      },
+      {
+        "step": "conveyor_pause",
+        "next": "operator_acknowledgement",
+        "edge_id": "504c4d94e4de"
+      },
+      {
+        "step": "operator_acknowledgement",
+        "next": "restart_sequence",
+        "edge_id": "1f6d7d5bcc10"
+      },
+      {
+        "step": "restart_sequence",
+        "next": null,
+        "edge_id": "81f1eee79e4f"
+      }
+    ]
+  },
+  {
+    "id": "industrial_0003",
+    "transitions": [
+      {
+        "step": "sensor_drift",
+        "next": "pid_recalculation",
+        "edge_id": "f67df9f4c716"
+      },
+      {
+        "step": "pid_recalculation",
+        "next": "safe_mode",
+        "edge_id": "02762f3c0cb0"
+      },
+      {
+        "step": "safe_mode",
+        "next": "operator_review",
+        "edge_id": "b98239fa009a"
+      },
+      {
+        "step": "operator_review",
+        "next": "resume",
+        "edge_id": "0cb5fa6946c5"
+      },
+      {
+        "step": "resume",
+        "next": null,
+        "edge_id": "3fb709bdf0ac"
+      }
+    ]
+  }
+]

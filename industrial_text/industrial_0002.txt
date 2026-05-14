@@ -1,0 +1,1 @@
+EtherCAT motion control, CAN bus actuator feedback, CNC path planning, conveyor synchronization.

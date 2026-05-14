@@ -1,0 +1,142 @@
+[
+  {
+    "semantic_problem": "semantic_continuity_case_1",
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "replay_constraints": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "contradictions": [
+      "preserve incompatible truths by assumption domain"
+    ],
+    "divergence_risks": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_requirements": [
+      "lineage-complete replay",
+      "authority validation"
+    ],
+    "sovereignty_requirements": [
+      "local-first storage",
+      "non-centralized truth control"
+    ]
+  },
+  {
+    "semantic_problem": "semantic_continuity_case_2",
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "replay_constraints": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "contradictions": [
+      "preserve incompatible truths by assumption domain"
+    ],
+    "divergence_risks": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_requirements": [
+      "lineage-complete replay",
+      "authority validation"
+    ],
+    "sovereignty_requirements": [
+      "local-first storage",
+      "non-centralized truth control"
+    ]
+  },
+  {
+    "semantic_problem": "semantic_continuity_case_3",
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "replay_constraints": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "contradictions": [
+      "preserve incompatible truths by assumption domain"
+    ],
+    "divergence_risks": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_requirements": [
+      "lineage-complete replay",
+      "authority validation"
+    ],
+    "sovereignty_requirements": [
+      "local-first storage",
+      "non-centralized truth control"
+    ]
+  },
+  {
+    "semantic_problem": "semantic_continuity_case_4",
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "replay_constraints": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "contradictions": [
+      "preserve incompatible truths by assumption domain"
+    ],
+    "divergence_risks": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_requirements": [
+      "lineage-complete replay",
+      "authority validation"
+    ],
+    "sovereignty_requirements": [
+      "local-first storage",
+      "non-centralized truth control"
+    ]
+  },
+  {
+    "semantic_problem": "semantic_continuity_case_5",
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "replay_constraints": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "contradictions": [
+      "preserve incompatible truths by assumption domain"
+    ],
+    "divergence_risks": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_requirements": [
+      "lineage-complete replay",
+      "authority validation"
+    ],
+    "sovereignty_requirements": [
+      "local-first storage",
+      "non-centralized truth control"
+    ]
+  }
+]

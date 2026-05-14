@@ -1,0 +1,1 @@
+PLC ladder logic, SCADA supervision, DCS transitions, Modbus and OPC-UA polling with RS-485 safety interlocks.

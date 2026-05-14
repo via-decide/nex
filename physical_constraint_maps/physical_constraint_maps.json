@@ -1,0 +1,97 @@
+[
+  {
+    "id": "phys_0001",
+    "derivation": [
+      {
+        "step": "memory_bandwidth_limit",
+        "next": "inference_bottleneck",
+        "edge_id": "b8f478f6e5a6"
+      },
+      {
+        "step": "inference_bottleneck",
+        "next": "scheduler_pressure",
+        "edge_id": "84cb6f7e22a1"
+      },
+      {
+        "step": "scheduler_pressure",
+        "next": "token_latency_variance",
+        "edge_id": "f7b8139680da"
+      },
+      {
+        "step": "token_latency_variance",
+        "next": "orchestration_divergence",
+        "edge_id": "d401cca7b085"
+      },
+      {
+        "step": "orchestration_divergence",
+        "next": null,
+        "edge_id": "87aa121e9d6a"
+      }
+    ]
+  },
+  {
+    "id": "phys_0002",
+    "derivation": [
+      {
+        "step": "increased_compute_density",
+        "next": "thermal_pressure",
+        "edge_id": "cb01c762bea8"
+      },
+      {
+        "step": "thermal_pressure",
+        "next": "clock_instability",
+        "edge_id": "314131dd2d01"
+      },
+      {
+        "step": "clock_instability",
+        "next": "synchronization_drift",
+        "edge_id": "6b6902fc2b09"
+      },
+      {
+        "step": "synchronization_drift",
+        "next": "replay_divergence",
+        "edge_id": "835d10d9d639"
+      },
+      {
+        "step": "replay_divergence",
+        "next": "continuity_risk",
+        "edge_id": "411c5affa6c6"
+      },
+      {
+        "step": "continuity_risk",
+        "next": null,
+        "edge_id": "1ff7b18c30e3"
+      }
+    ]
+  },
+  {
+    "id": "phys_0003",
+    "derivation": [
+      {
+        "step": "memory_bandwidth_limit",
+        "next": "inference_bottleneck",
+        "edge_id": "84ecf0d4713c"
+      },
+      {
+        "step": "inference_bottleneck",
+        "next": "scheduler_pressure",
+        "edge_id": "2e6d91557975"
+      },
+      {
+        "step": "scheduler_pressure",
+        "next": "token_latency_variance",
+        "edge_id": "916042889474"
+      },
+      {
+        "step": "token_latency_variance",
+        "next": "orchestration_divergence",
+        "edge_id": "186f332919ae"
+      },
+      {
+        "step": "orchestration_divergence",
+        "next": null,
+        "edge_id": "f247b545c2c2"
+      }
+    ]
+  }
+]

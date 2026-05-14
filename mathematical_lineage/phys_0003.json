@@ -1,0 +1,9 @@
+{
+  "id": "phys_0003",
+  "math": [
+    "linear_algebra",
+    "graph_theory",
+    "information_theory",
+    "optimization"
+  ]
+}

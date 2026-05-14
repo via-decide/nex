@@ -1,0 +1,59 @@
+{
+  "lineage_types": [
+    "engineering",
+    "authority",
+    "replay",
+    "infrastructure",
+    "civilization",
+    "runtime",
+    "mathematical"
+  ],
+  "nodes": [
+    {
+      "id": "admissibility",
+      "kind": "semantic"
+    },
+    {
+      "id": "authority",
+      "kind": "semantic"
+    },
+    {
+      "id": "canonical_continuity",
+      "kind": "semantic"
+    },
+    {
+      "id": "replay_validation",
+      "kind": "semantic"
+    },
+    {
+      "id": "sovereignty_preservation",
+      "kind": "semantic"
+    }
+  ],
+  "edges": [
+    {
+      "from": "authority",
+      "to": "admissibility",
+      "relation": "supports",
+      "edge_id": "857ac970ba30"
+    },
+    {
+      "from": "admissibility",
+      "to": "replay_validation",
+      "relation": "supports",
+      "edge_id": "55195287d1cd"
+    },
+    {
+      "from": "replay_validation",
+      "to": "canonical_continuity",
+      "relation": "supports",
+      "edge_id": "44bdfad13268"
+    },
+    {
+      "from": "canonical_continuity",
+      "to": "sovereignty_preservation",
+      "relation": "supports",
+      "edge_id": "aa330721fa26"
+    }
+  ]
+}

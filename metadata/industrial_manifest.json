@@ -1,0 +1,43 @@
+[
+  {
+    "id": "industrial_0001",
+    "title": "PLC SCADA coordination baseline",
+    "raw": "/workspace/nex/industrial_raw/industrial_0001.json",
+    "text": "/workspace/nex/industrial_text/industrial_0001.txt",
+    "protocols": [
+      "modbus",
+      "opc-ua",
+      "rs-485"
+    ],
+    "lineage": [
+      "process_sync",
+      "state_transition"
+    ]
+  },
+  {
+    "id": "industrial_0002",
+    "title": "Robotics conveyor orchestration",
+    "raw": "/workspace/nex/industrial_raw/industrial_0002.json",
+    "text": "/workspace/nex/industrial_text/industrial_0002.txt",
+    "protocols": [
+      "can bus",
+      "ethercat"
+    ],
+    "lineage": [
+      "process_sync",
+      "state_transition"
+    ]
+  },
+  {
+    "id": "industrial_0003",
+    "title": "Safety standard lineage",
+    "raw": "/workspace/nex/industrial_raw/industrial_0003.json",
+    "text": "/workspace/nex/industrial_text/industrial_0003.txt",
+    "protocols": [],
+    "lineage": [
+      "operator_authority",
+      "safety_override",
+      "restart_sequence"
+    ]
+  }
+]

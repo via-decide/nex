@@ -1,0 +1,63 @@
+[
+  {
+    "id": "phys_0001",
+    "replay_targets": [
+      "thermodynamic_pressure",
+      "synchronization_instability",
+      "signal_propagation",
+      "energy_bottlenecks",
+      "timing_collapse",
+      "memory_bandwidth_pressure"
+    ],
+    "causal_order": [
+      "memory_bandwidth_limit",
+      "inference_bottleneck",
+      "scheduler_pressure",
+      "token_latency_variance",
+      "orchestration_divergence"
+    ],
+    "lineage_supported": true,
+    "uncertainty": "none"
+  },
+  {
+    "id": "phys_0002",
+    "replay_targets": [
+      "thermodynamic_pressure",
+      "synchronization_instability",
+      "signal_propagation",
+      "energy_bottlenecks",
+      "timing_collapse",
+      "memory_bandwidth_pressure"
+    ],
+    "causal_order": [
+      "increased_compute_density",
+      "thermal_pressure",
+      "clock_instability",
+      "synchronization_drift",
+      "replay_divergence",
+      "continuity_risk"
+    ],
+    "lineage_supported": true,
+    "uncertainty": "none"
+  },
+  {
+    "id": "phys_0003",
+    "replay_targets": [
+      "thermodynamic_pressure",
+      "synchronization_instability",
+      "signal_propagation",
+      "energy_bottlenecks",
+      "timing_collapse",
+      "memory_bandwidth_pressure"
+    ],
+    "causal_order": [
+      "memory_bandwidth_limit",
+      "inference_bottleneck",
+      "scheduler_pressure",
+      "token_latency_variance",
+      "orchestration_divergence"
+    ],
+    "lineage_supported": true,
+    "uncertainty": "none"
+  }
+]

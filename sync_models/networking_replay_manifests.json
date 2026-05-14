@@ -1,0 +1,116 @@
+[
+  {
+    "network_topology": "replicated_log_topology",
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_dependencies": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_propagation": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_recovery_rules": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "replay_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "continuity_lineage": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ],
+    "canonical_recovery_paths": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ]
+  },
+  {
+    "network_topology": "replicated_log_topology",
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_dependencies": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_propagation": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_recovery_rules": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "replay_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "continuity_lineage": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ],
+    "canonical_recovery_paths": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ]
+  },
+  {
+    "network_topology": "mesh_partition_tolerant",
+    "synchronization_constraints": [
+      "bounded replication lag",
+      "offline replay admissibility"
+    ],
+    "consensus_dependencies": [
+      "raft quorum",
+      "paxos safety"
+    ],
+    "authority_propagation": [
+      "leader lease",
+      "epoch transition"
+    ],
+    "partition_recovery_rules": [
+      "fence stale writers",
+      "reconcile via vector clocks"
+    ],
+    "replay_constraints": [
+      "append-only wal",
+      "deterministic ordering"
+    ],
+    "failure_modes": [
+      "split-brain",
+      "causal reorder",
+      "stale read"
+    ],
+    "continuity_lineage": [
+      "wal replay",
+      "causal ordering",
+      "reconciliation"
+    ],
+    "canonical_recovery_paths": [
+      "quorum restore",
+      "log replay",
+      "state checksum validation"
+    ]
+  }
+]

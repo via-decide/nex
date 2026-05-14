@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ai_runtime_0001",
+    "title": "Portable runtimes",
+    "text": "/workspace/nex/ai_runtime_text/ai_runtime_0001.txt",
+    "topology": [
+      "runtime_substitution",
+      "scheduler_chain",
+      "offline_local_first"
+    ],
+    "memory": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  },
+  {
+    "id": "ai_runtime_0002",
+    "title": "GPU scheduling and KV cache",
+    "text": "/workspace/nex/ai_runtime_text/ai_runtime_0002.txt",
+    "topology": [
+      "runtime_substitution",
+      "scheduler_chain",
+      "offline_local_first"
+    ],
+    "memory": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  },
+  {
+    "id": "ai_runtime_0003",
+    "title": "Distributed inference continuity",
+    "text": "/workspace/nex/ai_runtime_text/ai_runtime_0003.txt",
+    "topology": [
+      "runtime_substitution",
+      "scheduler_chain",
+      "offline_local_first"
+    ],
+    "memory": [
+      "kv_cache_budget",
+      "gpu_memory_ceiling",
+      "numa_affinity"
+    ],
+    "lineage": [
+      "replay_boundary",
+      "continuity_check",
+      "canonical_restore"
+    ]
+  }
+]

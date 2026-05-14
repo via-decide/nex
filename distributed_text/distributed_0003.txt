@@ -1,0 +1,1 @@
+Bluetooth mesh, LoRa peer routing, offline-first replication, CRDT conflict-free merges, local-first sync.

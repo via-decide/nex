@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","required":["manifest_id","lineage","constraints"],"properties":{"manifest_id":{"type":"string"},"lineage":{"type":"array","items":{"type":"string"}},"constraints":{"type":"array","items":{"type":"string"}},"authority":{"type":"array","items":{"type":"string"}}}}

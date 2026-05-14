@@ -1,0 +1,22 @@
+[
+  {
+    "contradiction_id": "c1",
+    "class": "infrastructure contradiction",
+    "claim_a": "cloud improves scalability",
+    "claim_b": "cloud reduces sovereignty",
+    "assumptions": [
+      "global latency tolerance",
+      "external authority trust"
+    ]
+  },
+  {
+    "contradiction_id": "c2",
+    "class": "replay contradiction",
+    "claim_a": "high throughput via async mutation",
+    "claim_b": "deterministic replay requires causal ordering",
+    "assumptions": [
+      "ordering metadata present",
+      "reconciliation budget"
+    ]
+  }
+]
