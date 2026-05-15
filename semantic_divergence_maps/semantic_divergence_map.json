@@ -1,0 +1,60 @@
+{
+  "divergence_classes": [
+    "AUTHORITY_COLLAPSE",
+    "REPLAY_COLLAPSE",
+    "PROJECTION_LEAK",
+    "TRANSPORT_AUTHORITY_LEAK",
+    "ECONOMIC_AUTHORITY_LEAK",
+    "CONTRADICTION_SUPPRESSION",
+    "CANONICAL_DRIFT",
+    "UNKNOWN_SEMANTIC_STATE"
+  ],
+  "nodes": [
+    {
+      "id": "payment_system",
+      "kind": "semantic_divergence"
+    },
+    {
+      "id": "entitlement_mutation",
+      "kind": "semantic_divergence"
+    },
+    {
+      "id": "ownership_revocation",
+      "kind": "semantic_divergence"
+    },
+    {
+      "id": "canonical_corruption",
+      "kind": "semantic_divergence"
+    },
+    {
+      "id": "sovereignty_failure",
+      "kind": "semantic_divergence"
+    }
+  ],
+  "edges": [
+    {
+      "from": "payment_system",
+      "to": "entitlement_mutation",
+      "relation": "propagates_to",
+      "edge_id": "72730570ec6f"
+    },
+    {
+      "from": "entitlement_mutation",
+      "to": "ownership_revocation",
+      "relation": "propagates_to",
+      "edge_id": "abf738cd0770"
+    },
+    {
+      "from": "ownership_revocation",
+      "to": "canonical_corruption",
+      "relation": "propagates_to",
+      "edge_id": "2ba5c00fad23"
+    },
+    {
+      "from": "canonical_corruption",
+      "to": "sovereignty_failure",
+      "relation": "propagates_to",
+      "edge_id": "38b107193eb4"
+    }
+  ]
+}

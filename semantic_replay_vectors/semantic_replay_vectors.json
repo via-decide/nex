@@ -1,0 +1,137 @@
+[
+  {
+    "vector_id": "f880ea02c32ddd",
+    "source_nodes": [
+      "admissibility"
+    ],
+    "reasoning_dependencies": [
+      "causal lineage",
+      "authority checks"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "replay_requirements": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "divergence_classes": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_outputs": [
+      "preserved::admissibility"
+    ]
+  },
+  {
+    "vector_id": "c24ee0ed8bcdf9",
+    "source_nodes": [
+      "authority"
+    ],
+    "reasoning_dependencies": [
+      "causal lineage",
+      "authority checks"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "replay_requirements": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "divergence_classes": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_outputs": [
+      "preserved::authority"
+    ]
+  },
+  {
+    "vector_id": "e0164ed37735f5",
+    "source_nodes": [
+      "canonical_continuity"
+    ],
+    "reasoning_dependencies": [
+      "causal lineage",
+      "authority checks"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "replay_requirements": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "divergence_classes": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_outputs": [
+      "preserved::canonical_continuity"
+    ]
+  },
+  {
+    "vector_id": "22a5a56ca55c36",
+    "source_nodes": [
+      "replay_validation"
+    ],
+    "reasoning_dependencies": [
+      "causal lineage",
+      "authority checks"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "replay_requirements": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "divergence_classes": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_outputs": [
+      "preserved::replay_validation"
+    ]
+  },
+  {
+    "vector_id": "59ec7b953fd4e7",
+    "source_nodes": [
+      "sovereignty_preservation"
+    ],
+    "reasoning_dependencies": [
+      "causal lineage",
+      "authority checks"
+    ],
+    "continuity_constraints": [
+      "canonical consistency"
+    ],
+    "authority_constraints": [
+      "execution cannot redefine truth"
+    ],
+    "replay_requirements": [
+      "deterministic order",
+      "complete lineage"
+    ],
+    "divergence_classes": [
+      "AUTHORITY_COLLAPSE",
+      "REPLAY_COLLAPSE"
+    ],
+    "canonical_outputs": [
+      "preserved::sovereignty_preservation"
+    ]
+  }
+]
