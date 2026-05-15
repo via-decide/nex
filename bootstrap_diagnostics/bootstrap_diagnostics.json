@@ -1,0 +1,17 @@
+{
+  "checks": {
+    ".codex/instructions.md": true,
+    ".codex/session.md": true,
+    "AGENTS.md": true
+  },
+  "pipeline": "repository unlocked",
+  "replay": "ready",
+  "state": "CONTINUITY_INITIALIZED",
+  "timestamp_utc": "2026-05-15T15:51:29.089083+00:00",
+  "validation_states": [
+    "BOOTSTRAP_READY",
+    "CONTINUITY_INITIALIZED",
+    "REPLAY_READY",
+    "SESSION_ACTIVE"
+  ]
+}
