@@ -4,6 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
+Create a sovereign decision intelligence extraction engine.
 Build a solo founder cognitive bias detector and reasoning auditor.
 
 RULES

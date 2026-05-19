@@ -1,3 +1,9 @@
+Branch: simba/create-a-sovereign-decision-intelligence-extract
+Title: Create a sovereign decision intelligence extraction engine.
+
+## Summary
+- Repo orchestration task for via-decide/nex
+- Goal: Create a sovereign decision intelligence extraction engine.
 Branch: simba/build-a-solo-founder-cognitive-bias-detector-and
 Title: Build a solo founder cognitive bias detector and reasoning auditor.
 
