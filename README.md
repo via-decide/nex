@@ -314,3 +314,38 @@ For large research tasks (exhaustive depth, 60–100 sources):
 | `data_analysis` | Statistical analysis of research datasets |
 | `numerical_modeling` | Monte Carlo, FEM, ODE solvers for quantitative validation |
 | `custom` | Any custom Zayvora-compatible computation |
+
+---
+
+## Local Research Dashboard
+
+Nex includes a local-first research workstation at `/research` for serious source tracking, evidence capture, citation organization, and deterministic research-to-output generation. It does not call an AI API; generated drafts are formatted from the projects, sources, and notes you select.
+
+### How to use the research dashboard
+
+1. Start the frontend from `frontend/` with `npm run dev`.
+2. Open `http://localhost:3000/research`.
+3. Use the dashboard metrics to review saved sources, active projects, recent notes, citation count, and source quality status.
+4. Data is saved locally in the browser under the `nex.research.library.v1` local storage key so research can be used without a hosted database service.
+
+### How to add sources
+
+1. Create or select a research project.
+2. Use **Add source** to save the source title, URL, author or organization, publication date, date accessed, source type, reliability rating, summary, notes, and tags.
+3. Use **Import sources** to paste a JSON array of source objects. Missing metadata is preserved as missing instead of being invented.
+4. Use **Export sources JSON** to back up or move the local source library.
+
+### How to validate claims
+
+1. Add an **Evidence note** for each claim.
+2. Link the note to a saved source and project.
+3. Set confidence to `low`, `medium`, `high`, or `verified`.
+4. Record contradiction notes whenever a source conflicts with other evidence.
+5. Review source quality warnings for missing URL, missing date accessed, weak or mixed reliability, no supporting evidence, conflicting sources, and outdated publication dates.
+
+### How to export research
+
+- Use **Export MD** on a project card to download a project evidence bundle.
+- Use **Export notes MD** to download all evidence notes as markdown.
+- Use the **Citation builder** to create inline citations, bibliography entries, and markdown citation blocks without fabricating missing metadata.
+- Use **Research output generator** to select a project, sources, and notes, then generate and export a structured markdown draft with title, thesis, key claims, evidence sections, open questions, and source list.
