@@ -60,7 +60,7 @@ class VerificationReport:
 
     @property
     def high_confidence_claims(self) -> list[VerifiedClaim]:
-        return self.verified + self.likely + self.contradicted
+        return self.verified + self.likely
 
 
 # ---------------------------------------------------------------------------
@@ -233,6 +233,39 @@ class VerificationEngine:
             low_confidence=low_confidence,
             contradictions=contradictions,
         )
+
+
+    def excise_low_confidence(self, report: VerificationReport) -> VerificationReport:
+        """Remove LOW_CONFIDENCE claims before graphing or final report synthesis."""
+        return VerificationReport(
+            verified=report.verified,
+            likely=report.likely,
+            contradicted=[],
+            low_confidence=[],
+            contradictions=report.contradictions,
+        )
+
+    def should_revise(
+        self,
+        report: VerificationReport,
+        graph: Any | None = None,
+        calculations: list[dict[str, Any]] | None = None,
+        min_confidence: float = 0.65,
+    ) -> tuple[bool, list[str], float]:
+        """Return whether the orchestrator must restart at DECOMPOSE."""
+        total = len(report.verified) + len(report.likely) + len(report.low_confidence) + len(report.contradicted)
+        score = (len(report.verified) + 0.65 * len(report.likely)) / max(total, 1)
+        reasons: list[str] = []
+        if total == 0:
+            reasons.append("no claims were extracted from evidence")
+        if score < min_confidence:
+            reasons.append(f"confidence score {score:.2f} is below threshold {min_confidence:.2f}")
+        if graph is not None and len(getattr(graph, "edges", [])) == 0 and len(getattr(graph, "nodes", [])) > 1:
+            reasons.append("knowledge graph has isolated claims with no supporting edges")
+        failed_calcs = [c for c in (calculations or []) if c.get("status") == "error"]
+        if failed_calcs:
+            reasons.append(f"{len(failed_calcs)} deterministic calculations failed")
+        return bool(reasons), reasons, score
 
     def _llm_contradict(self, a: str, b: str) -> bool:
         if not self._llm:
