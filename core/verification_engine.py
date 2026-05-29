@@ -12,14 +12,11 @@ Confidence levels:
 
 from __future__ import annotations
 
-import json
-import os
-import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .evidence_collector import EvidenceItem
 from .utils import claims_are_similar
@@ -122,15 +119,11 @@ class VerificationEngine:
     def __init__(
         self,
         use_llm_contradiction: bool = False,   # set True for more precise contradiction detection
-        model: str = "claude-haiku-4-5-20251001",
+        model: str | None = None,
     ) -> None:
         self._use_llm = use_llm_contradiction
         self._model = model
-        self._llm = (
-            anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-            if use_llm_contradiction
-            else None
-        )
+        self._llm = LocalLLMClient(model=model) if use_llm_contradiction else None
 
     def verify(self, evidence_list: list[EvidenceItem]) -> VerificationReport:
         """
@@ -270,16 +263,12 @@ class VerificationEngine:
     def _llm_contradict(self, a: str, b: str) -> bool:
         if not self._llm:
             return False
-        msg = self._llm.messages.create(
-            model=self._model,
-            max_tokens=128,
-            system=_CONTRADICT_SYSTEM,
-            messages=[{"role": "user", "content": f"Claim A: {a}\nClaim B: {b}"}],
-        )
-        text = msg.content[0].text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
         try:
-            return json.loads(text).get("contradicts", False)
+            data = self._llm.generate_json_sync(
+                f"Claim A: {a}\nClaim B: {b}",
+                system=_CONTRADICT_SYSTEM,
+                max_tokens=128,
+            )
+            return data.get("contradicts", False)
         except Exception:
             return False

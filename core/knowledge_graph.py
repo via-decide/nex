@@ -9,12 +9,10 @@ LLM analysis. Exports to JSON and Mermaid diagram format.
 from __future__ import annotations
 
 import json
-import os
-import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .verification_engine import VerificationReport, VerifiedClaim, Confidence
 
@@ -134,9 +132,8 @@ class KnowledgeGraph:
         graph = kg.build(report, topic="V2X Communication")
     """
 
-    def __init__(self, model: str = "claude-haiku-4-5-20251001") -> None:
-        self._llm = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = model
+    def __init__(self, model: str | None = None) -> None:
+        self._llm = LocalLLMClient(model=model)
 
     def build(
         self,
@@ -170,16 +167,7 @@ class KnowledgeGraph:
         try:
             claim_text = "\n".join(f"- {c}" for c in claims[:40])
             user_msg = f"Topic: {topic}\n\nClaims:\n{claim_text}"
-            message = self._llm.messages.create(
-                model=self._model,
-                max_tokens=2048,
-                system=_RELATION_SYSTEM,
-                messages=[{"role": "user", "content": user_msg}],
-            )
-            text = message.content[0].text.strip()
-            text = re.sub(r"^```(?:json)?\s*", "", text)
-            text = re.sub(r"\s*```$", "", text)
-            return json.loads(text)
+            return self._llm.generate_json_sync(user_msg, system=_RELATION_SYSTEM, max_tokens=2048)
         except json.JSONDecodeError as exc:
             print(f"[KnowledgeGraph._extract_graph] JSON parse error: {exc}")
             return {"concepts": [], "relationships": []}

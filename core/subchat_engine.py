@@ -8,13 +8,12 @@ Zayvora simulations — all within the context of a specific finding.
 
 from __future__ import annotations
 
-import os
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Iterator
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .research_synthesizer import ResearchFinding, ResearchReport
 
@@ -97,11 +96,11 @@ class SubchatEngine:
     def __init__(
         self,
         report: ResearchReport,
-        model: str = "claude-sonnet-4-6",
+        model: str | None = None,
     ) -> None:
         self._report = report
         self._model = model
-        self._llm = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        self._llm = LocalLLMClient(model=model)
         self._threads: dict[str, SubchatThread] = {}
         self._findings: dict[str, ResearchFinding] = {
             f.id: f for f in report.key_findings
@@ -179,17 +178,12 @@ class SubchatEngine:
             and not m.content.startswith("**Research finding loaded.**")
         ]
 
-        # Stream
+        # Stream from local Ollama with near-zero token latency.
+        prompt = "\n".join(f"{m['role']}: {m['content']}" for m in api_messages)
         full_response = ""
-        with self._llm.messages.stream(
-            model=self._model,
-            max_tokens=1024,
-            system=system,
-            messages=api_messages,
-        ) as stream:
-            for text in stream.text_stream:
-                full_response += text
-                yield text
+        for text in self._llm.stream_sync(prompt, system=system, max_tokens=1024):
+            full_response += text
+            yield text
 
         # Save assistant reply
         thread.messages.append(SubchatMessage(role="assistant", content=full_response))
