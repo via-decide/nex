@@ -297,10 +297,10 @@ For large research tasks (exhaustive depth, 60–100 sources):
 | **Source volume** | Async HTTP with configurable concurrency (default 8x); rate-limited per API |
 | **LLM cost** | Local Ollama/Zayvora inference removes remote API billing; map-reduce extraction keeps prompts within local context windows |
 | **Latency** | Stream pipeline events via SSE; progressive UI rendering as stages complete |
-| **Persistence** | Replace in-memory `_runs` dict with PostgreSQL + background worker (Celery/ARQ) |
+| **Persistence** | Embedded SQLite `nex_state.db` persists runs, reports, evidence, embeddings, and graph rows with zero server setup |
 | **Caching** | Cache source fetches + LLM extractions by URL hash for repeated queries |
 | **Parallelism** | `asyncio.gather` for source collection; independent subtopics can run parallel pipelines |
-| **Knowledge graph** | For graphs > 100 nodes, use Neo4j instead of in-memory dict |
+| **Knowledge graph** | Project graph nodes and relationships from embedded SQLite tables with recursive SQL traversal |
 
 ---
 

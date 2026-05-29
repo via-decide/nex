@@ -18,9 +18,9 @@ import asyncio
 import json
 import os
 import uuid
-import time
 from contextlib import asynccontextmanager
 from datetime import datetime
+from types import SimpleNamespace
 from typing import Any, AsyncIterator
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
@@ -33,25 +33,38 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.pipeline import DeepResearchPipeline, PipelineConfig, PipelineResult
-from core.research_synthesizer import ResearchReport
-from core.subchat_engine import SubchatEngine
+from core.subchat_engine import SubchatEngine, SubchatMessage
+from core.database import NexDatabase
 from core.zayvora_integration import ZayvoraIntegration, ZayvoraRequest, ZayvoraToolType
 
 
 # ---------------------------------------------------------------------------
-# In-memory store (replace with PostgreSQL/Redis in production)
+# Embedded SQLite persistence
 # ---------------------------------------------------------------------------
 
-_runs: dict[str, dict[str, Any]] = {}
-_reports: dict[str, ResearchReport] = {}
-_subchats: dict[str, SubchatEngine] = {}  # keyed by run_id
-_thread_to_engine: dict[str, str] = {}    # Maps thread_id -> run_id for fast lookup
+_db = NexDatabase()
 
-_CLEANUP_CONFIG = {
-    "max_age_seconds": 86400 * 7,  # 7 days
-    "check_interval_seconds": 3600,  # 1 hour
-}
-_last_cleanup: float = time.time()
+
+def _as_obj(value: Any) -> Any:
+    if isinstance(value, dict):
+        return SimpleNamespace(**{k: _as_obj(v) for k, v in value.items()})
+    if isinstance(value, list):
+        return [_as_obj(v) for v in value]
+    return value
+
+
+def _report_obj(report: dict[str, Any]) -> Any:
+    obj = _as_obj(report)
+    obj.key_findings = [_as_obj(f) for f in report.get("key_findings", [])]
+    return obj
+
+
+def _markdown(report: dict[str, Any]) -> str:
+    lines = [f"# {report.get('title', 'Research Report')}", "", "## Executive Summary", report.get("executive_summary", "")]
+    lines.extend(["", "## Key Findings"])
+    for finding in report.get("key_findings", []):
+        lines.append(f"- **{finding.get('confidence', '')}** {finding.get('headline', '')}")
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -91,51 +104,6 @@ class ZayvoraRunRequest(BaseModel):
 
 
 
-
-async def _cleanup_old_runs() -> None:
-    """Periodically clean up old completed runs.
-
-    Prevents indefinite memory growth in in-memory stores.
-
-    Returns:
-        None.
-
-    Raises:
-        None.
-    """
-    global _last_cleanup
-    now = time.time()
-
-    # Only run cleanup every check_interval_seconds
-    if now - _last_cleanup < _CLEANUP_CONFIG["check_interval_seconds"]:
-        return
-
-    _last_cleanup = now
-    max_age = _CLEANUP_CONFIG["max_age_seconds"]
-    cutoff_time = datetime.utcnow().timestamp() - max_age
-
-    # Find old runs
-    old_run_ids: list[str] = []
-    for run_id, run in _runs.items():
-        created_str = run.get("created_at", "")
-        if created_str:
-            try:
-                created_dt = datetime.fromisoformat(created_str.replace("Z", "+00:00"))
-                created_ts = created_dt.timestamp()
-                if created_ts < cutoff_time:
-                    old_run_ids.append(run_id)
-            except ValueError:
-                pass
-
-    # Clean up old runs
-    for run_id in old_run_ids:
-        _runs.pop(run_id, None)
-        _reports.pop(run_id, None)
-        _subchats.pop(run_id, None)
-        print(f"[api._cleanup_old_runs] Removed old run {run_id}")
-
-    if old_run_ids:
-        print(f"[api._cleanup_old_runs] Removed {len(old_run_ids)} old runs")
 
 # ---------------------------------------------------------------------------
 # App lifecycle
@@ -191,32 +159,11 @@ async def _run_pipeline(run_id: str, request: ResearchStartRequest) -> None:
     )
     pipeline = DeepResearchPipeline(config=config)
     try:
-        _runs[run_id]["status"] = "running"
+        _db.update_run(run_id, status="running")
         result: PipelineResult = await pipeline.run(request.question)
-        _reports[run_id] = result.report
-        _subchats[run_id] = SubchatEngine(result.report)
-        _runs[run_id].update({
-            "status": "completed",
-            "completed_at": datetime.utcnow().isoformat() + "Z",
-            "events": [
-                {"stage": e.stage, "status": e.status, "message": e.message, "data": e.data}
-                for e in result.events
-            ],
-            "stats": {
-                "sources_discovered": len(result.sources),
-                "evidence_items": len(result.evidence),
-                "verified_claims": len(result.verification.verified),
-                "likely_claims": len(result.verification.likely),
-                "findings": len(result.report.key_findings),
-                "graph_nodes": len(result.knowledge_graph.nodes),
-            },
-        })
+        _db.save_result(run_id, result)
     except Exception as exc:
-        _runs[run_id].update({
-            "status": "error",
-            "error": str(exc),
-            "completed_at": datetime.utcnow().isoformat() + "Z",
-        })
+        _db.update_run(run_id, status="error", error=str(exc), completed_at=datetime.utcnow().isoformat() + "Z")
 
 
 @app.post("/api/research/start", response_model=ResearchStartResponse)
@@ -224,18 +171,8 @@ async def start_research(
     request: ResearchStartRequest,
     background_tasks: BackgroundTasks,
 ) -> ResearchStartResponse:
-    # Run cleanup if needed
-    await _cleanup_old_runs()
-
     run_id = str(uuid.uuid4())
-    _runs[run_id] = {
-        "run_id": run_id,
-        "question": request.question,
-        "status": "queued",
-        "depth": request.depth,
-        "created_at": datetime.utcnow().isoformat() + "Z",
-        "events": [],
-    }
+    _db.create_run(run_id, request.question, request.depth)
     background_tasks.add_task(_run_pipeline, run_id, request)
     return ResearchStartResponse(
         run_id=run_id,
@@ -246,30 +183,27 @@ async def start_research(
 
 @app.get("/api/research/{run_id}")
 async def get_research_run(run_id: str) -> dict[str, Any]:
-    run = _runs.get(run_id)
+    run = _db.get_run(run_id)
     if not run:
         raise HTTPException(status_code=404, detail="Run not found.")
 
-    response = dict(run)
-    if run["status"] == "completed" and run_id in _reports:
-        response["report"] = _reports[run_id].to_dict()
-    return response
+    return dict(run)
 
 
 @app.get("/api/research/{run_id}/report/markdown")
 async def get_report_markdown(run_id: str) -> dict[str, str]:
-    report = _reports.get(run_id)
+    report = _db.get_report(run_id)
     if not report:
         raise HTTPException(status_code=404, detail="Report not found or pipeline not completed.")
-    return {"markdown": report.to_markdown()}
+    return {"markdown": _markdown(report)}
 
 
 @app.get("/api/research/{run_id}/report/json")
 async def get_report_json(run_id: str) -> dict[str, Any]:
-    report = _reports.get(run_id)
+    report = _db.get_report(run_id)
     if not report:
         raise HTTPException(status_code=404, detail="Report not found or pipeline not completed.")
-    return report.to_dict()
+    return report
 
 
 @app.get("/api/research/{run_id}/stream")
@@ -278,19 +212,19 @@ async def stream_research(run_id: str) -> StreamingResponse:
     SSE stream of pipeline events for a run.
     Clients connect and receive Server-Sent Events as stages complete.
     """
-    run = _runs.get(run_id)
+    run = _db.get_run(run_id)
     if not run:
         raise HTTPException(status_code=404, detail="Run not found.")
 
     async def _event_generator() -> AsyncIterator[str]:
         sent = 0
         while True:
-            events = _runs.get(run_id, {}).get("events", [])
+            events = (_db.get_run(run_id) or {}).get("events", [])
             while sent < len(events):
                 event = events[sent]
                 yield f"data: {json.dumps(event)}\n\n"
                 sent += 1
-            status = _runs.get(run_id, {}).get("status", "queued")
+            status = (_db.get_run(run_id) or {}).get("status", "queued")
             if status in ("completed", "error"):
                 yield f"data: {json.dumps({'stage': 'done', 'status': status})}\n\n"
                 break
@@ -320,16 +254,17 @@ async def create_subchat(request: SubchatCreateRequest) -> dict[str, Any]:
     Raises:
         HTTPException: If run does not exist or finding_id is invalid.
     """
-    engine = _subchats.get(request.run_id)
-    if not engine:
+    report = _db.get_report(request.run_id)
+    if not report:
         raise HTTPException(status_code=404, detail="Research run not found or not completed.")
+    engine = SubchatEngine(_report_obj(report))
     try:
         thread = engine.create_thread(request.finding_id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
-    # Track thread-to-engine mapping for fast lookup
-    _thread_to_engine[thread.thread_id] = request.run_id
-    return engine.export_thread(thread.thread_id)
+    exported = engine.export_thread(thread.thread_id)
+    _db.save_thread(exported, request.run_id, request.finding_id)
+    return exported
 
 
 @app.post("/api/subchat/{thread_id}/message")
@@ -338,18 +273,25 @@ async def subchat_message(
     request: SubchatMessageRequest,
 ) -> StreamingResponse:
     """Stream subchat response via SSE."""
-    # Fast O(1) lookup using thread-to-engine map
-    run_id = _thread_to_engine.get(thread_id)
-    engine = _subchats.get(run_id) if run_id else None
-
-    if not engine:
+    stored_thread = _db.get_thread(thread_id)
+    if not stored_thread:
         raise HTTPException(status_code=404, detail="Thread not found.")
+    report = _db.get_report(stored_thread.get("run_id", ""))
+    if not report:
+        raise HTTPException(status_code=404, detail="Research report not found.")
+    engine = SubchatEngine(_report_obj(report))
+    thread = engine.create_thread(stored_thread["finding_id"])
+    thread.thread_id = thread_id
+    thread.messages = [SubchatMessage(role=m["role"], content=m["content"], timestamp=m.get("timestamp", "")) for m in stored_thread.get("messages", [])]
+    engine._threads[thread_id] = thread
 
     async def _generate() -> AsyncIterator[str]:
         loop = asyncio.get_event_loop()
 
         def _sync_stream() -> list[str]:
-            return list(engine.chat_stream(thread_id, request.message))
+            chunks = list(engine.chat_stream(thread_id, request.message))
+            _db.save_thread(engine.export_thread(thread_id), stored_thread.get("run_id", ""), stored_thread["finding_id"])
+            return chunks
 
         chunks = await loop.run_in_executor(None, _sync_stream)
         for chunk in chunks:
@@ -365,18 +307,10 @@ async def subchat_message(
 
 @app.get("/api/subchat/{thread_id}/export")
 async def export_subchat(thread_id: str) -> dict[str, Any]:
-    # Fast O(1) lookup using thread-to-engine map
-    run_id = _thread_to_engine.get(thread_id)
-    engine = _subchats.get(run_id) if run_id else None
-
-    if not engine:
-        raise HTTPException(status_code=404, detail="Thread not found.")
-
-    thread = engine.get_thread(thread_id)
+    thread = _db.get_thread(thread_id)
     if not thread:
         raise HTTPException(status_code=404, detail="Thread not found.")
-
-    return engine.export_thread(thread_id)
+    return thread
 
 
 # ---------------------------------------------------------------------------

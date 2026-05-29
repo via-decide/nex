@@ -348,8 +348,8 @@ User Question
 | API Layer | Next.js API routes |
 | Frontend | React + Next.js |
 | State Management | Zustand |
-| Evidence Storage | SQLite (local) / PostgreSQL (deployed) |
-| Search | Full-text search via SQLite FTS5 or pg_trgm |
+| Evidence Storage | Embedded SQLite `nex_state.db` with local vector rows |
+| Search | Full-text search via embedded SQLite FTS5 |
 | Export | Unified (for Markdown), Puppeteer (for HTML/PDF) |
 | Zayvora Integration | HTTP client with retry + circuit breaker |
 
