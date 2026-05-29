@@ -1,7 +1,6 @@
 # Nex Deep Research Engine — Python dependencies
 
 # Core LLM
-anthropic>=0.34.0
 
 # Web framework
 fastapi>=0.111.0

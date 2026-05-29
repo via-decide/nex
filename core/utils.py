@@ -52,3 +52,25 @@ def claims_are_similar(a: str, b: str, threshold: float = 0.25) -> bool:
     if not ta or not tb:
         return False
     return len(ta & tb) / len(ta | tb) >= threshold
+
+
+def export_workspace(run_id: str, destination: str | None = None, db_path: str = "nex_state.db") -> str:
+    """Export a completed run's local SQLite workspace as .sqlite or .zip.
+
+    The copied SQLite file contains run metadata, evidence, local embeddings,
+    graph nodes/edges, claims, subchat payloads, and final report JSON.
+    """
+    import shutil
+    import zipfile
+    from pathlib import Path
+
+    source = Path(db_path)
+    if not source.exists():
+        raise FileNotFoundError(f"SQLite workspace not found: {source}")
+    target = Path(destination or f"nex_workspace_{run_id}.sqlite")
+    if target.suffix == ".zip":
+        with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.write(source, arcname="nex_state.db")
+    else:
+        shutil.copy2(source, target)
+    return str(target)

@@ -5,12 +5,11 @@ Checks sentence-level grounding of synthesis output against collected evidence.
 
 from __future__ import annotations
 
-import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .evidence_collector import EvidenceItem
 from .research_synthesizer import ResearchReport
@@ -31,9 +30,8 @@ class HallucinationGuardResult:
 
 
 class HallucinationGuard:
-    def __init__(self, model: str = "claude-haiku-4-5-20251001") -> None:
-        self._llm = anthropic.AsyncAnthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = model
+    def __init__(self, model: str | None = None) -> None:
+        self._llm = LocalLLMClient(model=model)
 
     async def run(self, report: ResearchReport, evidence: list[EvidenceItem]) -> HallucinationGuardResult:
         evidence_digest = self._build_evidence_digest(evidence)
@@ -71,12 +69,7 @@ class HallucinationGuard:
             f"Sentence: {sentence}\n\nEvidence:\n{evidence_digest}"
         )
         try:
-            msg = await self._llm.messages.create(
-                model=self._model,
-                max_tokens=180,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            raw = msg.content[0].text.strip()
+            raw = await self._llm.generate(prompt, max_tokens=180, json_mode=True)
             grounded = '"grounded": true' in raw.lower()
             correction_match = re.search(r'"suggested_correction"\s*:\s*"(.*?)"', raw, re.DOTALL)
             correction = correction_match.group(1).strip() if correction_match else sentence
