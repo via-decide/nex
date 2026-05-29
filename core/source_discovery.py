@@ -9,14 +9,14 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import urlencode, urlparse
 
-import anthropic
 import httpx
+
+from .llm_client import LocalLLMClient
 
 
 # ---------------------------------------------------------------------------
@@ -235,8 +235,7 @@ class SourceDiscovery:
 
     def __init__(self, max_sources: int = 60) -> None:
         self.max_sources = max_sources
-        self._llm = anthropic.AsyncAnthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = "claude-haiku-4-5-20251001"
+        self._llm = LocalLLMClient()
 
     async def discover_sources(
         self,
@@ -314,12 +313,8 @@ class SourceDiscovery:
             f"Query: {query}"
         )
         try:
-            message = await self._llm.messages.create(
-                model=self._model,
-                max_tokens=120,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            return message.content[0].text.strip().split("\n")[0]
+            text = await self._llm.generate(prompt, max_tokens=120)
+            return text.strip().split("\n")[0]
         except Exception:
             return query
 

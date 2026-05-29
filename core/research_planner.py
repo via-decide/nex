@@ -2,18 +2,16 @@
 Module 1 — Research Planner
 
 Breaks a research question into structured subtopics, keywords, and a
-prioritised research strategy. Uses Claude as the planning LLM.
+prioritised research strategy using the local Zayvora/Ollama model.
 """
 
 from __future__ import annotations
 
 import json
-import os
-import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 
 # ---------------------------------------------------------------------------
@@ -70,9 +68,8 @@ class ResearchPlanner:
         plan = await planner.plan("How do Vehicle-to-Infrastructure systems work?")
     """
 
-    def __init__(self, model: str = "claude-opus-4-6") -> None:
-        self._client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = model
+    def __init__(self, model: str | None = None) -> None:
+        self._client = LocalLLMClient(model=model)
 
     # ------------------------------------------------------------------
     # Public API
@@ -86,34 +83,29 @@ class ResearchPlanner:
             question: Natural-language research question from the user.
             depth_hint: "standard" | "deep" | "exhaustive" | "auto"
         """
-        raw = self._call_llm(question, depth_hint)
+        raw = await self._call_llm(question, depth_hint)
         return self._parse(raw)
 
     def plan_sync(self, question: str, depth_hint: str = "auto") -> ResearchPlan:
         """Synchronous wrapper around plan()."""
-        raw = self._call_llm(question, depth_hint)
+        raw = self._call_llm_sync(question, depth_hint)
         return self._parse(raw)
 
     # ------------------------------------------------------------------
     # Internal
     # ------------------------------------------------------------------
 
-    def _call_llm(self, question: str, depth_hint: str) -> dict[str, Any]:
+    async def _call_llm(self, question: str, depth_hint: str) -> dict[str, Any]:
         user_content = f"Research question: {question}"
         if depth_hint != "auto":
             user_content += f"\nPreferred depth: {depth_hint}"
+        return await self._client.generate_json(user_content, system=SYSTEM_PROMPT, max_tokens=1024)
 
-        message = self._client.messages.create(
-            model=self._model,
-            max_tokens=1024,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_content}],
-        )
-        text = message.content[0].text.strip()
-        # Strip markdown code fences if present
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-        return json.loads(text)
+    def _call_llm_sync(self, question: str, depth_hint: str) -> dict[str, Any]:
+        user_content = f"Research question: {question}"
+        if depth_hint != "auto":
+            user_content += f"\nPreferred depth: {depth_hint}"
+        return self._client.generate_json_sync(user_content, system=SYSTEM_PROMPT, max_tokens=1024)
 
     def _parse(self, raw: dict[str, Any]) -> ResearchPlan:
         return ResearchPlan(

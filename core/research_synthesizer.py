@@ -8,13 +8,11 @@ narrative research report. Produces multiple export formats.
 from __future__ import annotations
 
 import json
-import os
-import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .verification_engine import VerificationReport, Confidence
 from .knowledge_graph import KnowledgeGraphData
@@ -231,9 +229,8 @@ class ResearchSynthesizer:
         report = synthesizer.synthesize(plan, report, graph, evidence_items)
     """
 
-    def __init__(self, model: str = "claude-opus-4-6") -> None:
-        self._llm = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = model
+    def __init__(self, model: str | None = None) -> None:
+        self._llm = LocalLLMClient(model=model)
 
     def synthesize(
         self,
@@ -437,16 +434,12 @@ class ResearchSynthesizer:
                 f"Subtopics: {', '.join(plan.subtopics)}\n\n"
                 f"Evidence digest:\n{claim_digest}"
             )
-            message = self._llm.messages.create(
-                model=self._model,
-                max_tokens=4096,
+            return self._llm.generate_json_sync(
+                user_msg,
                 system=_SYNTHESIS_SYSTEM,
-                messages=[{"role": "user", "content": user_msg}],
+                max_tokens=4096,
+                temperature=0.1,
             )
-            text = message.content[0].text.strip()
-            text = re.sub(r"^```(?:json)?\s*", "", text)
-            text = re.sub(r"\s*```$", "", text)
-            return json.loads(text)
         except json.JSONDecodeError as exc:
             print(f"[ResearchSynthesizer._call_llm] JSON parse error: {exc}")
             return {
