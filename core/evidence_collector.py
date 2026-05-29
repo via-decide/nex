@@ -2,23 +2,22 @@
 Module 3 — Evidence Collector
 
 Fetches each source URL, extracts structured text, and produces an
-EvidenceItem with key claims and citations. Uses Claude to extract
-structured evidence from raw page text.
+EvidenceItem with key claims and citations. Uses local Zayvora/Ollama
+inference to extract structured evidence from raw page text.
 """
 
 from __future__ import annotations
 
 import asyncio
 import json
-import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import anthropic
 import httpx
 
 from .source_discovery import DiscoveredSource
+from .llm_client import LocalLLMClient
 
 
 # ---------------------------------------------------------------------------
@@ -142,52 +141,44 @@ Rules:
 """
 
 
-def _llm_extract(client: anthropic.Anthropic, model: str, text: str, url: str) -> dict[str, Any]:
-    """Extract structured evidence from raw page text.
+async def _llm_extract(client: LocalLLMClient, text: str, url: str) -> dict[str, Any]:
+    """Map-reduce extract structured evidence from raw page text with a local model."""
+    async def _extract_chunk(chunk: str, idx: int) -> dict[str, Any]:
+        content = f"Source URL: {url}\nChunk: {idx}\n\nText:\n{_truncate(chunk)}"
+        return await client.generate_json(content, system=_EXTRACT_SYSTEM, max_tokens=1024)
 
-    Args:
-        client: Anthropic client instance.
-        model: Model name to use for extraction.
-        text: Raw source text to parse.
-        url: Source URL used for debugging context.
-
-    Returns:
-        Dict with keys: summary, key_claims, citations, extraction_confidence.
-        Returns default empty values on parsing or runtime failures.
-
-    Raises:
-        None.
-    """
     try:
-        content = f"Source URL: {url}\n\nText:\n{_truncate(text)}"
-        message = client.messages.create(
-            model=model,
-            max_tokens=1024,
-            system=_EXTRACT_SYSTEM,
-            messages=[{"role": "user", "content": content}],
-        )
-        raw = message.content[0].text.strip()
-        raw = re.sub(r"^```(?:json)?\s*", "", raw)
-        raw = re.sub(r"\s*```$", "", raw)
-        return json.loads(raw)
+        chunks = [text[i:i + 5500] for i in range(0, len(text), 5500)][:8]
+        mapped = await asyncio.gather(*[_extract_chunk(chunk, i + 1) for i, chunk in enumerate(chunks)])
+        claims: list[str] = []
+        citations: list[str] = []
+        summaries: list[str] = []
+        confidence = 0.0
+        published_at = None
+        for item in mapped:
+            summaries.append(item.get("summary", ""))
+            claims.extend(item.get("key_claims", []))
+            citations.extend(item.get("citations", []))
+            published_at = published_at or item.get("published_at")
+            confidence = max(confidence, float(item.get("extraction_confidence", 0.0) or 0.0))
+        return {
+            "summary": " ".join(s for s in summaries if s)[:1000],
+            "key_claims": list(dict.fromkeys(claims))[:12],
+            "citations": list(dict.fromkeys(citations + _extract_urls(text)))[:10],
+            "published_at": published_at,
+            "extraction_confidence": confidence,
+        }
     except json.JSONDecodeError as exc:
         print(f"[EvidenceCollector._llm_extract] JSON parse error from {url}: {exc}")
-        return {
-            "summary": "",
-            "key_claims": [],
-            "citations": [],
-            "published_at": None,
-            "extraction_confidence": 0.0,
-        }
     except Exception as exc:
         print(f"[EvidenceCollector._llm_extract] Unexpected error from {url}: {exc}")
-        return {
-            "summary": "",
-            "key_claims": [],
-            "citations": [],
-            "published_at": None,
-            "extraction_confidence": 0.0,
-        }
+    return {
+        "summary": "",
+        "key_claims": [],
+        "citations": [],
+        "published_at": None,
+        "extraction_confidence": 0.0,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -205,11 +196,10 @@ class EvidenceCollector:
 
     def __init__(
         self,
-        model: str = "claude-haiku-4-5-20251001",  # fast model for bulk extraction
+        model: str | None = None,
         concurrency: int = 8,
     ) -> None:
-        self._llm = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        self._model = model
+        self._llm = LocalLLMClient(model=model)
         self._sem = asyncio.Semaphore(concurrency)
 
     async def collect(
@@ -246,11 +236,8 @@ class EvidenceCollector:
                 if not text or len(text) < 100:
                     return None
 
-                # LLM extraction (sync Anthropic client, run in thread)
-                loop = asyncio.get_event_loop()
-                extracted = await loop.run_in_executor(
-                    None, _llm_extract, self._llm, self._model, text, src.url
-                )
+                # Map-reduce extraction keeps each local-model prompt within context limits.
+                extracted = await _llm_extract(self._llm, text, src.url)
 
                 # Safely convert extraction_confidence to float
                 try:

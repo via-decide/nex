@@ -17,6 +17,35 @@ function ConfidenceBadge({ confidence }: { confidence: Confidence }) {
   return <span className={cls}>{label}</span>;
 }
 
+const ZAYVORA_STAGES = [
+  ['decompose', '1. Decompose', 'Plan sub-questions + evidence rules'],
+  ['retrieve', '2. Retrieve', 'Collect high-signal sources only'],
+  ['synthesize', '3. Synthesize', 'Build graph + flag anomalies'],
+  ['calculate', '4. Calculate', 'Validate metrics through Zayvora'],
+  ['verify', '5. Verify', 'Excise LOW_CONFIDENCE nodes'],
+  ['revise', '6. Revise', 'Loop until truth threshold passes'],
+] as const;
+
+function StageChecklist({ events }: { events: Array<{ stage: string; status: string }> }) {
+  const completed = new Set(events.filter((e) => e.status === 'completed').map((e) => e.stage));
+  const active = [...events].reverse().find((e) => e.status === 'started')?.stage;
+  return (
+    <div style={{ width: 'min(560px, 100%)', display: 'grid', gap: 8 }}>
+      {ZAYVORA_STAGES.map(([stage, label, detail]) => {
+        const state = completed.has(stage) ? '✓' : active === stage ? '●' : '○';
+        const color = completed.has(stage) ? 'var(--verified)' : active === stage ? 'var(--accent)' : 'var(--text-tertiary)';
+        return (
+          <div key={stage} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '9px 12px', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)' }}>
+            <span style={{ color, fontWeight: 800 }}>{state}</span>
+            <strong style={{ fontSize: 13, minWidth: 100 }}>{label}</strong>
+            <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>{detail}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function FindingBullet({
   finding,
   isSelected,
@@ -107,7 +136,7 @@ function FindingBullet({
 }
 
 export function CenterPanel() {
-  const { report, pipelineStatus, selectedFindingId, selectFinding, openSubchat, question } =
+  const { report, pipelineStatus, selectedFindingId, selectFinding, openSubchat, question, pipelineEvents } =
     useResearchStore();
 
   if (pipelineStatus === 'idle') {
@@ -158,6 +187,7 @@ export function CenterPanel() {
         <p style={{ fontSize: 13, color: 'var(--text-tertiary)', textAlign: 'center', maxWidth: 400 }}>
           "{question}"
         </p>
+        <StageChecklist events={pipelineEvents} />
       </main>
     );
   }

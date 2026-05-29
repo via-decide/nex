@@ -12,14 +12,11 @@ Confidence levels:
 
 from __future__ import annotations
 
-import json
-import os
-import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-import anthropic
+from .llm_client import LocalLLMClient
 
 from .evidence_collector import EvidenceItem
 from .utils import claims_are_similar
@@ -60,7 +57,7 @@ class VerificationReport:
 
     @property
     def high_confidence_claims(self) -> list[VerifiedClaim]:
-        return self.verified + self.likely + self.contradicted
+        return self.verified + self.likely
 
 
 # ---------------------------------------------------------------------------
@@ -122,15 +119,11 @@ class VerificationEngine:
     def __init__(
         self,
         use_llm_contradiction: bool = False,   # set True for more precise contradiction detection
-        model: str = "claude-haiku-4-5-20251001",
+        model: str | None = None,
     ) -> None:
         self._use_llm = use_llm_contradiction
         self._model = model
-        self._llm = (
-            anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-            if use_llm_contradiction
-            else None
-        )
+        self._llm = LocalLLMClient(model=model) if use_llm_contradiction else None
 
     def verify(self, evidence_list: list[EvidenceItem]) -> VerificationReport:
         """
@@ -234,19 +227,48 @@ class VerificationEngine:
             contradictions=contradictions,
         )
 
+
+    def excise_low_confidence(self, report: VerificationReport) -> VerificationReport:
+        """Remove LOW_CONFIDENCE claims before graphing or final report synthesis."""
+        return VerificationReport(
+            verified=report.verified,
+            likely=report.likely,
+            contradicted=[],
+            low_confidence=[],
+            contradictions=report.contradictions,
+        )
+
+    def should_revise(
+        self,
+        report: VerificationReport,
+        graph: Any | None = None,
+        calculations: list[dict[str, Any]] | None = None,
+        min_confidence: float = 0.65,
+    ) -> tuple[bool, list[str], float]:
+        """Return whether the orchestrator must restart at DECOMPOSE."""
+        total = len(report.verified) + len(report.likely) + len(report.low_confidence) + len(report.contradicted)
+        score = (len(report.verified) + 0.65 * len(report.likely)) / max(total, 1)
+        reasons: list[str] = []
+        if total == 0:
+            reasons.append("no claims were extracted from evidence")
+        if score < min_confidence:
+            reasons.append(f"confidence score {score:.2f} is below threshold {min_confidence:.2f}")
+        if graph is not None and len(getattr(graph, "edges", [])) == 0 and len(getattr(graph, "nodes", [])) > 1:
+            reasons.append("knowledge graph has isolated claims with no supporting edges")
+        failed_calcs = [c for c in (calculations or []) if c.get("status") == "error"]
+        if failed_calcs:
+            reasons.append(f"{len(failed_calcs)} deterministic calculations failed")
+        return bool(reasons), reasons, score
+
     def _llm_contradict(self, a: str, b: str) -> bool:
         if not self._llm:
             return False
-        msg = self._llm.messages.create(
-            model=self._model,
-            max_tokens=128,
-            system=_CONTRADICT_SYSTEM,
-            messages=[{"role": "user", "content": f"Claim A: {a}\nClaim B: {b}"}],
-        )
-        text = msg.content[0].text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
         try:
-            return json.loads(text).get("contradicts", False)
+            data = self._llm.generate_json_sync(
+                f"Claim A: {a}\nClaim B: {b}",
+                system=_CONTRADICT_SYSTEM,
+                max_tokens=128,
+            )
+            return data.get("contradicts", False)
         except Exception:
             return False

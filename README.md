@@ -63,7 +63,7 @@ flowchart LR
     WP & AX & S2 & GV --> Filter["Paywall Filter\nRejects login-gated URLs"]
     Filter --> Ranker["Source Ranker\nBy type x keyword relevance"]
     Ranker --> Fetch["Async HTTP Fetcher\n8x concurrent"]
-    Fetch --> Extract["LLM Extractor\nclaude-haiku-4-5\nKey claims + citations"]
+    Fetch --> Extract["Local Zayvora Extractor\nOllama /api/generate\nKey claims + citations"]
     Extract --> Evidence["EvidenceItem[]"]
 ```
 
@@ -218,12 +218,12 @@ nex/
 
 | Module | File | Responsibility |
 |--------|------|----------------|
-| Research Planner | `core/research_planner.py` | Decomposes question into subtopics, keywords, search queries using Claude |
+| Research Planner | `core/research_planner.py` | Decomposes question into subtopics, keywords, search queries using local Zayvora/Ollama |
 | Source Discovery | `core/source_discovery.py` | Queries Wikipedia, arXiv, Semantic Scholar; filters paywalls; ranks by relevance |
 | Evidence Collector | `core/evidence_collector.py` | Async fetches up to 50 sources; LLM extracts key claims + citations |
 | Verification Engine | `core/verification_engine.py` | Clusters similar claims; assigns VERIFIED / LIKELY / LOW_CONFIDENCE |
 | Knowledge Graph | `core/knowledge_graph.py` | LLM extracts concept nodes + relationships; exports Mermaid + JSON |
-| Research Synthesizer | `core/research_synthesizer.py` | Claude Opus generates title, executive summary, findings, evidence sections |
+| Research Synthesizer | `core/research_synthesizer.py` | Local Zayvora/Ollama generates title, executive summary, findings, evidence sections |
 | Zayvora Integration | `core/zayvora_integration.py` | Routes simulation requests to Zayvora tools; mock fallback when offline |
 | Subchat Engine | `core/subchat_engine.py` | Per-finding chat threads with streaming, citations, Zayvora triggers |
 | Pipeline | `core/pipeline.py` | Orchestrates all modules end-to-end with event streaming |
@@ -275,7 +275,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 cp .env.example .env
-# Add your ANTHROPIC_API_KEY to .env
+# Ensure Ollama is running locally and ZAYVORA_MODEL is available
 
 uvicorn api.main:app --reload --port 8000
 
@@ -295,7 +295,7 @@ For large research tasks (exhaustive depth, 60–100 sources):
 | Concern | Strategy |
 |---------|----------|
 | **Source volume** | Async HTTP with configurable concurrency (default 8x); rate-limited per API |
-| **LLM cost** | Use `claude-haiku-4-5` for bulk extraction; reserve `claude-opus-4-6` for planning + synthesis |
+| **LLM cost** | Local Ollama/Zayvora inference removes remote API billing; map-reduce extraction keeps prompts within local context windows |
 | **Latency** | Stream pipeline events via SSE; progressive UI rendering as stages complete |
 | **Persistence** | Replace in-memory `_runs` dict with PostgreSQL + background worker (Celery/ARQ) |
 | **Caching** | Cache source fetches + LLM extractions by URL hash for repeated queries |
