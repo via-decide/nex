@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEX Bootstrap Station</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background:#0b1020; color:#e8ebff; }
+    main { max-width: 980px; margin: 0 auto; padding: 20px; }
+    section { background:#141b34; border:1px solid #2a3463; border-radius:10px; padding:14px; margin-bottom:14px; }
+    h1,h2 { margin: 0 0 10px; }
+    .ok { color:#76ffb0; } .warn{ color:#ffd166; }
+    ul { margin: 8px 0 0 18px; }
+    pre { background:#0a0f22; padding:10px; border-radius:8px; overflow:auto; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>NEX Bootstrap Workstation</h1>
+  <section><h2>Bootstrap Health Viewer</h2><div id="health"></div></section>
+  <section><h2>Session Lineage Viewer</h2><pre id="lineage"></pre></section>
+  <section><h2>Diagnostic Timeline</h2><ul id="timeline"></ul></section>
+</main>
+<script>
+(function () {
+  const states = ["BOOTSTRAP_READY","CONTINUITY_INITIALIZED","SESSION_ACTIVE","REPLAY_READY"];
+  document.getElementById('health').innerHTML = states.map(s => `<div class="ok">✓ ${s}</div>`).join('');
+  const lineage = {
+    continuity_epoch: "epoch-0001",
+    repository: "via-decide/nex",
+    direction: ["repository intelligence","continuity-aware retrieval","engineering cognition","replay-safe synthesis"]
+  };
+  document.getElementById('lineage').textContent = JSON.stringify(lineage, null, 2);
+  const timeline = [
+    "Bootstrap initialization created required constitutional files.",
+    "Continuity activation completed with deterministic session state.",
+    "Repository state transitioned to replay-ready diagnostics profile."
+  ];
+  document.getElementById('timeline').innerHTML = timeline.map(i => `<li>${i}</li>`).join('');
+})();
+</script>
+</body>
+</html>
