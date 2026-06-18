@@ -161,9 +161,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+ALLOWED_ORIGINS = [
+    "https://logichub.app",
+    "https://viadecide.com",
+    "https://aporaksha.com",
+    "https://daxini.space",
+    "http://localhost:3000",
+    "http://localhost:7004"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
