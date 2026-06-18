@@ -1,0 +1,7 @@
+{
+  "title": "Robotics conveyor orchestration",
+  "lineage": [
+    "process_sync",
+    "state_transition"
+  ]
+}

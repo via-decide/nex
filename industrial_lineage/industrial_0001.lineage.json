@@ -1,0 +1,7 @@
+{
+  "title": "PLC SCADA coordination baseline",
+  "lineage": [
+    "process_sync",
+    "state_transition"
+  ]
+}

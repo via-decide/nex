@@ -1,0 +1,8 @@
+{
+  "title": "Safety standard lineage",
+  "lineage": [
+    "operator_authority",
+    "safety_override",
+    "restart_sequence"
+  ]
+}
