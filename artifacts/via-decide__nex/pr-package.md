@@ -1,9 +1,9 @@
-Branch: simba/build-a-zero-dependency-pure-python-neural-netwo
-Title: Build a zero-dependency Pure Python Neural Network Engine from scratch.
+Branch: simba/create-topic-cluster-organizer
+Title: Create topic cluster organizer.
 
 ## Summary
 - Repo orchestration task for via-decide/nex
-- Goal: Build a zero-dependency Pure Python Neural Network Engine from scratch.
+- Goal: Create topic cluster organizer.
 
 ## Testing Checklist
 - [ ] Run unit/integration tests

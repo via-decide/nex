@@ -4,7 +4,7 @@ TARGET
 Validate and repair only the files touched by the previous implementation.
 
 TASK
-Build a zero-dependency Pure Python Neural Network Engine from scratch.
+Create topic cluster organizer.
 
 RULES
 1. Audit touched files first and identify regressions.

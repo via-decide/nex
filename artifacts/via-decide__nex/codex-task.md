@@ -1,7 +1,7 @@
 You are working in repository via-decide/nex on branch main.
 
 MISSION
-Build a zero-dependency Pure Python Neural Network Engine from scratch.
+Create topic cluster organizer.
 
 CONSTRAINTS
 Preserve existing code; prefer additive changes.
