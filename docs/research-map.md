@@ -1,26 +1,31 @@
 # Research Map
 
-This map classifies existing markdown artifacts without rewriting their content.
+Classification layer for existing markdown sources.
+
+No source document content is rewritten here; files are only mapped into a constraint-driven system view.
 
 ## Actions
 
-- `docs/research_pipeline.md` → staged research execution flow (question intake, planning, collection, verification, synthesis).
+- `docs/research_pipeline.md` -> staged research execution flow
+- `docs/execution-patterns.md` -> repeatable execution motifs and operational flow patterns
 
 ## Constraints
 
-- `artifacts/via-decide__nex/antigravity-repair-task.md` → repair constraints and minimal-change protocol.
-- `artifacts/via-decide__nex/codex-task.md` → execution constraints, guardrails, and process boundaries.
+- `artifacts/via-decide__nex/antigravity-repair-task.md` -> minimal-change repair boundaries and risk containment
+- `artifacts/via-decide__nex/codex-task.md` -> execution guardrails, scope limits, and failure prevention constraints
 
 ## Execution
 
-- `artifacts/via-decide__nex/pr-package.md` → release execution wrapper (summary, test checklist, risk, rollback).
+- `artifacts/via-decide__nex/pr-package.md` -> PR packaging, validation, rollback framing
 
 ## Systems
 
-- `README.md` → top-level research system entrypoint and relation to KUP / Decide / Zayvora.
-- `docs/nex_architecture.md` → end-to-end research system architecture and module boundaries.
-- `docs/ui_architecture.md` → interface system design for interaction, inspection, and exploration.
+- `README.md` -> research-layer entry and engine linkage
+- `docs/nex_architecture.md` -> system topology and component relationship model
+- `docs/ui_architecture.md` -> interface-level system interaction model
+- `docs/index-map.md` -> structural index logic across research assets
 
 ## Philosophy (optional)
 
-- `docs/nex_architecture.md` → evidence-first and verification-by-default stance as governing system philosophy.
+- `docs/research-framework.md` -> method contract: observation -> constraint -> abstraction -> execution implication
+- `docs/research-map.md` -> non-destructive classification policy for raw research artifacts
