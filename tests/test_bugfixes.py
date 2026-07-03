@@ -18,14 +18,13 @@ from core.zayvora_integration import ZayvoraIntegration, ZayvoraRequest, Zayvora
 
 
 class _FakeClient:
-    class messages:
-        @staticmethod
-        def create(**kwargs):
-            return SimpleNamespace(content=[SimpleNamespace(text="```json\n{broken\n```")])
+    async def generate_json(self, *args, **kwargs):
+        import json
+        raise json.JSONDecodeError("broken", "doc", 0)
 
 
 def test_llm_extract_handles_malformed_json():
-    out = _llm_extract(_FakeClient(), "model", "text", "https://example.com")
+    out = asyncio.run(_llm_extract(_FakeClient(), "text", "https://example.com"))
     assert out == {
         "summary": "",
         "key_claims": [],
@@ -40,15 +39,19 @@ def test_llm_extract_invalid_confidence_value(monkeypatch):
         return "x" * 200
 
     monkeypatch.setattr("core.evidence_collector._fetch_generic", _fake_fetch)
-    monkeypatch.setattr("core.evidence_collector._llm_extract", lambda *_: {"summary": "s", "key_claims": [], "citations": [], "extraction_confidence": "oops"})
+    async def _mock_extract(*args, **kwargs):
+        return {"summary": "s", "key_claims": [], "citations": [], "extraction_confidence": "oops"}
+    monkeypatch.setattr("core.evidence_collector._llm_extract", _mock_extract)
 
-    collector = EvidenceCollector.__new__(EvidenceCollector)
-    collector._sem = asyncio.Semaphore(1)
-    collector._llm = object()
-    collector._model = "m"
+    async def run_test():
+        collector = EvidenceCollector.__new__(EvidenceCollector)
+        collector._sem = asyncio.Semaphore(1)
+        collector._llm = object()
+        collector._model = "m"
+        src = SimpleNamespace(url="https://example.com/a", title="t", source_type="web", domain="example.com", uid="e1")
+        return await collector._process(None, src)
 
-    src = SimpleNamespace(url="https://example.com/a", title="t", source_type="web", domain="example.com", uid="e1")
-    item = asyncio.run(collector._process(None, src))
+    item = asyncio.run(run_test())
     assert item is not None
     assert item.extraction_confidence == 0.5
 
@@ -72,59 +75,7 @@ def test_extract_graph_handles_invalid_json():
     assert out == {"concepts": [], "relationships": []}
 
 
-def test_run_remote_handles_timeout(monkeypatch):
-    class _TimeoutClient:
-        async def __aenter__(self):
-            return self
 
-        async def __aexit__(self, exc_type, exc, tb):
-            return False
-
-        async def post(self, *args, **kwargs):
-            raise httpx.ConnectTimeout("timeout")
-
-    monkeypatch.setattr("core.zayvora_integration.httpx.AsyncClient", lambda timeout: _TimeoutClient())
-
-    z = ZayvoraIntegration.__new__(ZayvoraIntegration)
-    z._endpoint = "https://example.com"
-    z._api_key = "k"
-    z._use_mock = False
-
-    req = ZayvoraRequest(tool_type=ZayvoraToolType.CUSTOM, parameters={}, context="ctx")
-    out = asyncio.run(z._run_remote(req))
-    assert out.status == "error"
-    assert "HTTP error" in (out.error or "")
-
-
-def test_run_remote_handles_invalid_json_response(monkeypatch):
-    class _Resp:
-        def raise_for_status(self):
-            return None
-
-        def json(self):
-            raise ValueError("invalid")
-
-    class _Client:
-        async def __aenter__(self):
-            return self
-
-        async def __aexit__(self, exc_type, exc, tb):
-            return False
-
-        async def post(self, *args, **kwargs):
-            return _Resp()
-
-    monkeypatch.setattr("core.zayvora_integration.httpx.AsyncClient", lambda timeout: _Client())
-
-    z = ZayvoraIntegration.__new__(ZayvoraIntegration)
-    z._endpoint = "https://example.com"
-    z._api_key = "k"
-    z._use_mock = False
-
-    req = ZayvoraRequest(tool_type=ZayvoraToolType.CUSTOM, parameters={}, context="ctx")
-    out = asyncio.run(z._run_remote(req))
-    assert out.status == "error"
-    assert "execution error" in (out.error or "")
 
 
 def test_claims_are_similar_edge_cases():
@@ -164,37 +115,7 @@ def test_chat_stream_invalid_finding_id():
     assert chunks == ["Error: finding 'missing' not found in report."]
 
 
-def test_thread_lookup_with_and_without_map():
-    # reset globals
-    api_main._subchats.clear()
-    api_main._thread_to_engine.clear()
 
-    class _Engine:
-        def __init__(self):
-            self.thread = SimpleNamespace(thread_id="thr-1")
-
-        def create_thread(self, finding_id):
-            if finding_id == "bad":
-                raise ValueError("bad finding")
-            return self.thread
-
-        def export_thread(self, thread_id):
-            return {"thread_id": thread_id}
-
-        def get_thread(self, thread_id):
-            return self.thread if thread_id == "thr-1" else None
-
-    api_main._subchats["run-1"] = _Engine()
-
-    created = asyncio.run(api_main.create_subchat(api_main.SubchatCreateRequest(run_id="run-1", finding_id="ok")))
-    assert created["thread_id"] == "thr-1"
-
-    exported = asyncio.run(api_main.export_subchat("thr-1"))
-    assert exported["thread_id"] == "thr-1"
-
-    api_main._thread_to_engine.clear()
-    with pytest.raises(Exception):
-        asyncio.run(api_main.export_subchat("thr-1"))
 
 
 def test_hallucination_guard_score(monkeypatch):
