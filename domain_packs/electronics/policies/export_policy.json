@@ -1,0 +1,1 @@
+{"human_review_required":true,"forbidden_capabilities":["hardware_authorization","firmware_flashing_permission","erase_permission","board_verification_status","automatic_component_confirmation","jtag","relay","power_control"]}

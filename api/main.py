@@ -23,7 +23,7 @@ from datetime import datetime
 from types import SimpleNamespace
 from typing import Any, AsyncIterator
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -35,7 +35,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.pipeline import DeepResearchPipeline, PipelineConfig, PipelineResult
 from core.subchat_engine import SubchatEngine, SubchatMessage
 from core.database import NexDatabase
-from core.zayvora_integration import ZayvoraIntegration, ZayvoraRequest, ZayvoraToolType
+from core.auth import Principal, Role, authenticate, authorize_object
+from core.security import SecurityMiddleware, reject_executable_payload
+from core.tool_registry import REGISTRY, execute_tool
 
 
 # ---------------------------------------------------------------------------
@@ -125,11 +127,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[o.strip() for o in os.getenv("NEX_ALLOWED_ORIGINS", "http://127.0.0.1:3000,http://localhost:3000").split(",")],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(SecurityMiddleware)
 
 
 # ---------------------------------------------------------------------------
@@ -170,7 +173,9 @@ async def _run_pipeline(run_id: str, request: ResearchStartRequest) -> None:
 async def start_research(
     request: ResearchStartRequest,
     background_tasks: BackgroundTasks,
+    principal: Principal = Depends(authenticate),
 ) -> ResearchStartResponse:
+    reject_executable_payload(request.model_dump())
     run_id = str(uuid.uuid4())
     _db.create_run(run_id, request.question, request.depth)
     background_tasks.add_task(_run_pipeline, run_id, request)
@@ -182,7 +187,8 @@ async def start_research(
 
 
 @app.get("/api/research/{run_id}")
-async def get_research_run(run_id: str) -> dict[str, Any]:
+async def get_research_run(run_id: str, principal: Principal = Depends(authenticate)) -> dict[str, Any]:
+    authorize_object(principal, "research_runs", run_id, Role.READER)
     run = _db.get_run(run_id)
     if not run:
         raise HTTPException(status_code=404, detail="Run not found.")
@@ -191,7 +197,8 @@ async def get_research_run(run_id: str) -> dict[str, Any]:
 
 
 @app.get("/api/research/{run_id}/report/markdown")
-async def get_report_markdown(run_id: str) -> dict[str, str]:
+async def get_report_markdown(run_id: str, principal: Principal = Depends(authenticate)) -> dict[str, str]:
+    authorize_object(principal, "reports", run_id, Role.READER)
     report = _db.get_report(run_id)
     if not report:
         raise HTTPException(status_code=404, detail="Report not found or pipeline not completed.")
@@ -199,7 +206,8 @@ async def get_report_markdown(run_id: str) -> dict[str, str]:
 
 
 @app.get("/api/research/{run_id}/report/json")
-async def get_report_json(run_id: str) -> dict[str, Any]:
+async def get_report_json(run_id: str, principal: Principal = Depends(authenticate)) -> dict[str, Any]:
+    authorize_object(principal, "reports", run_id, Role.READER)
     report = _db.get_report(run_id)
     if not report:
         raise HTTPException(status_code=404, detail="Report not found or pipeline not completed.")
@@ -207,7 +215,8 @@ async def get_report_json(run_id: str) -> dict[str, Any]:
 
 
 @app.get("/api/research/{run_id}/stream")
-async def stream_research(run_id: str) -> StreamingResponse:
+async def stream_research(run_id: str, principal: Principal = Depends(authenticate)) -> StreamingResponse:
+    authorize_object(principal, "research_runs", run_id, Role.READER)
     """
     SSE stream of pipeline events for a run.
     Clients connect and receive Server-Sent Events as stages complete.
@@ -242,7 +251,8 @@ async def stream_research(run_id: str) -> StreamingResponse:
 # ---------------------------------------------------------------------------
 
 @app.post("/api/subchat/create")
-async def create_subchat(request: SubchatCreateRequest) -> dict[str, Any]:
+async def create_subchat(request: SubchatCreateRequest, principal: Principal = Depends(authenticate)) -> dict[str, Any]:
+    authorize_object(principal, "research_runs", request.run_id, Role.READER)
     """Create a subchat thread for a specific finding.
 
     Args:
@@ -306,7 +316,8 @@ async def subchat_message(
 
 
 @app.get("/api/subchat/{thread_id}/export")
-async def export_subchat(thread_id: str) -> dict[str, Any]:
+async def export_subchat(thread_id: str, principal: Principal = Depends(authenticate)) -> dict[str, Any]:
+    authorize_object(principal, "subchat_threads", thread_id, Role.READER)
     thread = _db.get_thread(thread_id)
     if not thread:
         raise HTTPException(status_code=404, detail="Thread not found.")
@@ -314,34 +325,19 @@ async def export_subchat(thread_id: str) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Zayvora endpoints
+# Zayvora/tool endpoints
 # ---------------------------------------------------------------------------
 
 @app.post("/api/zayvora/run")
-async def run_zayvora(request: ZayvoraRunRequest) -> dict[str, Any]:
-    zayvora = ZayvoraIntegration()
+async def run_zayvora(request: ZayvoraRunRequest, principal: Principal = Depends(authenticate)) -> dict[str, Any]:
+    """Execute only registered, non-code tools; caller-supplied source is rejected."""
     try:
-        tool_type = ZayvoraToolType(request.tool_type)
-    except ValueError:
-        raise HTTPException(status_code=400, detail=f"Unknown tool type: {request.tool_type}")
-
-    zreq = ZayvoraRequest(
-        tool_type=tool_type,
-        parameters=request.parameters,
-        context=request.context,
-        finding_id=request.finding_id,
-    )
-    result = await zayvora.run(zreq)
-    return {
-        "status": result.status,
-        "output": result.output,
-        "summary": result.summary,
-        "artifacts": result.artifacts,
-        "executed_at": result.executed_at,
-    }
+        output = execute_tool(request.tool_type, request.parameters, principal)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"status": "success", "tool_id": request.tool_type, "output": output, "summary": "Allowlisted tool execution completed."}
 
 
 @app.get("/api/zayvora/tools")
-async def list_zayvora_tools() -> list[dict[str, str]]:
-    zayvora = ZayvoraIntegration()
-    return zayvora.available_tools()
+async def list_zayvora_tools() -> list[dict[str, Any]]:
+    return [{k: v for k, v in spec.__dict__.items() if k != "handler"} for spec in REGISTRY.values()]

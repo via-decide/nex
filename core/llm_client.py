@@ -106,7 +106,7 @@ class LocalLLMClient:
 def run_async(coro: Any) -> Any:
     """Run an async LLM call from synchronous code without cloud dependencies."""
     try:
-        loop = asyncio.get_running_loop()
+        asyncio.get_running_loop()
     except RuntimeError:
         return asyncio.run(coro)
     raise RuntimeError("Cannot run synchronous local LLM call inside an active event loop") from None
