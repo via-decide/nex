@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+artifacts/sources/
+artifacts/*.json
+.env
+node_modules/
+.next/
